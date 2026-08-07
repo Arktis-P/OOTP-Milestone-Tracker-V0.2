@@ -1,0 +1,32 @@
+[
+  {
+    "key": "bat_hit_streak",
+    "label": "연속 경기 안타",
+    "subject": "player",
+    "category": "batting",
+    "stat": "h",
+    "continue_when": {"op": ">=", "value": 1},
+    "minimum_to_record": 5,
+    "scope": "season"
+  },
+  {
+    "key": "bat_hr_streak",
+    "label": "연속 경기 홈런",
+    "subject": "player",
+    "category": "batting",
+    "stat": "hr",
+    "continue_when": {"op": ">=", "value": 1},
+    "minimum_to_record": 3,
+    "scope": "season"
+  },
+  {
+    "key": "team_win_streak",
+    "label": "팀 연속 연승",
+    "subject": "team",
+    "category": "team",
+    "stat": "win",
+    "continue_when": {"op": "==", "value": 1},
+    "minimum_to_record": 5,
+    "scope": "season"
+  }
+]

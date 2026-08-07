@@ -12,6 +12,8 @@ from gui.theme.theme import apply_dark_theme
 from gui.views.dashboard_view import DashboardView
 from gui.views.achievement_records_view import AchievementRecordsView
 from gui.views.player_stats_view import PlayerStatsView
+from gui.views.prediction_view import PredictionView
+from gui.views.streak_view import StreakView
 from gui.views.record_import_center_view import RecordImportCenterView
 from gui.views.settings_view import SettingsView
 
@@ -98,14 +100,16 @@ class MainWindow(QMainWindow):
         dashboard_page = DashboardView(self.settings_mgr, navigate_callback=self.navigate_to_page)
         records_page = AchievementRecordsView(self.settings_mgr)
         player_stats_page = PlayerStatsView(self.settings_mgr)
+        prediction_page = PredictionView(self.settings_mgr)
+        streak_page = StreakView(self.settings_mgr)
         import_center_page = RecordImportCenterView(self.settings_mgr)
         settings_page = SettingsView(self.settings_mgr, on_settings_changed=self._on_settings_changed)
 
         self.pages["Dashboard"] = (0, dashboard_page)
         self.pages["Achievement Records"] = (1, records_page)
         self.pages["Player Stats"] = (2, player_stats_page)
-        self.pages["Predictions"] = (3, PlaceholderView("Milestone Predictions"))
-        self.pages["Streak Records"] = (4, PlaceholderView("Streak Records"))
+        self.pages["Predictions"] = (3, prediction_page)
+        self.pages["Streak Records"] = (4, streak_page)
         self.pages["Record Import Center"] = (5, import_center_page)
         self.pages["Manual Records"] = (6, PlaceholderView("Manual Records"))
         self.pages["Rating Editor"] = (7, PlaceholderView("Rating Editor"))

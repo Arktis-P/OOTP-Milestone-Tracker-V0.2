@@ -446,7 +446,7 @@ Settings
 
 # Phase 6. 기록 달성 예측
 
-## [ ] 6.1 예측 모델
+## [x] 6.1 예측 모델
 
 ### 기능
 현재 속도라면 시즌/통산 마일스톤에 언제 또는 어느 정도 확률로 접근할지 보여준다.
@@ -465,7 +465,7 @@ Settings
 - `near_n`: 목표에 매우 가까운 항목을 강조한다.
 - 선수 개인 출전/등판량과 팀 경기 수를 혼동하지 않는다.
 
-## [ ] 6.2 Prediction UI
+## [x] 6.2 Prediction UI
 
 ### 기능
 임박/추적 중인 목표를 정렬하고 선수 상세로 이동한다.
@@ -474,11 +474,11 @@ Settings
 
 # Phase 7. 연속 기록(Streak)
 
-## [ ] 7.1 streak policy 로더
+## [x] 7.1 streak policy 로더
 
 정책 파일에서 streak 종류와 유지/종료 조건을 읽는다.
 
-## [ ] 7.2 streak tracker
+## [x] 7.2 streak tracker
 
 ### 기능
 박스스코어 import마다 현재 streak를 연장하거나 종료한다.
@@ -490,7 +490,7 @@ Settings
 - end date
 - final length/value
 
-## [ ] 7.3 Streak Center
+## [x] 7.3 Streak Center
 
 ### 기능
 - 진행 중 기록
@@ -498,7 +498,7 @@ Settings
 - 시즌/선수/팀/유형 필터
 - CSV export
 
-## [ ] 7.4 Dashboard/Player integration
+## [x] 7.4 Dashboard/Player integration
 
 - 대시보드 진행 중 streak 카드
 - 선수 상세에 해당 선수의 active streak 표시
