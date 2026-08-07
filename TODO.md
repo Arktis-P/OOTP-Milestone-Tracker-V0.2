@@ -356,7 +356,7 @@ baseline + 앱이 import한 이후 기록을 결합해 통산 threshold crossing
 
 # Phase 5. 최소 사용 가능한 UI(MVP)
 
-## [ ] 5.1 앱 셸 / 내비게이션
+## [x] 5.1 앱 셸 / 내비게이션
 
 ### 권장 페이지
 Records
@@ -377,7 +377,7 @@ Settings
 
 초기 MVP에서는 1, 2, 3, 6, 9만 먼저 실제 구현하고 나머지는 placeholder여도 된다.
 
-## [ ] 5.2 Settings
+## [x] 5.2 Settings
 
 ### 기능
 - OOTP save root 선택
@@ -388,7 +388,7 @@ Settings
 - 파생 경로 확인
 - 데이터 readiness 표시
 
-## [ ] 5.3 Record Import Center
+## [x] 5.3 Record Import Center
 
 ### 기능
 모든 import 작업의 진입점을 한 곳에 둔다.
@@ -402,7 +402,7 @@ Settings
 - 추후 news messages
 - season finalize
 
-## [ ] 5.4 Achievement Records
+## [x] 5.4 Achievement Records
 
 ### 기능
 자동/수동으로 저장된 모든 이벤트를 조회한다.
@@ -418,7 +418,7 @@ Settings
 - 마일스톤 달성 카드를 고화질 이미지(PNG) 또는 세련된 HTML 카드로 내보내기/복사.
 - 커뮤니티(FM/OOTP 야구 커뮤니티 등)에 공유하기 용이하도록 마일스톤 요약 텍스트 자동 복사 기능 제공.
 
-## [ ] 5.5 Player Stats
+## [x] 5.5 Player Stats
 
 ### 기능
 추적 팀 선수를 중심으로 시즌/통산 기록을 본다.
@@ -430,7 +430,7 @@ Settings
 - 경기별 drill-down
 - 최근 milestone 요약
 
-## [ ] 5.6 Dashboard
+## [x] 5.6 Dashboard
 
 ### 기능
 앱을 켰을 때 현재 데이터 상태와 중요한 기록을 압축해서 보여준다.

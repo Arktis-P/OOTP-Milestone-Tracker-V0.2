@@ -27,9 +27,11 @@ def main():
     print("Starting GUI mode...")
     try:
         from PySide6.QtWidgets import QApplication
+        from gui.theme.theme import apply_dark_theme
         from gui.views.main_window import MainWindow
 
         app = QApplication(sys.argv)
+        apply_dark_theme(app)
         window = MainWindow(settings_mgr)
         window.show()
         print("GUI Window launched successfully.")
