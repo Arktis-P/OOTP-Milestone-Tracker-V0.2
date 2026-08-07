@@ -103,19 +103,39 @@ class SettingsManager:
 
     def detect_ootp_save_directories(self) -> List[str]:
         """
-        Dynamically scans common OOTP saved_games locations on Windows:
-        1. Standard Documents
-        2. OneDrive Documents (English)
-        3. OneDrive Documents (Korean)
+        Dynamically scans OOTP saved_games locations on Windows:
+        1. Windows Active Shell Personal (Documents) folder from Registry
+        2. Standard Documents
+        3. OneDrive Documents (English & Korean fallbacks)
         """
         user_home = os.path.expanduser("~")
-        candidate_roots = [
+        candidate_roots = []
+
+        # 1. Query Windows User Shell Folders registry
+        try:
+            import winreg
+            key = winreg.OpenKey(
+                winreg.HKEY_CURRENT_USER,
+                r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+            )
+            personal_path, _ = winreg.QueryValueEx(key, "Personal")
+            winreg.CloseKey(key)
+            if personal_path:
+                expanded = os.path.expandvars(personal_path)
+                candidate_roots.append(os.path.join(expanded, "Out of the Park Developments"))
+        except Exception:
+            pass
+
+        # 2. Add fallback paths
+        candidate_roots.extend([
             os.path.join(user_home, "Documents", "Out of the Park Developments"),
             os.path.join(user_home, "OneDrive", "Documents", "Out of the Park Developments"),
             os.path.join(user_home, "OneDrive", "문서", "Out of the Park Developments"),
-        ]
+        ])
 
         found_saves: List[str] = []
+        seen_paths = set()
+
         for root in candidate_roots:
             if not os.path.exists(root):
                 continue
@@ -125,9 +145,10 @@ class SettingsManager:
                     if os.path.exists(saved_games_dir):
                         for save_folder in os.listdir(saved_games_dir):
                             if save_folder.endswith(".lg") and not save_folder.startswith("."):
-                                full_save_path = os.path.join(saved_games_dir, save_folder)
-                                if os.path.isdir(full_save_path):
-                                    found_saves.append(os.path.normpath(full_save_path))
+                                full_save_path = os.path.normpath(os.path.join(saved_games_dir, save_folder))
+                                if os.path.isdir(full_save_path) and full_save_path.lower() not in seen_paths:
+                                    seen_paths.add(full_save_path.lower())
+                                    found_saves.append(full_save_path)
 
         return found_saves
 

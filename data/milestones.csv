@@ -1,0 +1,32 @@
+category,key,label,scope,stat,threshold,direction,grade,track_from,near_n,description_template
+batting,bat_game_hr_3,한 경기 3홈런,game,hr,3,higher,rare,,,1경기에 3개 이상의 홈런을 기록했습니다.
+batting,bat_game_h_5,한 경기 5안타,game,h,5,higher,epic,,,1경기에 5개 이상의 안타를 기록했습니다.
+batting,bat_game_cycle,사이클링 히트,game,cycle,1,boolean,legendary,,,히트 포 더 사이클(사이클링 히트)을 달성했습니다!
+batting,bat_game_grand_slam,그랜드슬램 (만루홈런),game,grand_slam,1,boolean,epic,,,시원한 만루 홈런을 터뜨렸습니다!
+pitching,pit_game_so_15,한 경기 15탈삼진,game,so,15,higher,epic,,,1경기에 무려 15개의 삼진을 솎아냈습니다.
+pitching,pit_game_cg,완투 승,game,cg,1,boolean,uncommon,,,경기 전체를 혼자 책임지는 완투를 기록했습니다.
+pitching,pit_game_sho,완봉 승,game,sho,1,boolean,rare,,,상대 타선을 무실점으로 봉쇄하는 완봉을 기록했습니다.
+pitching,pit_game_no_hitter,노히트 노런,game,no_hitter,1,boolean,legendary,,,상대 타선에 안타를 단 1개도 허용하지 않은 노히트 노런 달성!
+pitching,pit_game_perfect_game,퍼펙트 게임,game,perfect_game,1,boolean,legendary,,,단 한 명의 주자도 허용하지 않은 대기록, 퍼펙트 게임 달성!
+batting,bat_season_hr_30,시즌 30홈런,season,hr,30,higher,rare,25,3,시즌 30호 홈런을 달성했습니다.
+batting,bat_season_hr_40,시즌 40홈런,season,hr,40,higher,epic,35,3,시즌 40호 홈런을 달성했습니다.
+batting,bat_season_hr_50,시즌 50홈런,season,hr,50,higher,legendary,45,3,시즌 50호 홈런 달성을 이뤄냈습니다.
+batting,bat_season_h_200,시즌 200안타,season,h,200,higher,epic,180,5,시즌 200안타 대기록을 작성했습니다.
+batting,bat_season_rbi_100,시즌 100타점,season,rbi,100,higher,rare,85,5,시즌 100타점을 돌파했습니다.
+batting,bat_season_sb_30,시즌 30도루,season,sb,30,higher,uncommon,25,3,시즌 30도루 성공!
+batting,bat_season_composite_20_20,시즌 20-20 클럽,season,season_hr_sb,20-20,higher,rare,15,2,시즌 20홈런 - 20도루 클럽에 가입했습니다.
+batting,bat_season_composite_30_30,시즌 30-30 클럽,season,season_hr_sb,30-30,higher,epic,25,2,시즌 30홈런 - 30도루 클럽에 가입했습니다.
+batting,bat_season_composite_40_40,시즌 40-40 클럽,season,season_hr_sb,40-40,higher,legendary,35,2,시즌 40홈런 - 40도루 클럽에 가입했습니다.
+batting,bat_season_composite_50_50,시즌 50-50 클럽,season,season_hr_sb,50-50,higher,legendary,45,2,시즌 50홈런 - 50도루 역사적 클럽에 가입했습니다!
+pitching,pit_season_w_20,시즌 20승,season,w,20,higher,epic,16,2,시즌 20승 고지에 올랐습니다.
+pitching,pit_season_so_200,시즌 200탈삼진,season,so,200,higher,rare,170,10,시즌 200탈삼진 달성!
+pitching,pit_season_sv_40,시즌 40세이브,season,sv,40,higher,epic,35,3,시즌 40세이브로 뒷문을 완벽히 잠궜습니다.
+batting,bat_career_first_h,통산 첫 안타,career,h,1,higher,common,,,개인 통산 첫 메이저리그 안타를 달성했습니다.
+batting,bat_career_first_hr,통산 첫 홈런,career,hr,1,higher,uncommon,,,개인 통산 첫 마수걸이 홈런을 터뜨렸습니다.
+batting,bat_career_hr_500,통산 500홈런,career,hr,500,higher,legendary,450,10,대기록! 개인 통산 500홈런 고지를 점령했습니다!
+batting,bat_career_h_3000,통산 3000안타,career,h,3000,higher,legendary,2700,50,명예의 전당 보증수표! 통산 3000안타를 완성했습니다!
+pitching,pit_career_first_w,통산 첫 승,career,w,1,higher,common,,,개인 통산 첫 승리 투수가 되었습니다.
+pitching,pit_career_first_so,통산 첫 탈삼진,career,so,1,higher,common,,,개인 통산 첫 삼진을 삼켰습니다.
+pitching,pit_career_w_300,통산 300승,career,w,300,higher,legendary,270,10,전설적인 통산 300승 대기록을 달성했습니다!
+pitching,pit_career_so_3000,통산 3000탈삼진,career,so,3000,higher,legendary,2700,50,통산 3000탈삼진을 기록한 위대한 대열에 합류했습니다.
+team,team_season_w_100,팀 시즌 100승,team_season,w,100,higher,epic,90,3,팀 시즌 100승 대기록 달성!
