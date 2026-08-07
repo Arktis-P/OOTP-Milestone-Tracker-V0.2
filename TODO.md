@@ -195,7 +195,7 @@ OOTP 파일마다 이름 표현이 달라도 동일 선수를 최대한 같은 �
 
 # Phase 3. Import 파이프라인과 통계 집계
 
-## [ ] 3.1 baseline import workflow
+## [x] 3.1 baseline import workflow
 
 ### 기능
 stats TXT를 최초/갱신/시즌 중간 모드로 가져온다.
@@ -210,7 +210,7 @@ stats TXT를 최초/갱신/시즌 중간 모드로 가져온다.
 - 저장은 transaction으로 묶는다.
 - GUI에서는 worker thread로 실행할 수 있도록 core API를 분리한다.
 
-## [ ] 3.2 박스스코어 import
+## [x] 3.2 박스스코어 import
 
 ### 기능
 새 경기 파일을 가져와 게임/통계/마일스톤/연속 기록을 갱신한다.
@@ -231,7 +231,7 @@ stats TXT를 최초/갱신/시즌 중간 모드로 가져온다.
 - 같은 파일 2회 import 시 결과가 증가하지 않는다.
 - 실패 시 해당 경기 처리 전체가 rollback 된다.
 
-## [ ] 3.3 수정 박스스코어 재가져오기
+## [x] 3.3 수정 박스스코어 재가져오기
 
 ### 기능
 이미 처리한 최신 경기 파일이 수정됐을 때 기존 결과를 안전하게 교체한다.
@@ -241,7 +241,7 @@ stats TXT를 최초/갱신/시즌 중간 모드로 가져온다.
 - 기존 game stats + 자동 milestone + streak 결과를 한 transaction에서 제거/재생한다.
 - 역사적 누적 재생이 안전하지 않은 과거 경기 수정은 거부하고 사용자에게 이유를 보여준다.
 
-## [ ] 3.4 라이브 자동 스캔/감시 (Live Auto-Watch)
+## [x] 3.4 라이브 자동 스캔/감시 (Live Auto-Watch)
 
 ### 기능
 OOTP 세이브 디렉터리(`boxscores/`, `news/`)의 파일 생성을 백그라운드에서 감시하고 새 경기 완료 시 자동 import를 수행한다.
