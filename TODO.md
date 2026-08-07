@@ -507,7 +507,7 @@ Settings
 
 # Phase 8. 수동 기록과 선수 보완
 
-## [ ] 8.1 통합 수동 기록 폼
+## [x] 8.1 통합 수동 기록 폼
 
 ### 지원
 - 마일스톤
@@ -520,7 +520,7 @@ Settings
 ### 요구
 자동 이벤트와 동일한 조회 모델에 저장하되 `source=manual`을 명시한다.
 
-## [ ] 8.2 수동 선수 등록
+## [x] 8.2 수동 선수 등록
 
 ### 기능
 아직 DB에 없는 선수를 풀 네임으로 임시 생성하고 이벤트를 기록한다.
@@ -532,12 +532,12 @@ stats/boxscore에서 확정 player_id가 확인되면 기존 이벤트를 병합
 
 # Phase 9. OOTP 뉴스 메시지 자동화
 
-## [ ] 9.1 messageN.txt 스캐너
+## [x] 9.1 messageN.txt 스캐너
 
 ### 기능
 OOTP 뉴스 폴더에서 메시지 파일을 수집하고 source fingerprint를 저장한다.
 
-## [ ] 9.2 messages.dat 날짜 해석기
+## [x] 9.2 messages.dat 날짜 해석기
 
 ### 기능
 확인된 OOTP 버전의 메시지 날짜 metadata를 읽는다.
@@ -545,7 +545,7 @@ OOTP 뉴스 폴더에서 메시지 파일을 수집하고 source fingerprint를 
 ### 안전 규칙
 확인되지 않은 버전/필드는 추측해서 쓰지 않는다. unsupported 상태로 남기고 텍스트 스캔은 계속한다.
 
-## [ ] 9.3 메시지 분류/파싱
+## [x] 9.3 메시지 분류/파싱
 
 ### 우선 지원
 - 트레이드
@@ -563,7 +563,7 @@ OOTP 뉴스 폴더에서 메시지 파일을 수집하고 source fingerprint를 
 - 월드시리즈 우승
 - 명예의 전당
 
-## [ ] 9.4 검토/승인 UI
+## [x] 9.4 검토/승인 UI
 
 상태:
 - new
@@ -575,7 +575,7 @@ OOTP 뉴스 폴더에서 메시지 파일을 수집하고 source fingerprint를 
 
 사용자가 승인한 메시지만 저장한다.
 
-## [ ] 9.5 메시지 단위 원자 저장
+## [x] 9.5 메시지 단위 원자 저장
 
 한 메시지에서 여러 이벤트가 생기더라도 모두 성공해야 commit한다.
 실패 시 해당 메시지만 rollback하고 error 상태를 저장한다.
@@ -584,12 +584,12 @@ OOTP 뉴스 폴더에서 메시지 파일을 수집하고 source fingerprint를 
 
 # Phase 10. 커스텀 팀 / 확장팀
 
-## [ ] 10.1 tracked teams
+## [x] 10.1 tracked teams
 
 - 기본 MLB 팀
 - 사용자 선택 추적 팀
 
-## [ ] 10.2 custom team registration
+## [x] 10.2 custom team registration
 
 - 약칭
 - 팀명
@@ -601,11 +601,11 @@ stats export의 affiliation을 이용해 선수를 커스텀 팀에 연결한다
 
 # Phase 11. 레이팅 편집
 
-## [ ] 11.1 roster parser
+## [x] 11.1 roster parser
 
 MLB/KBO roster export를 읽되 통계 DB와 강하게 결합하지 않는다.
 
-## [ ] 11.2 일괄 편집
+## [x] 11.2 일괄 편집
 
 ### 기능
 - 대상 필터
@@ -624,12 +624,12 @@ MLB/KBO roster export를 읽되 통계 DB와 강하게 결합하지 않는다.
 
 # Phase 12. 로컬라이제이션
 
-## [ ] 12.1 UI 한국어/English
+## [x] 12.1 UI 한국어/English
 
 모든 UI 문구는 translation layer를 통과한다.
 언어 변경은 settings에 저장한다.
 
-## [ ] 12.2 선수 이름 한글 매핑
+## [x] 12.2 선수 이름 한글 매핑
 
 ### 파일
 - korean_last_names.csv
@@ -648,7 +648,7 @@ UI 언어와 선수명 한글 표시는 독립 설정으로 유지한다.
 
 # Phase 13. 번들 정책 업데이트
 
-## [ ] 13.1 bundle manifest
+## [x] 13.1 bundle manifest
 
 앱 업데이트로 새 milestone/name seed/policy가 추가됐을 때 사용자 파일에 안전하게 병합한다.
 
@@ -661,19 +661,19 @@ UI 언어와 선수명 한글 표시는 독립 설정으로 유지한다.
 
 # Phase 14. Advanced Tools / 복구 도구
 
-## [ ] 14.1 개별 박스스코어 재import
+## [x] 14.1 개별 박스스코어 재import
 
 선택 파일 1개를 복구 목적으로 다시 처리한다.
 
-## [ ] 14.2 Spring Training 제거
+## [x] 14.2 Spring Training 제거
 
 스프링 트레이닝 경기를 명시적으로 찾아 운영 기록에서 제거한다.
 
-## [ ] 14.3 Regular Season recovery
+## [x] 14.3 Regular Season recovery
 
 삭제/누락 이후 boxscore source를 다시 스캔해 빠진 정규시즌 경기를 복구한다.
 
-## [ ] 14.4 Season isolation validation
+## [x] 14.4 Season isolation validation
 
 ### 기능
 운영 DB를 수정하지 않고 별도 validation DB에 시즌 전체를 replay한다.
@@ -685,7 +685,7 @@ UI 언어와 선수명 한글 표시는 독립 설정으로 유지한다.
 - 운영 DB와의 차이
 - JSON report
 
-## [ ] 14.5 현재 세이브 DB 초기화
+## [x] 14.5 현재 세이브 DB 초기화
 
 삭제 전 DB summary와 대상 경로를 표시하고 명시적 확인을 요구한다.
 
@@ -693,7 +693,7 @@ UI 언어와 선수명 한글 표시는 독립 설정으로 유지한다.
 
 # Phase 15. 배포 / 품질
 
-## [ ] 15.1 테스트 계층
+## [x] 15.1 테스트 계층
 
 필수 테스트:
 - parser fixtures
@@ -709,13 +709,13 @@ UI 언어와 선수명 한글 표시는 독립 설정으로 유지한다.
 - message save rollback
 - save isolation
 
-## [ ] 15.2 Windows 배포
+## [x] 15.2 Windows 배포
 
 - PyInstaller build
 - 사용자 데이터는 `%APPDATA%/OOTP_Milestone_Tracker_V0.2/` 등 별도 영역
 - exe 교체 후 DB/settings/user CSV 유지
 
-## [ ] 15.3 E2E acceptance flow
+## [x] 15.3 E2E acceptance flow
 
 최종적으로 아래 흐름이 실제 세이브 fixture에서 끊김 없이 동작해야 한다.
 

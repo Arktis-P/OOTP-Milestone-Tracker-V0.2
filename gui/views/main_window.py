@@ -15,17 +15,10 @@ from gui.views.player_stats_view import PlayerStatsView
 from gui.views.prediction_view import PredictionView
 from gui.views.streak_view import StreakView
 from gui.views.record_import_center_view import RecordImportCenterView
+from gui.views.manual_records_view import ManualRecordsView
+from gui.views.rating_editor_view import RatingEditorView
 from gui.views.settings_view import SettingsView
-
-
-class PlaceholderView(QWidget):
-    def __init__(self, title_text: str):
-        super().__init__()
-        layout = QVBoxLayout(self)
-        label = QLabel(f"[{title_text}] 준비 중 (Phase 후속 구현 대상)")
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        label.setStyleSheet("font-size: 16px; color: #888899;")
-        layout.addWidget(label)
+from gui.views.advanced_tools_view import AdvancedToolsView
 
 
 class MainWindow(QMainWindow):
@@ -103,7 +96,10 @@ class MainWindow(QMainWindow):
         prediction_page = PredictionView(self.settings_mgr)
         streak_page = StreakView(self.settings_mgr)
         import_center_page = RecordImportCenterView(self.settings_mgr)
+        manual_page = ManualRecordsView(self.settings_mgr)
+        rating_editor_page = RatingEditorView(self.settings_mgr)
         settings_page = SettingsView(self.settings_mgr, on_settings_changed=self._on_settings_changed)
+        advanced_tools_page = AdvancedToolsView(self.settings_mgr)
 
         self.pages["Dashboard"] = (0, dashboard_page)
         self.pages["Achievement Records"] = (1, records_page)
@@ -111,10 +107,10 @@ class MainWindow(QMainWindow):
         self.pages["Predictions"] = (3, prediction_page)
         self.pages["Streak Records"] = (4, streak_page)
         self.pages["Record Import Center"] = (5, import_center_page)
-        self.pages["Manual Records"] = (6, PlaceholderView("Manual Records"))
-        self.pages["Rating Editor"] = (7, PlaceholderView("Rating Editor"))
+        self.pages["Manual Records"] = (6, manual_page)
+        self.pages["Rating Editor"] = (7, rating_editor_page)
         self.pages["Settings"] = (8, settings_page)
-        self.pages["Advanced Tools"] = (9, PlaceholderView("Advanced Tools"))
+        self.pages["Advanced Tools"] = (9, advanced_tools_page)
 
         for _, (_, widget) in sorted(self.pages.items(), key=lambda item: item[1][0]):
             self.stacked_widget.addWidget(widget)

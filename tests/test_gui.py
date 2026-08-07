@@ -33,12 +33,9 @@ def test_gui_views_initialization(qapp, tmp_path):
     assert window.windowTitle() == "OOTP Milestone Tracker V0.2"
     assert window.stacked_widget.count() == 10
 
-    # Test page navigation
-    window.navigate_to_page("Record Import Center")
-    assert window.stacked_widget.currentIndex() == 5
-
-    window.navigate_to_page("Settings")
-    assert window.stacked_widget.currentIndex() == 8
-
-    window.navigate_to_page("Dashboard")
-    assert window.stacked_widget.currentIndex() == 0
+    # Test page navigation across all 10 pages
+    for key in ["Dashboard", "Achievement Records", "Player Stats", "Predictions", "Streak Records",
+                "Record Import Center", "Manual Records", "Rating Editor", "Settings", "Advanced Tools"]:
+        window.navigate_to_page(key)
+        idx, _ = window.pages[key]
+        assert window.stacked_widget.currentIndex() == idx
