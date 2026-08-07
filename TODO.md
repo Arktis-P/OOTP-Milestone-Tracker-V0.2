@@ -40,14 +40,19 @@
 │  ├─ import_workflow/
 │  └─ validation/
 ├─ gui/
+│  ├─ theme/          # UI 디자인 시스템, 컬러 팔레트, 큐티 스타일시트(QSS)
 │  ├─ views/
 │  ├─ widgets/
-│  └─ workers/
+│  └─ workers/        # QThread 기반 비동기 워커
 ├─ data/
 ├─ docs/
 ├─ tests/
 └─ build.py
 ```
+
+### GUI 기술 스택 및 아키텍처 원칙
+- **GUI 프레임워크**: PySide6 (또는 PyQt6) 활용, 모던 다크 테마 및 반응형 카드 디자이너 적용.
+- **비동기 응답성**: 파일 파싱 및 DB I/O 등 중무거운 작업은 반드시 `gui/workers/`의 `QThread`를 활용하여 메인 UI 스레드 멈춤(Freezing) 현상을 완벽히 방지.
 
 ### 완료 조건
 - `python main.py`가 오류 없이 최소 창 또는 CLI bootstrap까지 실행된다.
@@ -230,6 +235,19 @@ stats TXT를 최초/갱신/시즌 중간 모드로 가져온다.
 - 기존 game stats + 자동 milestone + streak 결과를 한 transaction에서 제거/재생한다.
 - 역사적 누적 재생이 안전하지 않은 과거 경기 수정은 거부하고 사용자에게 이유를 보여준다.
 
+## [ ] 3.4 라이브 자동 스캔/감시 (Live Auto-Watch)
+
+### 기능
+OOTP 세이브 디렉터리(`boxscores/`, `news/`)의 파일 생성을 백그라운드에서 감시하고 새 경기 완료 시 자동 import를 수행한다.
+
+### 동작
+- watchdog 기반의 File System Watcher 모듈 구현.
+- 게임 실행 중 새 박스스코어 생성 시 무중단 자동 감지 및 백그라운드 파싱/마일스톤 갱신.
+- 트레이 핑/알림 UI를 통해 신규 달성된 마일스톤 즉시 팝업 안내.
+
+### 완료 조건
+- 라이브 감시 On/Off 토글이 가능하고, 새 파일 생성 시 자동 import 및 UI 신규 이벤트 알림이 동작한다.
+
 ---
 
 # Phase 4. 마일스톤 엔진 — 제품의 핵심
@@ -389,6 +407,10 @@ Settings
 - 이벤트 유형
 - 중요도
 - 자동/수동 source
+
+### 내보내기 & 공유 (Export & Share)
+- 마일스톤 달성 카드를 고화질 이미지(PNG) 또는 세련된 HTML 카드로 내보내기/복사.
+- 커뮤니티(FM/OOTP 야구 커뮤니티 등)에 공유하기 용이하도록 마일스톤 요약 텍스트 자동 복사 기능 제공.
 
 ## [ ] 5.5 Player Stats
 
