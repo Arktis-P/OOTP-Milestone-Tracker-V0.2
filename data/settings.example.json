@@ -1,0 +1,12 @@
+{
+  "active_save_path": "",
+  "league_id": "lg_1",
+  "current_season": 2026,
+  "tracked_teams": [],
+  "mlb_only": true,
+  "ui_language": "ko",
+  "korean_names_enabled": true,
+  "auto_watch_enabled": false,
+  "qualification_ab_per_game": 3.1,
+  "qualification_ip_per_game": 1.0
+}
