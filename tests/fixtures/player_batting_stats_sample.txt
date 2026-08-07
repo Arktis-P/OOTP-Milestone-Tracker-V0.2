@@ -1,0 +1,301 @@
+//412 => Anyang Hops (California League => 212)
+//413 => Seoul (FCL) Yukies (Florida Complex League => 218)
+//414 =>  (World Baseball Classic => 80)
+//415 =>  (World Baseball Classic => 80)
+//416 =>  (World Baseball Classic => 80)
+//417 =>  (World Baseball Classic => 80)
+//
+//FILE FORMAT:
+//player ID, lastname, firstname, year, team ID, g, gs, pa, ab, h, 2b, 3b, hr, rbi, r, sb, cs, bb, hp, k, sh, sf, gdp, ibb, ci, pitches seen, vorp, split_id, team_abbr, league_abbr, team_name, league_name, league_level_id, bbrefid, bbrefminorid, OOTP pID
+//split_id: 1 = overall; 2 = vsL; 3 = vsR; 21 = Playoffs
+//NOTE: Player, team and league names are purely cosmetical and will not be used when importing stats from this file!
+56971,Aaberg,Al,1936,293,4,3,11,10,2,0,0,0,1,1,0,0,1,0,1,0,0,0,0,0,0,-0.1,1,BRA,FSL,Bradenton,Florida State League,4,BRA,,aaberg001alf,134887,eol
+56972,Aadland,Kirk,1978,96,39,26,111,80,9,0,0,0,1,12,7,1,26,0,19,5,0,0,1,0,0,-0.6,1,ACBl,ACL,Chicago N (ACL),Arizona Complex League,6,ACBl,,aadlan001kir,134888,eol
+56973,Aalbers,Brady,1998,288,22,13,54,46,8,2,0,0,1,3,1,2,4,2,12,2,0,2,0,0,0,-0.4,1,DAY,FSL,Daytona,Florida State League,4,DAY,,aalber001bra,134889,eol
+56974,Aanonsen,Gerald,1968,104,15,10,40,35,3,0,0,0,0,4,0,0,5,0,6,0,0,0,0,0,0,-0.5,1,FSTL,FCL,St. Louis (FCL),Florida Complex League,6,FSTL,,aanons001ger,134890,eol
+56974,Aanonsen,Gerald,1969,104,2,2,6,6,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.1,1,FSTL,FCL,St. Louis (FCL),Florida Complex League,6,FSTL,,aanons001ger,134890,eol
+17977,Aardsma,David,2004,58,44,1,4,4,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,-0.1,1,SAC,PCL,Sacramento,Pacific Coast League,2,SAC,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2005,73,33,2,7,6,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,-0.2,1,KNO,SL,Knoxville,Southern League,3,KNO,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2005,63,9,1,6,5,1,1,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,-0.0,1,RCH,EL,Richmond,Eastern League,3,RCH,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2006,47,29,0,2,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,-0.0,1,IOW,IL,Iowa,International League,2,IOW,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2006,6,45,0,3,2,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,-0.1,1,CHC,MLB,Chicago,Major League Baseball,1,CHC,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2006,6,26,0,2,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,-0.0,3,CHC,MLB,Chicago,Major League Baseball,1,CHC,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2006,6,17,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,2,CHC,MLB,Chicago,Major League Baseball,1,CHC,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2008,4,4,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,3,BOS,MLB,Boston,Major League Baseball,1,BOS,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2008,4,47,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,1,BOS,MLB,Boston,Major League Baseball,1,BOS,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2008,4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,2,BOS,MLB,Boston,Major League Baseball,1,BOS,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2014,48,33,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,1,MEM,IL,Memphis,International League,2,MEM,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2015,2,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2015,2,33,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aardsda01,aardsm001dav,18619,eol
+17977,Aardsma,David,2015,2,25,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aardsda01,aardsm001dav,18619,eol
+2015,Aaron,Hank,1952,90,87,87,389,345,116,19,4,9,50,26,3,2,35,2,41,4,3,6,2,0,0,3.3,1,AUG,CAR,Augusta,Carolina League,4,AUG,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1954,2,122,113,509,468,131,27,6,13,69,58,2,2,28,3,39,6,4,13,3,0,0,1.9,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1955,2,153,151,665,602,189,37,9,27,106,105,3,1,49,3,61,7,4,20,5,0,0,5.7,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1956,2,153,152,660,609,200,34,14,26,92,106,2,4,37,2,54,5,7,21,6,0,0,6.0,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1957,2,7,0,29,28,11,0,1,3,7,5,0,0,1,0,6,0,0,0,0,0,0,0.6,21,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1957,2,151,150,675,615,198,27,6,44,132,118,1,1,57,0,58,0,3,13,15,0,0,7.4,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1958,2,7,0,31,27,9,2,0,0,2,3,0,0,4,0,6,0,0,1,0,0,0,0.2,21,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1958,2,153,153,664,601,196,34,4,30,95,109,4,1,59,1,49,0,3,21,16,0,0,6.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1959,2,154,154,693,629,223,46,7,39,123,116,8,0,51,4,54,0,9,19,17,0,0,8.9,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1960,2,153,153,664,590,172,20,11,40,126,102,16,7,60,2,63,0,12,8,13,0,0,6.2,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1961,2,155,154,671,603,197,39,10,34,120,115,21,9,56,2,64,1,9,16,20,0,0,6.5,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1962,2,156,153,667,592,191,28,6,45,128,127,15,7,66,3,73,0,6,14,14,0,0,7.8,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1963,2,161,161,714,631,201,29,4,44,130,121,31,5,78,0,94,0,5,11,18,0,0,10.2,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1964,2,145,142,634,570,187,30,2,24,95,103,22,4,62,0,46,0,2,22,9,0,0,7.5,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1965,2,150,148,639,570,181,40,1,32,89,109,24,4,60,1,81,0,8,15,10,0,0,8.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1966,2,158,157,688,603,168,23,1,44,127,117,21,3,76,1,96,0,8,14,15,0,0,7.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1966,2,48,48,203,179,54,5,0,16,44,36,4,0,22,0,19,0,2,3,4,0,0,2.6,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1966,2,110,109,485,424,114,18,1,28,83,81,17,3,54,1,77,0,6,11,11,0,0,4.5,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1967,2,155,152,669,600,184,37,3,39,109,113,17,6,63,0,97,0,6,11,19,0,0,8.4,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1967,2,114,111,485,436,132,25,2,27,75,82,16,4,43,0,77,0,6,10,14,0,0,5.7,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1967,2,41,41,184,164,52,12,1,12,34,31,1,2,20,0,20,0,0,2,5,0,0,2.7,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1968,2,160,157,676,606,174,33,4,29,86,84,28,5,64,1,62,0,5,21,23,0,0,7.8,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1968,2,48,48,208,189,52,12,0,8,24,19,7,2,17,1,10,0,1,6,8,0,0,1.9,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1968,2,112,109,468,417,122,21,4,21,62,65,21,3,47,0,52,0,4,15,15,0,0,5.9,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1969,2,42,42,187,150,47,9,2,13,30,34,2,3,34,2,7,0,1,3,9,0,0,2.8,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1969,2,3,0,14,14,5,2,0,3,7,3,0,0,0,0,1,0,0,1,0,0,0,0.5,21,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1969,2,105,103,452,397,117,21,1,31,67,66,7,7,53,0,40,0,2,11,10,0,0,5.4,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1969,2,147,145,639,547,164,30,3,44,97,100,9,10,87,2,47,0,3,14,19,0,0,8.2,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1970,2,113,98,436,368,122,18,0,33,97,83,7,0,61,2,41,0,5,10,11,0,0,6.2,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1970,2,150,135,598,516,154,26,1,38,118,103,9,0,74,2,63,0,6,13,15,0,0,6.3,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1970,2,37,37,162,148,32,8,1,5,21,20,2,0,13,0,22,0,1,3,4,0,0,0.1,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1971,2,99,90,401,342,114,17,3,29,72,64,1,1,54,1,41,0,4,2,17,0,0,6.0,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1971,2,139,129,573,495,162,22,3,47,118,95,1,1,71,2,58,0,5,9,21,0,0,8.8,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1971,2,40,39,172,153,48,5,0,18,46,31,0,0,17,1,17,0,1,7,4,0,0,2.8,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1972,2,78,71,320,260,67,6,0,19,44,40,3,0,60,0,37,0,0,7,11,0,0,3.5,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1972,2,129,121,544,449,119,10,0,34,77,75,4,0,92,1,55,0,2,17,15,0,0,6.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1972,2,51,50,225,189,52,4,0,15,33,35,1,0,33,1,18,0,2,10,4,0,0,2.7,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1973,2,120,105,465,392,118,12,1,40,96,84,1,1,68,1,51,0,4,7,13,0,0,6.4,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1973,2,58,49,214,187,54,2,0,22,53,40,0,0,25,0,28,0,2,2,5,0,0,2.8,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1973,2,62,56,251,205,64,10,1,18,43,44,1,1,43,1,23,0,2,5,8,0,0,3.5,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1974,2,68,51,220,200,56,8,0,15,46,30,1,0,19,0,21,0,1,3,4,0,0,2.1,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1974,2,112,89,382,340,91,16,0,20,69,47,1,0,39,0,29,1,2,6,6,0,0,2.9,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1974,2,44,38,162,140,35,8,0,5,23,17,0,0,20,0,8,1,1,3,2,0,0,0.9,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1975,16,47,47,201,160,42,5,1,6,26,18,0,0,37,1,15,0,3,6,1,0,0,1.6,2,MIL,MLB,Milwaukee,Major League Baseball,1,MIL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1975,16,90,82,342,305,67,11,1,6,34,27,0,1,33,0,36,1,3,9,2,0,0,0.2,3,MIL,MLB,Milwaukee,Major League Baseball,1,MIL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1975,16,137,129,543,465,109,16,2,12,60,45,0,1,70,1,51,1,6,15,3,0,0,1.8,1,MIL,MLB,Milwaukee,Major League Baseball,1,ML4,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1976,16,53,38,176,157,37,2,0,4,17,9,0,1,18,0,22,0,1,7,1,0,0,0.4,3,MIL,MLB,Milwaukee,Major League Baseball,1,MIL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1976,16,32,32,132,114,25,6,0,6,18,13,0,0,17,0,16,0,1,1,0,0,0,0.8,2,MIL,MLB,Milwaukee,Major League Baseball,1,MIL,aaronha01,aaron-001hen,2499,eol
+2015,Aaron,Hank,1976,16,85,70,308,271,62,8,0,10,35,22,0,1,35,0,38,0,2,8,1,0,0,1.2,1,MIL,MLB,Milwaukee,Major League Baseball,1,ML4,aaronha01,aaron-001hen,2499,eol
+56975,Aaron,Lary,1981,105,28,16,73,63,12,1,0,0,5,5,1,0,2,2,8,6,0,1,0,0,0,-0.6,1,FATL,FCL,Atlanta (FCL),Florida Complex League,6,FATL,,aaron-001law,134892,eol
+56975,Aaron,Lary,1982,105,36,30,122,103,33,4,0,1,10,16,5,2,18,0,21,0,1,2,1,0,0,0.4,1,FATL,FCL,Atlanta (FCL),Florida Complex League,6,FATL,,aaron-001law,134892,eol
+2016,Aaron,Tommie,1958,90,66,65,266,237,65,10,0,3,33,32,2,1,23,4,42,1,1,3,2,0,0,0.7,1,AUG,CAR,Augusta,Carolina League,4,AUG,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1959,90,123,123,523,472,121,16,3,26,80,88,3,2,39,4,86,5,3,14,5,0,0,2.2,1,AUG,CAR,Augusta,Carolina League,4,AUG,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1960,75,137,137,586,515,154,26,7,20,88,93,10,3,58,4,94,2,7,15,6,0,0,3.6,1,CBS,SL,Columbus,Southern League,3,CBS,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1960,42,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1961,75,138,138,609,528,158,25,3,15,70,77,5,2,66,2,72,10,3,12,4,0,0,3.0,1,CBS,SL,Columbus,Southern League,3,CBS,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1962,2,141,74,382,334,77,20,2,8,38,54,6,0,41,0,58,4,3,10,0,0,0,1.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1963,42,66,66,274,252,78,12,2,10,36,46,1,0,21,0,32,0,1,5,2,0,0,1.7,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1963,2,72,28,151,135,27,6,1,1,15,6,0,3,11,0,27,3,2,7,1,0,0,-0.4,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1964,42,152,152,614,553,153,28,11,21,86,103,5,1,56,2,85,1,2,12,5,0,0,3.2,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1965,42,114,108,441,402,114,19,2,4,36,41,3,2,29,2,38,5,3,9,4,0,0,0.5,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1965,2,8,4,17,16,3,0,0,0,1,1,0,0,1,0,2,0,0,1,0,0,0,-0.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ML1,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1966,42,110,86,351,320,86,14,4,11,49,41,2,2,23,3,40,0,5,7,3,0,0,1.0,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1967,42,119,112,455,424,131,17,0,11,56,45,5,4,23,3,46,1,4,9,5,0,0,1.5,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1968,2,50,22,118,106,25,2,1,0,16,9,2,2,9,0,16,2,1,5,1,0,0,0.1,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1968,2,48,48,189,177,44,8,2,1,9,12,1,2,12,0,21,0,0,4,0,0,0,0.7,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1968,2,98,70,307,283,69,10,3,1,25,21,3,4,21,0,37,2,1,9,1,0,0,0.8,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1969,2,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,21,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1969,2,49,8,66,60,15,2,0,1,5,13,0,1,6,0,6,0,0,1,0,0,0,0.2,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1969,2,31,6,44,39,12,2,0,1,5,10,0,1,5,0,4,0,0,0,0,0,0,0.4,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1969,2,18,2,22,21,3,0,0,0,0,3,0,0,1,0,2,0,0,1,0,0,0,-0.2,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1970,2,44,12,66,63,13,2,0,2,7,3,0,0,3,0,10,0,0,5,0,0,0,-0.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1970,2,16,8,39,37,10,2,0,2,6,2,0,0,2,0,5,0,0,1,0,0,0,0.2,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1970,2,28,4,27,26,3,0,0,0,1,1,0,0,1,0,5,0,0,4,0,0,0,-0.3,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1971,42,96,96,395,355,113,19,3,12,54,55,2,0,32,3,35,3,2,8,4,0,0,2.6,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1971,2,12,5,32,30,9,2,0,0,3,4,0,0,2,0,2,0,0,1,0,0,0,0.2,2,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1971,2,25,10,56,53,12,2,0,0,3,4,0,0,3,0,5,0,0,3,1,0,0,-0.1,1,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1971,2,13,5,24,23,3,0,0,0,0,0,0,0,1,0,3,0,0,2,1,0,0,-0.3,3,ATL,MLB,Atlanta,Major League Baseball,1,ATL,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1972,42,106,94,383,337,91,15,0,1,39,36,0,1,37,3,34,1,5,8,4,0,0,0.2,1,GWI,IL,Gwinnett,International League,2,GWI,aaronto01,aaron-001tom,2500,eol
+2016,Aaron,Tommie,1973,75,105,105,441,374,98,22,1,13,47,51,5,0,52,3,37,10,2,9,4,0,0,1.6,1,CBS,SL,Columbus,Southern League,3,CBS,aaronto01,aaron-001tom,2500,eol
+56978,Aaron,Wilmer,1972,89,123,111,456,409,112,24,7,2,48,48,16,8,34,8,71,1,4,9,5,0,0,1.2,1,DEL,CAR,Delmarva,Carolina League,4,DEL,,aaron-001wil,134895,eol
+56978,Aaron,Wilmer,1973,89,7,2,7,7,2,0,0,0,0,1,0,0,0,0,3,0,0,0,0,0,0,-0.0,1,DEL,CAR,Delmarva,Carolina League,4,DEL,,aaron-001wil,134895,eol
+56978,Aaron,Wilmer,1973,67,84,73,298,273,70,12,4,2,31,30,12,2,20,3,42,2,0,6,3,0,0,0.2,1,CHE,EL,Chesapeake,Eastern League,3,CHE,,aaron-001wil,134895,eol
+56978,Aaron,Wilmer,1974,65,112,109,440,410,133,17,9,4,39,61,14,12,25,4,65,1,0,10,4,0,0,1.9,1,AKR,EL,Akron,Eastern League,3,AKR,,aaron-001wil,134895,eol
+56978,Aaron,Wilmer,1975,65,132,132,555,503,135,21,6,1,45,65,12,8,36,6,55,6,4,12,5,0,0,-0.1,1,AKR,EL,Akron,Eastern League,3,AKR,,aaron-001wil,134895,eol
+56978,Aaron,Wilmer,1976,297,12,12,46,42,16,1,0,0,4,6,0,1,4,0,7,0,0,1,0,0,0,0.3,1,HIL,CAR,Hill City,Carolina League,4,HIL,,aaron-001wil,134895,eol
+56978,Aaron,Wilmer,1976,65,119,119,504,461,142,19,4,0,31,60,34,10,32,7,56,4,0,10,4,0,0,1.5,1,AKR,EL,Akron,Eastern League,3,AKR,,aaron-001wil,134895,eol
+2017,Aase,Don,1973,275,29,13,59,51,8,3,0,0,2,4,0,0,2,0,21,6,0,1,1,0,0,-0.7,1,GRE,SAL,Greenville,South Atlantic League,4,GRE,aasedo01,aase--001don,2501,eol
+2017,Aase,Don,1974,295,32,20,91,78,13,4,0,0,3,9,0,0,4,0,11,9,0,2,1,0,0,-0.9,1,SAL,CAR,Salem,Carolina League,4,SAL,aasedo01,aase--001don,2501,eol
+2017,Aase,Don,1975,35,29,13,62,49,8,2,0,2,3,6,0,0,4,0,26,9,0,1,0,0,0,-0.4,1,WOR,IL,Worcester,International League,2,WOR,aasedo01,aase--001don,2501,eol
+2017,Aase,Don,1989,19,49,1,5,5,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,-0.0,1,NYM,MLB,New York,Major League Baseball,1,NYM,aasedo01,aase--001don,2501,eol
+2017,Aase,Don,1989,19,35,0,3,3,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0.0,3,NYM,MLB,New York,Major League Baseball,1,NYM,aasedo01,aase--001don,2501,eol
+2017,Aase,Don,1989,19,14,0,2,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0.1,2,NYM,MLB,New York,Major League Baseball,1,NYM,aasedo01,aase--001don,2501,eol
+56979,Aase,Kermit,1938,112,10,6,25,23,6,0,0,0,6,2,2,0,2,0,3,0,0,2,0,0,0,-0.1,1,ACIN,ACL,Cincinnati (ACL),Arizona Complex League,6,ACIN,,aase--001ker,134897,eol
+56017,Abad,Andelzon,2022,184,11,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,Mar1,DSL,Miami (DSL),Dominican Rookie League,6,Mar1,,abad--000and,131060,eol
+56017,Abad,Andelzon,2023,332,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,Mar2,DSL,Miami (DSL),Dominican Rookie League,6,Mar2,,abad--000and,131060,eol
+2018,Abad,Andy,1993,113,59,59,263,230,57,9,2,1,28,24,2,2,25,2,27,2,4,2,0,0,0,-0.6,1,FBOS,FCL,Boston (FCL),Florida Complex League,6,FBOS,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1994,275,111,99,411,354,102,20,0,2,35,39,2,12,42,5,58,5,5,9,4,0,0,0.3,1,GRE,SAL,Greenville,South Atlantic League,4,GRE,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1995,275,18,16,65,59,17,3,0,0,10,5,4,3,6,0,13,0,0,0,0,0,0,0.1,1,GRE,SAL,Greenville,South Atlantic League,4,GRE,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1995,64,89,81,335,287,69,14,3,4,32,29,5,7,36,3,58,6,3,6,2,0,0,0.0,1,POR,EL,Portland,Eastern League,3,POR,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1996,275,58,58,246,202,58,15,1,2,41,28,10,3,37,3,28,2,2,6,1,0,0,1.3,1,GRE,SAL,Greenville,South Atlantic League,4,GRE,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1996,64,65,62,249,213,59,22,1,4,39,33,5,3,33,0,41,0,3,4,2,0,0,1.2,1,POR,EL,Portland,Eastern League,3,POR,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1997,64,45,45,201,165,50,13,0,8,24,37,2,4,33,2,27,0,1,2,3,0,0,1.7,1,POR,EL,Portland,Eastern League,3,POR,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1997,35,68,66,267,227,62,7,0,9,32,28,3,2,36,2,47,1,1,4,1,0,0,1.3,1,WOR,IL,Worcester,International League,2,WOR,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1998,35,111,108,445,365,112,18,1,16,66,71,10,6,68,3,70,4,5,7,2,0,0,3.5,1,WOR,IL,Worcester,International League,2,WOR,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,1999,35,102,102,435,377,112,21,4,15,65,61,7,2,51,2,50,2,3,9,5,0,0,2.9,1,WOR,IL,Worcester,International League,2,WOR,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2001,38,124,124,526,462,139,19,2,19,82,72,4,2,58,1,67,3,2,12,1,0,0,3.0,1,LVA,PCL,Las Vegas,Pacific Coast League,2,LVA,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2001,20,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,3,ATH,MLB,Athletics,Major League Baseball,1,OAK,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2001,20,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,1,ATH,MLB,Athletics,Major League Baseball,1,ATH,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2002,251,111,102,415,352,106,28,2,11,70,50,0,3,57,4,44,0,2,7,1,0,0,3.1,1,JAC,IL,Jacksonville,International League,2,JAC,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2003,35,134,134,573,504,153,35,3,13,93,78,0,3,55,4,67,3,7,15,8,0,0,2.8,1,WOR,IL,Worcester,International League,2,WOR,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2003,4,2,0,2,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0.0,2,BOS,MLB,Boston,Major League Baseball,1,BOS,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2003,4,9,4,19,17,2,0,0,0,0,1,0,1,2,0,5,0,0,1,0,0,0,-0.2,1,BOS,MLB,Boston,Major League Baseball,1,BOS,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2003,4,7,4,17,16,2,0,0,0,0,0,0,1,1,0,5,0,0,1,0,0,0,-0.2,3,BOS,MLB,Boston,Major League Baseball,1,BOS,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2004,44,99,85,349,301,88,15,1,12,49,45,4,1,40,5,52,1,2,9,1,0,0,2.3,1,IND,IL,Indianapolis,International League,2,IND,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2005,33,121,117,474,423,124,29,1,20,85,68,3,4,44,3,60,0,4,16,5,0,0,2.9,1,CLM,IL,Columbus,International League,2,CLM,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2006,45,83,73,304,266,71,12,0,9,32,36,0,1,26,6,31,5,1,6,1,0,0,0.9,1,LOU,IL,Louisville,International League,2,LOU,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2006,7,2,0,2,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0.0,2,CIN,MLB,Cincinnati,Major League Baseball,1,CIN,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2006,7,5,1,5,3,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,-0.0,1,CIN,MLB,Cincinnati,Major League Baseball,1,CIN,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2006,7,3,0,3,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,-0.0,3,CIN,MLB,Cincinnati,Major League Baseball,1,CIN,abadan01,abad--001fau,2502,eol
+2018,Abad,Andy,2007,49,83,73,300,269,85,12,0,12,59,49,6,2,24,1,35,1,5,6,6,0,0,1.7,1,NAS,IL,Nashville,International League,2,NAS,abadan01,abad--001fau,2502,eol
+139379,Abad,Carlos,2024,193,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,JayR,DSL,Toronto (DSL),Dominican Rookie League,6,JayR,,abad--000car,271885,eol
+53836,Abad,Dailoui,2022,182,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,DodM,DSL,Los Angeles (DSL),Dominican Rookie League,6,DodM,,abad--000dai,115588,eol
+53836,Abad,Dailoui,2022,232,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,DodB,DSL,Los Angeles (DSL),Dominican Rookie League,6,DodB,,abad--000dai,115588,eol
+53836,Abad,Dailoui,2023,101,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,ALA1,ACL,Los Angeles N (ACL),Arizona Complex League,6,ALA1,,abad--000dai,115588,eol
+53836,Abad,Dailoui,2023,308,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,ONT,CAL,Ontario,California League,4,ONT,,abad--000dai,115588,eol
+53836,Abad,Dailoui,2024,101,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,ALA1,ACL,Los Angeles N (ACL),Arizona Complex League,6,ALA1,,abad--000dai,115588,eol
+24686,Abad,Fernando,2009,86,3,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,1,CC,TL,Corpus Christi,Texas League,3,CC,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2010,86,14,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,1,CC,TL,Corpus Christi,Texas League,3,CC,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2010,12,18,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,3,HOU,MLB,Houston,Major League Baseball,1,HOU,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2010,12,22,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,1,HOU,MLB,Houston,Major League Baseball,1,HOU,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2010,12,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,2,HOU,MLB,Houston,Major League Baseball,1,HOU,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2011,252,29,0,2,2,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,1,SUG,PCL,Sugar Land,Pacific Coast League,2,SUG,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2012,252,13,0,2,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,-0.0,1,SUG,PCL,Sugar Land,Pacific Coast League,2,SUG,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2012,12,7,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,-0.0,2,HOU,MLB,Houston,Major League Baseball,1,HOU,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2012,12,29,5,6,6,1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,-0.1,3,HOU,MLB,Houston,Major League Baseball,1,HOU,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2012,12,37,6,7,7,1,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,-0.1,1,HOU,MLB,Houston,Major League Baseball,1,HOU,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2014,20,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,21,ATH,MLB,Athletics,Major League Baseball,1,OAK,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2016,17,39,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,1,MIN,MLB,Minnesota,Major League Baseball,1,MIN,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2016,17,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,3,MIN,MLB,Minnesota,Major League Baseball,1,MIN,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2017,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,3,BOS,MLB,Boston,Major League Baseball,1,BOS,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2019,58,21,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,1,SAC,PCL,Sacramento,Pacific Coast League,2,SAC,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2022,56,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,TAC,PCL,Tacoma,Pacific Coast League,2,TAC,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2023,57,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,ABQ,PCL,Albuquerque,Pacific Coast League,2,ABQ,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2023,49,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,NAS,IL,Nashville,International League,2,NAS,abadfe01,abad--001fer,26768,eol
+24686,Abad,Fernando,2023,9,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,COL,MLB,Colorado,Major League Baseball,1,COL,abadfe01,abad--001fer,26768,eol
+56980,Abad,Irvin,1994,107,51,49,201,180,39,4,11,0,17,26,13,3,17,0,40,3,1,3,0,0,0,-0.4,1,FTOR,FCL,Toronto (FCL),Florida Complex League,6,FTOR,,abad--001irv,134898,eol
+56981,Abad,Juan,2000,102,29,26,106,101,15,1,0,0,4,9,1,0,3,2,19,0,0,0,0,0,0,-1.1,1,FWAS,FCL,Washington (FCL),Florida Complex League,6,FWAS,,abad--001jua,134900,eol
+56982,Abad,Noel,2001,97,19,15,65,58,17,1,1,1,7,9,6,1,3,2,14,1,1,1,0,0,0,0.1,1,ALAA,ACL,Los Angeles A (ACL),Arizona Complex League,6,ALAA,,abad--001noe,134901,eol
+56982,Abad,Noel,2002,97,24,17,71,64,12,2,1,0,2,9,3,0,4,2,12,1,0,2,0,0,0,-0.4,1,ALAA,ACL,Los Angeles A (ACL),Arizona Complex League,6,ALAA,,abad--001noe,134901,eol
+138656,Abad,Pablo,2024,172,13,12,44,36,4,1,0,1,3,4,2,1,8,0,15,0,0,0,0,0,0,-0.2,1,Reds,DSL,Cincinnati (DSL),Dominican Rookie League,6,Reds,,abad--000pab,271112,eol
+138656,Abad,Pablo,2027,67,11,0,10,10,2,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,31,-0.1,1,CHE,EL,Chesapeake,Eastern League,3,,,abad--000pab,271112,eol
+138656,Abad,Pablo,2027,67,7,0,7,7,1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,-0.1,3,CHE,EL,Chesapeake,Eastern League,3,,,abad--000pab,271112,eol
+138656,Abad,Pablo,2027,67,3,0,3,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,2,CHE,EL,Chesapeake,Eastern League,3,,,abad--000pab,271112,eol
+56987,Abad,Ramon,2006,168,21,9,36,30,5,1,0,0,1,3,1,3,6,0,14,0,0,0,0,0,0,-0.3,1,GiaO,DSL,San Francisco (DSL),Dominican Rookie League,6,GiaO,,abad-001ram,134906,eol
+56987,Abad,Ramon,2007,168,55,42,177,148,39,3,1,6,25,27,8,5,22,5,28,0,2,1,0,0,0,0.5,1,GiaO,DSL,San Francisco (DSL),Dominican Rookie League,6,GiaO,,abad-001ram,134906,eol
+56987,Abad,Ramon,2008,168,30,24,96,80,19,3,0,0,6,14,4,4,14,2,30,0,0,1,0,0,0,-0.1,1,GiaO,DSL,San Francisco (DSL),Dominican Rookie League,6,GiaO,,abad-001ram,134906,eol
+2019,Abadie,John,1875,22,11,11,46,45,10,0,0,0,4,3,1,0,0,0,3,1,0,0,0,0,0,-0.1,1,PIT,MLB,Pittsburgh,Major League Baseball,1,PH3,abadijo01,abadie001joh,2503,eol
+56988,Abarbanel,Mickey,1966,92,21,13,57,43,6,0,0,0,4,3,0,0,9,0,12,5,0,0,0,0,0,-0.4,1,KAN,CAR,Kannapolis,Carolina League,4,KAN,,abarba001mic,134913,eol
+56988,Abarbanel,Mickey,1967,74,25,8,35,29,3,0,0,0,1,6,0,0,4,0,5,2,0,0,0,0,0,-0.4,1,BIR,SL,Birmingham,Southern League,3,BIR,,abarba001mic,134913,eol
+56988,Abarbanel,Mickey,1967,39,3,1,5,5,3,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0.1,1,CHR,IL,Charlotte,International League,2,CHR,,abarba001mic,134913,eol
+56988,Abarbanel,Mickey,1968,74,14,6,27,25,3,0,0,0,0,1,0,0,0,0,10,2,0,0,0,0,0,-0.4,1,BIR,SL,Birmingham,Southern League,3,BIR,,abarba001mic,134913,eol
+56988,Abarbanel,Mickey,1969,92,3,1,5,5,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.1,1,KAN,CAR,Kannapolis,Carolina League,4,KAN,,abarba001mic,134913,eol
+56988,Abarbanel,Mickey,1969,39,2,1,3,3,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.1,1,CHR,IL,Charlotte,International League,2,CHR,,abarba001mic,134913,eol
+56989,Abare,Bill,1990,289,118,112,456,391,98,19,0,10,44,49,1,2,59,1,65,2,3,8,0,0,0,1.0,1,DUN,FSL,Dunedin,Florida State League,4,DUN,,abare-001wil,134914,eol
+56991,Abate,Mike,2000,98,7,7,28,24,4,0,0,1,3,3,0,0,3,1,4,0,0,1,0,0,0,-0.1,1,ASEA,ACL,Seattle (ACL),Arizona Complex League,6,ASEA,,abate-001mic,134917,eol
+21451,Abbadessa,Dominic,2016,107,14,7,29,26,5,0,0,0,1,3,2,2,1,1,3,1,0,1,0,0,0,-0.3,1,FTOR,FCL,Toronto (FCL),Florida Complex League,6,FTOR,,abbade000dom,23020,eol
+21451,Abbadessa,Dominic,2017,107,39,38,164,147,50,4,3,0,10,30,11,6,7,9,14,0,1,3,0,0,0,0.5,1,FTOR,FCL,Toronto (FCL),Florida Complex League,6,FTOR,,abbade000dom,23020,eol
+21451,Abbadessa,Dominic,2021,317,54,0,253,221,78,8,13,5,42,65,15,4,23,7,48,0,2,0,0,0,0,0.1,1,GF,PIO,Great Falls,Pioneer League,7,GF,,abbade000dom,23020,eol
+21451,Abbadessa,Dominic,2021,319,22,0,91,78,26,5,1,0,10,22,12,2,8,3,13,0,2,0,0,0,0,-0.1,1,OGD,PIO,Ogden,Pioneer League,7,OGD,,abbade000dom,23020,eol
+54587,Abbadessa,Jude,2027,137,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,AARB,ACL,Arizona (ACL),Arizona Complex League,6,,,abbade000jud,117898,eol
+2020,Abbaticchio,Ed,1897,21,3,3,11,10,3,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0.0,1,PHI,MLB,Philadelphia,Major League Baseball,1,PHI,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1898,21,25,25,102,92,21,4,0,0,14,9,4,3,7,1,15,2,0,1,0,0,0,-0.3,1,PHI,MLB,Philadelphia,Major League Baseball,1,PHI,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1903,2,18,17,68,59,15,2,0,0,3,7,3,0,4,1,2,4,0,0,0,0,0,0.0,2,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1903,2,118,116,498,434,97,16,5,1,30,55,20,0,48,3,29,13,0,0,0,0,0,0.5,3,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1903,2,136,135,563,489,111,18,5,1,46,61,23,15,52,4,36,17,1,5,1,0,0,-0.4,1,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1904,2,31,31,129,116,27,2,2,0,10,15,8,0,12,0,7,1,0,0,0,0,0,1.2,2,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1904,2,154,154,638,579,148,18,10,3,54,76,24,16,40,5,55,13,1,6,1,0,0,2.6,1,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1904,2,123,123,514,462,121,16,8,3,27,61,16,0,35,5,43,12,0,0,0,0,0,3.4,3,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1905,2,17,17,76,71,19,2,1,0,6,10,5,0,4,0,6,1,0,0,0,0,0,1.1,2,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1905,2,153,153,659,610,170,25,12,3,41,70,30,17,35,8,51,5,1,7,1,0,0,3.6,1,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1905,2,136,136,589,541,151,23,11,3,34,60,25,0,35,8,36,5,0,0,0,0,0,4.5,3,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1907,22,112,111,449,372,103,13,6,1,50,49,30,0,51,7,32,19,0,0,0,0,0,4.2,3,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1907,22,35,35,142,124,27,1,1,1,20,13,5,0,14,1,9,3,0,0,0,0,0,0.7,2,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1907,22,147,140,592,496,130,14,7,2,82,63,35,14,65,8,48,22,1,6,1,0,0,3.6,1,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1908,22,43,43,183,152,39,6,2,1,12,16,4,0,23,2,13,6,0,0,0,0,0,1.6,2,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1908,22,103,101,410,348,86,10,5,0,49,27,18,0,38,5,31,19,0,0,0,0,0,2.4,3,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1908,22,146,140,591,500,125,16,7,1,61,43,22,14,58,7,49,25,1,6,1,0,0,2.7,1,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1909,22,27,18,85,73,17,0,0,0,8,9,2,0,10,1,9,1,0,0,0,0,0,0.2,3,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1909,22,10,4,22,14,3,0,0,1,3,4,0,0,8,0,2,0,0,0,0,0,0,0.4,2,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1909,22,36,26,107,87,20,0,0,1,16,13,2,3,19,0,11,1,0,1,0,0,0,0.3,1,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1909,22,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-0.0,21,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1910,2,52,48,198,178,44,4,2,0,10,20,2,6,12,0,16,8,0,2,1,0,0,-0.3,1,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1910,2,45,37,159,145,35,3,2,0,7,14,2,0,8,0,15,6,0,0,0,0,0,0.0,3,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1910,2,11,8,41,34,9,1,0,0,2,6,0,0,4,0,1,3,0,0,0,0,0,0.2,2,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1910,2,45,37,159,145,35,3,2,0,7,14,2,0,8,0,15,6,0,0,0,0,0,0.0,3,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1910,22,3,1,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.1,1,PIT,MLB,Pittsburgh,Major League Baseball,1,PIT,abbated01,abbati001edw,2504,eol
+2020,Abbaticchio,Ed,1910,2,11,8,41,34,9,1,0,0,2,6,0,0,4,0,1,3,0,0,0,0,0,0.2,2,ATL,MLB,Atlanta,Major League Baseball,1,BSN,abbated01,abbati001edw,2504,eol
+47850,Abbatiello,Neil,2022,216,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,WINDY,FL,Windy City,Frontier League,7,WINDY,,abbati000nei,65915,eol
+47850,Abbatiello,Neil,2022,313,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,TC,FL,Tri-City,Frontier League,7,TC,,abbati000nei,65915,eol
+140403,Abbatine,Anthony,2024,201,21,20,85,73,13,3,0,1,3,6,3,0,10,1,32,0,1,0,0,0,0,-0.2,1,GARY,AA,Gary SouthShore,American Association,7,GARY,,abbati000ant,272973,eol
+140403,Abbatine,Anthony,2025,327,8,0,22,20,2,0,0,0,1,1,2,0,2,0,7,0,0,0,0,0,0,-0.2,1,SI,ATL,Staten Island,Atlantic League,7,SI,,abbati000ant,272973,eol
+56993,Abbatinozzi,Paul,1988,196,29,24,95,83,21,7,1,1,18,11,0,0,11,0,21,1,0,2,0,0,0,0.0,1,ACHA,ACL,Chicago A (ACL),Arizona Complex League,6,ACHA,,abbati001pau,134919,eol
+56994,Abbe,Chris,1993,81,82,72,299,254,52,7,1,13,36,32,0,3,35,6,61,0,4,3,5,0,0,0.3,1,TUL,TL,Tulsa,Texas League,3,TUL,,abbe--001chr,134920,eol
+56994,Abbe,Chris,1994,81,73,65,267,236,62,14,1,7,25,24,1,1,25,4,55,1,1,5,2,0,0,1.0,1,TUL,TL,Tulsa,Texas League,3,TUL,,abbe--001chr,134920,eol
+56995,Abberbock,Jerome,1932,46,13,7,29,27,4,1,0,0,2,2,0,0,2,0,2,0,0,0,0,0,0,-0.2,1,TOL,IL,Toledo,International League,2,TOL,,abberb001h--,134921,eol
+56995,Abberbock,Jerome,1933,68,5,1,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.1,1,ERI,EL,Erie,Eastern League,3,ERI,,abberb001h--,134921,eol
+56995,Abberbock,Jerome,1933,46,4,2,7,7,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.1,1,TOL,IL,Toledo,International League,2,TOL,,abberb001h--,134921,eol
+56995,Abberbock,Jerome,1934,112,3,1,5,5,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,1,ACIN,ACL,Cincinnati (ACL),Arizona Complex League,6,ACIN,,abberb001h--,134921,eol
+56995,Abberbock,Jerome,1934,45,2,1,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.1,1,LOU,IL,Louisville,International League,2,LOU,,abberb001h--,134921,eol
+2021,Abbey,Bert,1892,17,27,21,85,75,9,1,0,0,3,5,2,3,9,0,27,1,0,1,0,0,0,-0.7,1,MIN,MLB,Minnesota,Major League Baseball,1,WAS,abbeybe01,abbey-001ber,2505,eol
+2021,Abbey,Bert,1893,6,7,7,29,26,6,1,0,0,2,2,0,1,2,0,3,1,0,0,0,0,0,-0.1,1,CHC,MLB,Chicago,Major League Baseball,1,CHC,abbeybe01,abbey-001ber,2505,eol
+2021,Abbey,Bert,1894,6,11,10,43,39,5,0,0,0,4,3,1,2,2,0,7,2,0,1,0,0,0,-0.6,1,CHC,MLB,Chicago,Major League Baseball,1,CHC,abbeybe01,abbey-001ber,2505,eol
+2021,Abbey,Bert,1895,6,1,1,3,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,CHC,MLB,Chicago,Major League Baseball,1,CHC,abbeybe01,abbey-001ber,2505,eol
+2021,Abbey,Bert,1895,15,8,5,21,19,5,0,1,0,1,4,0,1,2,0,4,0,0,0,0,0,0,-0.0,1,LAD,MLB,Los Angeles,Major League Baseball,1,BRO,abbeybe01,abbey-001ber,2505,eol
+2022,Abbey,Charlie,1893,17,31,31,131,116,30,1,4,0,12,11,9,3,12,1,6,2,0,2,0,0,0,0.1,1,MIN,MLB,Minnesota,Major League Baseball,1,WAS,abbeych01,abbey-001cha,2506,eol
+2022,Abbey,Charlie,1894,17,129,129,591,523,164,26,18,7,101,95,31,17,58,7,38,1,2,8,1,0,0,2.5,1,MIN,MLB,Minnesota,Major League Baseball,1,WAS,abbeych01,abbey-001cha,2506,eol
+2022,Abbey,Charlie,1895,17,132,132,568,511,141,14,10,8,84,102,28,16,43,7,41,5,2,7,1,0,0,0.6,1,MIN,MLB,Minnesota,Major League Baseball,1,WAS,abbeych01,abbey-001cha,2506,eol
+2022,Abbey,Charlie,1896,17,79,79,343,301,79,12,6,1,49,47,16,10,27,4,20,10,1,4,0,0,0,-0.1,1,MIN,MLB,Minnesota,Major League Baseball,1,WAS,abbeych01,abbey-001cha,2506,eol
+2022,Abbey,Charlie,1897,17,80,80,335,300,78,14,8,3,34,52,9,9,27,4,15,3,1,4,0,0,0,0.2,1,MIN,MLB,Minnesota,Major League Baseball,1,WAS,abbeych01,abbey-001cha,2506,eol
+141978,Abbey,Troy,2027,102,42,40,130,118,21,5,0,1,6,10,4,1,12,0,50,0,0,0,0,0,546,-1.3,1,FWAS,FCL,Washington (FCL),Florida Complex League,6,,,,0,eol
+141978,Abbey,Troy,2027,102,37,31,94,84,12,1,0,1,3,5,0,0,10,0,40,0,0,0,0,0,0,-1.1,3,FWAS,FCL,Washington (FCL),Florida Complex League,6,,,,0,eol
+141978,Abbey,Troy,2027,102,22,9,36,34,9,4,0,0,3,5,0,0,2,0,10,0,0,0,0,0,0,-0.3,2,FWAS,FCL,Washington (FCL),Florida Complex League,6,,,,0,eol
+56996,Abbey,William,1938,81,11,6,22,20,0,0,0,0,0,0,0,0,2,0,3,0,0,0,0,0,0,-0.4,1,TUL,TL,Tulsa,Texas League,3,TUL,,abbey-001wil,134922,eol
+56997,Abbitt,Robert,1940,106,6,3,13,12,3,0,0,0,1,1,0,0,1,0,1,0,0,0,0,0,0,-0.1,1,FPHI,FCL,Philadelphia (FCL),Florida Complex League,6,FPHI,,abbitt001rob,134923,eol
+56997,Abbitt,Robert,1940,106,30,15,62,55,7,0,0,0,2,2,0,0,6,0,6,1,0,0,0,0,0,-0.6,1,FPHI,FCL,Philadelphia (FCL),Florida Complex League,6,FPHI,,abbitt001rob,134923,eol
+56997,Abbitt,Robert,1941,96,5,4,14,13,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,-0.3,1,ACBl,ACL,Chicago N (ACL),Arizona Complex League,6,ACBl,,abbitt001rob,134923,eol
+39632,Abbott,Alex,2014,97,31,30,130,109,22,6,1,0,8,21,3,7,13,7,30,1,0,4,0,0,0,-0.6,1,ALAA,ACL,Los Angeles A (ACL),Arizona Complex League,6,ALAA,,abbott000ale,49993,eol
+26699,Abbott,Andrew,2022,256,5,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,DTO,MWL,Dayton,Midwest League,4,DTO,abbotan01,abbott000and,29336,eol
+26699,Abbott,Andrew,2022,78,20,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,CHT,SL,Chattanooga,Southern League,3,CHT,abbotan01,abbott000and,29336,eol
+26699,Abbott,Andrew,2023,78,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,CHT,SL,Chattanooga,Southern League,3,CHT,abbotan01,abbott000and,29336,eol
+26699,Abbott,Andrew,2023,45,7,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,LOU,IL,Louisville,International League,2,LOU,abbotan01,abbott000and,29336,eol
+26699,Abbott,Andrew,2023,7,21,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,CIN,MLB,Cincinnati,Major League Baseball,1,CIN,abbotan01,abbott000and,29336,eol
+26699,Abbott,Andrew,2024,7,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,CIN,MLB,Cincinnati,Major League Baseball,1,CIN,abbotan01,abbott000and,29336,eol
+57018,Abbott,Charles,1927,48,13,4,14,13,3,0,0,0,1,1,0,0,1,0,1,0,0,0,0,0,0,-0.0,1,MEM,IL,Memphis,International League,2,MEM,,abbott003cha,134957,eol
+57018,Abbott,Charles,1928,80,43,23,96,85,15,4,0,0,7,8,1,0,8,0,7,3,0,1,0,0,0,-0.5,1,SPF,TL,Springfield,Texas League,3,SPF,,abbott003cha,134957,eol
+57014,Abbott,Chuck,1998,76,132,132,579,525,138,21,9,2,62,74,16,9,38,4,100,8,4,18,0,0,0,0.1,1,RC,SL,Rocket City,Southern League,3,RC,,abbott002cha,134953,eol
+57014,Abbott,Chuck,1999,76,125,123,501,444,106,13,1,6,46,70,9,10,47,2,83,6,2,10,1,0,0,-0.6,1,RC,SL,Rocket City,Southern League,3,RC,,abbott002cha,134953,eol
+57014,Abbott,Chuck,2000,76,97,88,365,330,82,14,3,5,39,39,3,3,22,4,96,7,2,11,0,0,0,-0.1,1,RC,SL,Rocket City,Southern League,3,RC,,abbott002cha,134953,eol
+57014,Abbott,Chuck,2000,55,5,4,15,15,3,1,0,0,1,0,0,0,0,0,5,0,0,0,0,0,0,-0.1,1,SL,PCL,Salt Lake,Pacific Coast League,2,SL,,abbott002cha,134953,eol
+57014,Abbott,Chuck,2001,65,17,11,44,41,8,1,1,3,8,6,1,1,2,0,17,1,0,0,0,0,0,0.0,1,AKR,EL,Akron,Eastern League,3,AKR,,abbott002cha,134953,eol
+57014,Abbott,Chuck,2001,55,4,3,11,9,0,0,0,0,0,1,0,0,2,0,4,0,0,0,0,0,0,-0.1,1,SL,PCL,Salt Lake,Pacific Coast League,2,SL,,abbott002cha,134953,eol
+40966,Abbott,Cory,2019,73,15,26,29,24,4,0,0,0,0,2,0,0,1,0,13,4,0,1,0,0,0,-0.3,1,KNO,SL,Knoxville,Southern League,3,KNO,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2021,47,19,19,9,8,1,0,0,0,2,0,0,0,0,0,5,1,0,0,0,0,0,-0.1,1,IOW,IL,Iowa,International League,2,IOW,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2021,6,8,1,3,3,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0.0,1,CHC,MLB,Chicago,Major League Baseball,1,CHC,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2022,36,10,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,ROC,IL,Rochester,International League,2,ROC,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2022,47,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,IOW,IL,Iowa,International League,2,IOW,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2022,30,16,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,WSH,MLB,Washington,Major League Baseball,1,WAS,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2023,36,13,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,ROC,IL,Rochester,International League,2,ROC,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2023,30,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,WSH,MLB,Washington,Major League Baseball,1,WAS,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2024,56,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,TAC,PCL,Tacoma,Pacific Coast League,2,TAC,abbotco01,abbott000cor,52410,eol
+40966,Abbott,Cory,2024,39,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,1,CHR,IL,Charlotte,International League,2,CHR,abbotco01,abbott000cor,52410,eol
+2023,Abbott,Dan,1890,10,3,3,7,7,1,0,1,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0.0,1,DET,MLB,Detroit,Major League Baseball,1,CL6,abbotda01,abbott001dan,2507,eol
+56998,Abbott,Dennis,1956,113,6,1,3,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,1,FBOS,FCL,Boston (FCL),Florida Complex League,6,FBOS,,abbott001den,134926,eol
+57000,Abbott,Edward,1940,288,21,12,50,45,10,1,0,0,5,5,1,0,4,0,6,1,0,1,0,0,0,-0.2,1,DAY,FSL,Daytona,Florida State League,4,DAY,,abbott001edw,134928,eol
+57002,Abbott,Fred,1932,268,46,46,188,167,44,12,4,3,23,23,1,1,16,0,16,4,1,4,1,0,0,0.4,1,FRE,SAL,Frederick,South Atlantic League,4,FRE,,abbott001fre,134930,eol
+57002,Abbott,Fred,1934,113,10,4,15,14,1,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,-0.2,1,FBOS,FCL,Boston (FCL),Florida Complex League,6,FBOS,,abbott001fre,134930,eol
+2024,Abbott,Fred,1903,8,60,55,224,202,50,9,2,1,21,22,8,0,8,4,13,10,0,0,0,0,0,4.3,3,CLE,MLB,Cleveland,Major League Baseball,1,CLE,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1903,8,77,66,276,255,60,11,3,1,25,25,8,8,7,5,25,9,0,3,0,0,0,3.6,1,CLE,MLB,Cleveland,Major League Baseball,1,CLE,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1903,8,18,15,60,57,10,2,1,0,4,3,0,0,1,1,3,1,0,0,0,0,0,3.6,2,CLE,MLB,Cleveland,Major League Baseball,1,CLE,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1904,8,14,13,48,43,7,0,1,0,3,4,0,0,3,0,2,2,0,0,0,0,0,1.5,2,CLE,MLB,Cleveland,Major League Baseball,1,CLE,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1904,8,27,26,94,87,15,4,1,0,9,10,2,0,4,0,9,3,0,0,0,0,0,1.4,3,CLE,MLB,Cleveland,Major League Baseball,1,CLE,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1904,8,41,34,141,130,22,4,2,0,12,14,2,4,6,0,27,5,0,1,0,0,0,1.0,1,CLE,MLB,Cleveland,Major League Baseball,1,CLE,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1905,21,37,32,129,114,21,6,1,0,9,9,4,0,8,2,18,5,0,0,0,0,0,1.7,3,PHI,MLB,Philadelphia,Major League Baseball,1,PHI,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1905,21,5,4,16,14,4,0,0,0,1,0,0,0,0,1,2,1,0,0,0,0,0,1.9,2,PHI,MLB,Philadelphia,Major League Baseball,1,PHI,abbotfr01,abbott002har,2508,eol
+2024,Abbott,Fred,1905,21,42,34,143,128,25,6,1,0,12,9,4,4,6,3,23,6,0,1,0,0,0,1.4,1,PHI,MLB,Philadelphia,Major League Baseball,1,PHI,abbotfr01,abbott002har,2508,eol
+2025,Abbott,Glenn,1972,84,13,8,34,32,4,1,0,0,2,0,0,0,0,0,5,2,0,1,0,0,0,-0.5,1,MID,TL,Midland,Texas League,3,MID,abbotgl01,abbott002wil,2509,eol
+2025,Abbott,Glenn,1972,38,15,10,41,37,4,0,0,0,0,2,0,0,3,0,6,1,0,0,0,0,0,-0.5,1,LVA,PCL,Las Vegas,Pacific Coast League,2,LVA,abbotgl01,abbott002wil,2509,eol
+57001,Abbott,Jake,1955,81,7,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0,1,TUL,TL,Tulsa,Texas League,3,TUL,,abbott001fra,134929,eol
+2026,Abbott,Jeff,1994,196,4,4,19,15,7,1,0,1,3,4,2,1,4,0,0,0,0,1,0,0,0,0.3,1,ACHA,ACL,Chicago A (ACL),Arizona Complex League,6,ACHA,abbotje01,abbott002jef,2510,eol
+2026,Abbott,Jeff,1994,92,63,63,265,224,88,16,6,6,48,47,2,1,38,1,33,1,1,4,1,0,0,4.1,1,KAN,CAR,Kannapolis,Carolina League,4,KAN,abbotje01,abbott002jef,2510,eol

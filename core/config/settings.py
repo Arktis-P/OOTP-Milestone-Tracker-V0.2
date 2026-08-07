@@ -101,6 +101,36 @@ class SettingsManager:
             import_export_dir=import_export_dir,
         )
 
+    def detect_ootp_save_directories(self) -> List[str]:
+        """
+        Dynamically scans common OOTP saved_games locations on Windows:
+        1. Standard Documents
+        2. OneDrive Documents (English)
+        3. OneDrive Documents (Korean)
+        """
+        user_home = os.path.expanduser("~")
+        candidate_roots = [
+            os.path.join(user_home, "Documents", "Out of the Park Developments"),
+            os.path.join(user_home, "OneDrive", "Documents", "Out of the Park Developments"),
+            os.path.join(user_home, "OneDrive", "문서", "Out of the Park Developments"),
+        ]
+
+        found_saves: List[str] = []
+        for root in candidate_roots:
+            if not os.path.exists(root):
+                continue
+            for item in os.listdir(root):
+                if item.startswith("OOTP Baseball"):
+                    saved_games_dir = os.path.join(root, item, "saved_games")
+                    if os.path.exists(saved_games_dir):
+                        for save_folder in os.listdir(saved_games_dir):
+                            if save_folder.endswith(".lg") and not save_folder.startswith("."):
+                                full_save_path = os.path.join(saved_games_dir, save_folder)
+                                if os.path.isdir(full_save_path):
+                                    found_saves.append(os.path.normpath(full_save_path))
+
+        return found_saves
+
     def check_readiness(self, settings: Settings) -> Dict[str, Any]:
         paths = self.get_derived_paths(settings)
         save_path_exists = bool(settings.active_save_path and os.path.exists(settings.active_save_path))
@@ -119,4 +149,6 @@ class SettingsManager:
             "import_export_dir_exists": import_export_exists,
             "save_key": paths.save_key,
             "db_path": paths.db_path,
+            "detected_saves": self.detect_ootp_save_directories(),
         }
+
