@@ -2,13 +2,36 @@
 
 ## Purpose
 
-A milestone achievement must preserve both the threshold crossing and, when available, the exact game context in which it happened.
+A milestone achievement is detected **while applying one game's stat delta** to the internal ledger. This makes the achievement game exact by construction instead of inferring it later from two distant aggregate snapshots.
 
-The numeric source of truth is the imported player-stat total. Game/message sources enrich that crossing with evidence and presentation details.
+## Detection flow
+
+```text
+baseline total
+  + processed games in order
+  -> before-game value
+  -> apply current game delta
+  -> after-game value
+  -> previous < threshold <= current
+  -> achievement belongs to current game
+```
+
+Example:
+
+```text
+Before game : 2,998 H
+Game        : 3-for-4
+After game  : 3,001 H
+Threshold   : 3,000 H
+
+=> 3,000th hit occurred in this game
+```
+
+The matching play-by-play log can then determine which hit was the threshold play.
 
 ## Achievement identity
 
-At minimum, one achievement is uniquely identified by:
+At minimum:
 
 ```text
 rule_id
@@ -18,7 +41,7 @@ season nullable
 threshold_value
 ```
 
-The same threshold must not be registered twice after repeated imports.
+The same achievement must never be inserted twice.
 
 ## Required fields
 
@@ -36,34 +59,34 @@ stat_key
 threshold_value
 value_before
 value_after
-achieved_at nullable
-import_run_id
+game_id
+game_date
+player_game_number nullable
+team_game_number nullable
 resolution_status
 ```
 
 `resolution_status`:
 
 ```text
-unresolved
-resolved_game
-resolved_play
+game_resolved
+play_resolved
 manual
 ```
 
-## Game context fields
+With a game-ledger pipeline there should normally be no numeric `unresolved` state: the crossing game is already known. Only the exact play may remain unresolved.
 
-Store these when they can be resolved safely:
+## Exact play context
+
+Store when safely resolved from the log:
 
 ```text
-game_id nullable
-game_date nullable
+play_sequence nullable
+inning nullable
+inning_half nullable
 team_id nullable
 opponent_team_id nullable
 opponent_player_id nullable
-player_game_number nullable
-team_game_number nullable
-inning nullable
-inning_half nullable
 score_for nullable
 score_against nullable
 outs nullable
@@ -73,21 +96,11 @@ context_text nullable
 source_file nullable
 ```
 
-Interpretation:
-
-- `game_date`: in-game date of the achievement.
-- `game_id`: OOTP game identity.
-- `opponent_player_id`: batter/pitcher counterpart when meaningful and discoverable.
-- `player_game_number`: player's game count at the moment. For a career milestone this should represent the career game count within the same competition type; for a season milestone it should represent that season's game count within the same competition type.
-- `team_game_number`: optional team game number when available.
-- `inning`, `score`, `outs`, `base_state`: game situation when the log can resolve the exact play.
-- `play_result` / `context_text`: compact human-readable achievement situation.
-
-Do not fabricate fields that cannot be resolved.
+Do not fabricate unavailable context.
 
 ## Competition separation
 
-Every achievement belongs to exactly one canonical competition type:
+Every achievement belongs to one canonical competition type:
 
 ```text
 regular_season
@@ -96,29 +109,46 @@ spring_training
 international
 ```
 
-Career and season game counts are computed independently inside that competition type.
+Career and season values, player game counts, and milestone rules are all evaluated independently inside that competition type.
 
-## Resolution flow
+## Game count semantics
+
+Season milestone:
 
 ```text
-stats import
-  -> threshold crossing detected
-  -> unresolved milestone achievement created
-  -> candidate games located between previous/current snapshots
-  -> game box narrows game/date/player participation
-  -> play log resolves exact play/opponent/situation when possible
-  -> message source optionally cross-checks/enriches
-  -> achievement marked resolved_game or resolved_play
+player appearances through achievement game
+within season + competition_type
 ```
 
-If several games occurred between imports and the exact game cannot be identified, keep the achievement unresolved rather than guessing.
+Career milestone:
 
-## Source priority
+```text
+baseline career game count
++ post-baseline player appearances through achievement game
+within competition_type
+```
 
-1. `player_*_stats.txt`: authoritative numeric value/crossing.
-2. `game_box_*.html`: game/date/team/player/game-line evidence.
-3. `log_*.txt`: exact play and opponent/situation evidence.
-4. `message*.txt`: optional text/date/entity corroboration.
+## Source responsibility
+
+1. `player_*_stats.txt`: baseline/checkpoint and reconciliation.
+2. `game_box_*.html`: authoritative per-game numeric deltas and achievement game.
+3. `log_*.txt`: exact threshold play and opponent/situation context.
+4. `message*.txt`: optional corroboration/enrichment.
+
+## Multiple stat increments in one game
+
+If a player jumps across multiple configured thresholds in one game, register each crossed threshold separately but reference the same game.
+
+If the same stat increases multiple times in one game (for example three hits), the play log must walk the relevant events in sequence starting from the before-game value to find the exact threshold event.
+
+Example:
+
+```text
+before game = 2,998
+hit #1 -> 2,999
+hit #2 -> 3,000  <- achievement play
+hit #3 -> 3,001
+```
 
 ## Display example
 
@@ -130,4 +160,4 @@ Career Game 2,184
 Single off Pitcher Name
 ```
 
-Only display fields that were actually resolved.
+Only display context fields actually resolved from source data.
