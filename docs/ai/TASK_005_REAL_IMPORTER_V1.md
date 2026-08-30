@@ -1,270 +1,236 @@
-# Task 005 — Real OOTP Importer v1
+# Task 005 — Real OOTP Importer v1 (Player Stats Only)
 
 ## Goal
 
-Replace the sample-only data path with a first real-data import path using the locally confirmed OOTP 27 save sources.
+Replace the sample-only data path with the first real-data import path using only:
 
-This task is intentionally limited to the two source families required to populate the current Player Records UI:
+```text
+import_export/player_*_stats.txt
+```
 
-1. `import_export/*_rosters.txt`
-2. `import_export/player_*_stats.txt`
+Do **not** require or parse `*_rosters.txt` for routine import. The user can export player stats with one action, while roster export requires repeated league selection.
 
-Do not parse messages, game boxes, or logs yet. Those sources belong to later event/game milestone work.
+This task ends when the current Player Records UI can display real OOTP players/stat rows from the selected `.lg`, with competition types separated and import history stored.
 
-## Required local context
-
-Before coding, read:
+## Read first
 
 - `docs/research/OOTP27_SOURCE_INVENTORY_LOCAL.md`
 - `docs/OOTP_DATA_IMPORT_PLAN.md`
 - `docs/MILESTONE_RULES_DESIGN.md`
-- `src/ootp_milestone_tracker/db/schema.py`
-- `src/ootp_milestone_tracker/importer/source_locator.py`
-- `src/ootp_milestone_tracker/importer/source_scanner.py`
+- `docs/MILESTONE_ACHIEVEMENT_MODEL.md`
+- current DB schema/repository/importer modules
 
-Use the actual local `.lg` save only as a read-only source. Never modify or commit the save files.
+Do not re-investigate unrelated repository areas.
 
-The local research already confirmed:
+## Confirmed local facts
 
-- common player primary key: `player_id`
-- roster player id: field 0
-- player stats player id: field 0
-- secondary keys: `team_id`, `game_id`, `year`
-- roster/stats encoding: UTF-8 with BOM CSV
-- career totals can be derived by grouping season stats by `player_id`
+- `player_id` is Field 0 / stable primary player key.
+- player-stat files are UTF-8 with BOM CSV.
+- `team_id` and `year` exist as secondary identities where applicable.
+- career additive counting totals can be derived by grouping normalized season records.
 
-Do not guess column indexes that are not explicitly documented in the local research report. Inspect the real header/rows when necessary and record the mapping in code constants or parser metadata.
+Inspect exact real headers/rows for mappings not already documented. Do not guess column indexes.
 
-## Required architecture
+## Mandatory competition split
 
-Keep source parsing separate from SQLite writing.
-
-Recommended package layout:
+The importer must keep these separate from the first real DB import:
 
 ```text
-src/ootp_milestone_tracker/importer/
+regular_season
+postseason
+spring_training
+international
+```
+
+Determine exactly how the local `player_*_stats.txt` exports distinguish these categories (filename, directory, field, or export family). Record the mapping in code constants/metadata and in the final report.
+
+If one category cannot be mapped safely from the available export, report that category as a blocker/unsupported source. Do not merge it into regular season.
+
+## Architecture
+
+Recommended:
+
+```text
+importer/
 ├─ source_locator.py
 ├─ source_scanner.py
 ├─ models.py
-├─ roster_parser.py
 ├─ player_stats_parser.py
 ├─ normalizer.py
 └─ import_service.py
 ```
 
-### 1. Parsed/normalized models
+No roster parser is required.
 
-Create small dataclasses or typed records for normalized data. At minimum:
+UI/Repository code must not parse OOTP files directly.
 
-- Team
-- Player
-- BattingSeason
-- PitchingSeason
+## Player/team identity without roster files
 
-The UI and Repository must never parse OOTP text files directly.
+Use only fields available in `player_*_stats.txt` for routine import.
 
-### 2. Roster parser
-
-Parse the confirmed roster CSV files and produce normalized team/player identity data.
-
-Required identity fields where available from the actual source:
+Attempt to normalize, when actually present:
 
 - `player_id`
-- `team_id`
 - English player name
+- `team_id`
+- team name/abbreviation
 - position
-- active/roster state
-- age or birth date source sufficient to derive display age
-- team name / abbreviation if present
-
-If team names are not fully available from roster files, use the documented local source relationship rather than inventing values.
-
-### 3. Player stats parser
-
-Parse the confirmed `player_*_stats.txt` files.
-
-At minimum, map the fields required by the current GUI schema when present:
-
-Batting:
+- active/current status if available
 - season/year
-- G, PA, AB, H, HR, RBI, BB, SO, SB
-- AVG, OBP, SLG, WAR if supplied
 
-Pitching:
-- season/year
-- G, GS, W, L, SV, IP, SO
-- ERA, WHIP, WAR if supplied
+If a display field is absent, keep it nullable/default and document the limitation. Never silently read roster files to fill gaps.
 
-If a current GUI field is not supplied by OOTP in the inspected file, keep a documented default instead of fabricating a value.
+The current UI may need a safe placeholder for missing team/position metadata; keep that minimal.
 
-### 4. Normalizer
+## Stats mapping
 
-The normalizer owns OOTP-specific conversion details:
+Map real fields required by the current GUI when present.
 
-- UTF-8 BOM handling
-- numeric conversion
-- blank/null handling
-- position normalization
-- season integer conversion
-- innings-pitched representation if needed
-- duplicate rows
+Batting target fields:
 
-Parsers should produce source-shaped data; the normalizer produces app-shaped data.
+```text
+G PA AB H HR RBI BB SO SB AVG OBP SLG WAR
+```
 
-## Database behavior
+Pitching target fields:
 
-Do not destroy the sample seed path. Real import and sample reset must remain separately usable during development.
+```text
+G GS W L SV IP SO ERA WHIP WAR
+```
 
-### Current-state tables
+Do not fabricate unavailable rate/advanced fields.
 
-Use/update the current tables for the latest imported state:
+## DB change required
 
-- `teams`
-- `players`
-- `batting_seasons`
-- `pitching_seasons`
+The old primary key `(player_id, season)` is insufficient.
 
-OOTP `player_id` and `team_id` should remain the stable source identities where safely possible.
+Season stat identity must become at least:
 
-Use idempotent UPSERT behavior so importing the same save twice does not duplicate rows.
+```text
+(player_id, season, competition_type)
+```
 
-### Import history
+Apply the equivalent change to batting and pitching season tables.
 
-Add the minimum history required for later milestone detection and forecasting.
+Current/career queries must accept or explicitly choose a `competition_type`; default UI behavior may initially show `regular_season`, but data for other contexts must remain separate.
 
-Recommended tables:
+## Import history
+
+Add/maintain:
 
 ```text
 import_runs
-- id
-- imported_at
-- save_path
-- save_name
-- source_modified_at or source signature
-- status
-
 stat_snapshots
-- import_run_id
-- entity_type
-- entity_id
-- scope
-- season nullable
-- stat_key
-- value
 ```
 
-For v1, snapshot only the stats already needed by configured milestone rules and the current Player Records UI. Do not create a giant generic copy of every OOTP field.
-
-The current-state season tables are for fast UI queries. `stat_snapshots` are append-only history for milestone crossing detection and later forecasts.
-
-Do not snapshot duplicate data if the selected save has not materially changed; use a simple source signature/modified-time strategy documented in code.
-
-## Import service
-
-Expose one service-level operation, conceptually:
-
-```python
-result = import_save(save_path)
-```
-
-The service should:
-
-1. validate `.lg` path,
-2. locate roster/stat source files,
-3. parse,
-4. normalize,
-5. start an import run,
-6. upsert current state,
-7. append required snapshots,
-8. commit transaction,
-9. return an import summary.
-
-Import summary should include at least:
-
-- save name
-- teams imported
-- players imported
-- batting season rows
-- pitching season rows
-- snapshots written
-- skipped/invalid rows
-- warnings
-
-A failed import must roll back current-state writes and mark/report failure cleanly.
-
-## First integration surface
-
-Do not redesign the GUI in this task.
-
-Add the smallest useful integration point:
-
-- Settings already stores/auto-detects the `.lg` save path.
-- Add a compact `Import / Refresh data` action in Settings or the existing top-level refresh action if one already exists.
-- On success, refresh repository-backed pages.
-- Display a concise success/failure summary; do not build an elaborate import UI yet.
-
-Keep the sample DB reset tool available.
-
-## Milestone rules
-
-Do not implement the full milestone-rule editor in this task.
-
-However, importer/snapshot code must not hard-code one specific hit milestone. Store generic stat keys so later rules can select:
+Snapshot identity/value data must include:
 
 ```text
-entity_type + scope + stat_key
+entity_type
+entity_id
+scope
+competition_type
+season nullable
+stat_key
+value
 ```
+
+Snapshot only useful milestone/current-UI stats, not every raw field.
+
+Repeated unchanged import:
+
+- no duplicate current rows,
+- no duplicate snapshot set,
+- no duplicate achievement.
+
+## Career totals
+
+For additive counting stats, derive career totals by summing normalized season rows **inside the same competition type**.
 
 Examples:
 
-- player + career + H
-- player + season + HR
-- player + career + W
+```text
+regular-season career H != postseason career H
+regular-season career W != international career W
+```
 
-Career values should be derived from the normalized season rows for additive counting stats unless the local research establishes a better authoritative source.
+Do not combine contexts.
 
-## Validation order
+## Milestone crossing preparation
 
-Use local validation only. No GitHub Actions.
-
-1. Sync remote without losing the existing local research commit.
-2. `compileall`
-3. existing pytest
-4. parser tests using tiny sanitized/local fixture rows where practical
-5. import the actual local test save
-6. verify DB counts and stable IDs
-7. run GUI
-8. verify real players appear
-9. verify at least one batter's season rows against OOTP source
-10. verify at least one pitcher's season rows against OOTP source
-11. import same unchanged save again and confirm no duplicate current-state rows
-12. verify import history/snapshot behavior
-
-## Required spot checks
-
-Choose at least:
-
-- one active batter from tracked team
-- one active pitcher from tracked team
-- one player with multiple seasons
-
-For each, compare OOTP source values to SQLite values for representative counting and rate stats.
-
-Do not claim PASS based only on row counts.
-
-## Git / cost rules
-
-- Local validation only.
-- No GitHub Actions.
-- No PR.
-- Do not push from the local worker.
-- Use checkpoint local commits only when necessary.
-- Prefer one final local commit for this feature after tests pass.
-
-Suggested commit:
+Task 005 does not need to resolve exact game situations yet, but data must support:
 
 ```text
-feat: import real OOTP roster and player stats
+previous < threshold <= current
+```
+
+When a rule crosses, the later achievement engine will record an unresolved achievement and Task 006 will enrich it from game sources.
+
+Do not use messages/box scores/logs in Task 005 unless strictly necessary to identify the player-stat competition type; if so, stop and report rather than expanding scope automatically.
+
+## Forecast scope
+
+Do not implement multi-year forecasts.
+
+If a minimal forecast is added, it may only return:
+
+```text
+likely_this_season
+unlikely_this_season
+already_achieved
+unknown
+```
+
+Only calculate when remaining schedule information is reliable. Otherwise `unknown`.
+
+Forecasting is lower priority than correct import and may be deferred.
+
+## GUI integration
+
+Keep UI redesign out of scope.
+
+Add/use one compact `Import / Refresh data` action:
+
+1. selected/auto-detected `.lg` path,
+2. import player stats,
+3. refresh repository-backed pages,
+4. concise result/error summary.
+
+The sample reset path remains available for development.
+
+## Required local validation
+
+Run locally only:
+
+1. sync latest `origin/user/Workspace`, preserving local research commit/work.
+2. compileall.
+3. existing pytest.
+4. parser tests with sanitized tiny rows where useful.
+5. import actual local save.
+6. verify stable `player_id` values.
+7. verify competition-type mapping from real files.
+8. verify one batter source parity.
+9. verify one pitcher source parity.
+10. verify one multi-season player and career sum.
+11. verify regular/post/spring/international never collide in DB keys.
+12. import unchanged source again and verify idempotency.
+13. GUI real-data smoke.
+
+Do not claim PASS from counts alone.
+
+## Explicit forbidden actions
+
+- Do not require `*_rosters.txt`.
+- Do not merge competition types.
+- Do not parse all messages/box/log files yet.
+- Do not push from local worker.
+- Do not open PR or run GitHub Actions.
+- Do not redesign the GUI.
+
+## Suggested local commit
+
+```text
+feat: import real OOTP player stats by competition
 ```
 
 ## Report format
@@ -274,37 +240,41 @@ RESULT: PASS | FAIL
 
 IMPORT
 - save: <name>
-- teams: <n>
+- player stat files: <n>
 - players: <n>
 - batting seasons: <n>
 - pitching seasons: <n>
 - snapshots: <n>
 
+COMPETITION MAPPING
+- regular_season: <source mapping / PASS/FAIL>
+- postseason: <source mapping / PASS/FAIL>
+- spring_training: <source mapping / PASS/FAIL>
+- international: <source mapping / PASS/FAIL>
+
 CHECKS
 - compile: PASS/FAIL
 - existing tests: PASS/FAIL
-- roster parser: PASS/FAIL
 - player stats parser: PASS/FAIL
+- stable player IDs: PASS/FAIL
 - DB upsert: PASS/FAIL
+- competition separation: PASS/FAIL
 - repeated import idempotency: PASS/FAIL
 - GUI real-data smoke: PASS/FAIL
 - batter source parity: PASS/FAIL
 - pitcher source parity: PASS/FAIL
+- career aggregation: PASS/FAIL
 - snapshot history: PASS/FAIL
 
 FIELD MAPPING NOTES
-- <only mappings/ambiguities that matter>
+- <only material mappings/limitations>
 
 FIXES
-- NONE
-or
-- <changes>
+- NONE or <changes>
 
 LOCAL COMMITS
 - <hash> <message>
 
 BLOCKERS
-- NONE
-or
-- <exact blocker>
+- NONE or <exact blocker>
 ```

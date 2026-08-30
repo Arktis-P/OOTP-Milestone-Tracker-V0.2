@@ -2,61 +2,58 @@
 
 ## Goal
 
-Milestone thresholds must not be hard-coded in the UI. The app should let the user choose **what to track**, **where tracking begins**, and **the numeric interval used to register later milestones**.
+Milestones are data-driven. The user chooses what to track, where tracking starts, how often later thresholds are registered, and which competition type the rule applies to.
 
-The final settings UI should support presets/sets and compact slider-style controls, while the stored rule remains data-driven.
+The final UI should expose compact presets/sets plus per-rule controls instead of forcing manual entry for every threshold.
 
 ## Rule identity
 
 A rule is identified by:
 
+```text
+entity_type
+scope
+competition_type
+stat_key
+```
+
+Canonical values:
+
 - `entity_type`: `player` / `team`
 - `scope`: `game` / `season` / `career` / `award`
-- `stat_key`: e.g. `H`, `HR`, `RBI`, `W`, `SO`, `ALLSTAR`
+- `competition_type`: `regular_season` / `postseason` / `spring_training` / `international`
+- `stat_key`: `H`, `HR`, `RBI`, `W`, `SO`, etc.
 
-Player and team rules are separate even when they share a stat key. For example player career wins and team career wins use different threshold ranges.
+Competition types must never share accumulated totals. Example: regular-season career hits and postseason career hits are different tracked series.
 
 ## Threshold modes
 
-### Interval mode
-
-Use when milestones follow a regular sequence.
-
-Example:
+### Interval
 
 ```text
-Career Hits
-start      = 2000
-interval   = 500
-end        = 3500
+Career Hits / Regular Season
+start    = 2000
+interval = 500
+end      = 3500
 
 => 2000 / 2500 / 3000 / 3500
 ```
 
-Recommended stored fields:
+### Explicit
+
+For irregular thresholds:
 
 ```text
-mode          interval
-start_value   2000
-step_value     500
-end_value     3500
+thresholds = [10, 20, 30, 50]
 ```
 
-### Explicit mode
-
-Use when milestone values are irregular.
-
-```text
-mode        explicit
-thresholds  [10, 20, 30, 50]
-```
-
-## Common rule fields
+## Common fields
 
 ```text
 id
 entity_type
 scope
+competition_type
 stat_key
 title
 enabled
@@ -67,71 +64,83 @@ end_value
 explicit_thresholds
 unit
 sort_order
-preset_id        nullable
+preset_id nullable
 ```
-
-Later filters can be added separately, such as league/team applicability, active/retired players, or position restrictions. Those filters should not be mixed into the threshold generator itself.
 
 ## Registration semantics
 
-A configured threshold becomes a milestone event when an import changes a value across that threshold.
+A configured threshold becomes an achievement when:
 
 ```text
-previous value < threshold <= imported current value
+previous value < threshold <= current value
 ```
 
-Example:
+The comparison must occur within the same `competition_type` and, for season rules, the same season.
 
-```text
-Previous snapshot: 1,998 H
-Current snapshot : 2,002 H
-Threshold        : 2,000 H
-
-=> Register 2,000-hit milestone once.
-```
-
-Milestone registration must be idempotent: importing the same save again must not create the same achievement twice.
+Achievement registration is idempotent.
 
 ## Presets / sets
 
-The app should ship with selectable rule sets rather than forcing users to configure every statistic manually.
+Initial concept:
 
-Proposed presets:
+- `Standard`
+- `Major only`
+- `Dense`
+- `Custom`
 
-- `Standard`: balanced default milestones.
-- `Major only`: only historically significant / high thresholds.
-- `Dense`: starts earlier and uses smaller intervals.
-- `Custom`: user-edited rules.
+A preset is a collection of rule definitions. Users can apply a preset and override individual rules.
 
-A preset is only a collection of milestone-rule definitions. Applying a preset copies/activates the selected rules; users may then override individual rules.
-
-## Planned compact UI
-
-A rule editor can be represented as one compact row/card:
+Planned compact editor:
 
 ```text
-[ON] Career Hits       2,000 ├──────────────┤ 3,500
-                       Step [500 ▾]
-                       Preview: 2,000 · 2,500 · 3,000 · 3,500
+[ON] Career Hits   [Regular Season ▾]
+     2,000 ├──────────────┤ 3,500   Step [500 ▾]
+     Preview: 2,000 · 2,500 · 3,000 · 3,500
 ```
 
-For explicit rules:
+## Import frequency is separate
+
+Threshold interval and import frequency are unrelated.
+
+- Threshold interval: how often a stat becomes a milestone.
+- Import frequency: when the app rereads OOTP data.
+
+Initial operation is manual `Import / Refresh`. Periodic refresh may be added later.
+
+## Achievement context
+
+The milestone rule decides **what counts**. A separate achievement record stores **when/how it happened**.
+
+See `docs/MILESTONE_ACHIEVEMENT_MODEL.md`.
+
+Required design principle:
+
+- `player_*_stats.txt` determines the authoritative numeric crossing.
+- game box/log/message sources enrich the crossing with exact game context where available.
+
+## Forecasting
+
+Forecasting is deliberately limited to the next threshold in the current season.
+
+Possible display states:
 
 ```text
-[ON] Award Count       [ 5 ] [ 10 ] [ 15 ] [ 20 ] [ 25 ]
+Likely this season
+Unlikely this season
+Already achieved
+Unknown
 ```
 
-The top of the page can expose preset selection:
+Do not predict a specific future career year.
+
+A basic estimator may compare:
 
 ```text
-Rule Set   [ Standard ▾ ]   [Apply]
+remaining_to_target
+current_season_stat_per_game
+remaining_games
 ```
 
-## Separation from import frequency
+Only produce Likely/Unlikely when remaining-games information is reliable enough. Otherwise return `Unknown`.
 
-Threshold interval and data-import frequency are different concepts.
-
-- Rule interval: e.g. register a career-hit milestone every 500 hits.
-- Import frequency: when the app reads the OOTP save again.
-
-Initial implementation should import when the user requests refresh/update. Automatic periodic/background import can be added later without changing milestone rule definitions.
+For contexts with inherently variable schedules (especially postseason/international), `Unknown` is acceptable unless a remaining schedule is known.
