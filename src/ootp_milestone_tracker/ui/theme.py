@@ -1,4 +1,7 @@
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QColor, QFont, QPalette
+
+DARK_ACCENT = "#4d8fe8"
+LIGHT_ACCENT = "#3275d8"
 
 DARK_QSS = """
 QWidget { background: #111318; color: #e7eaf0; font-size: 12px; }
@@ -55,6 +58,18 @@ QTabBar::tab:selected { color: #20242a; border-bottom-color: #3275d8; }
 
 
 def apply_theme(app, theme: str) -> None:
-    app.setStyleSheet(LIGHT_QSS if theme == "light" else DARK_QSS)
+    is_light = theme == "light"
+    app.setStyleSheet(LIGHT_QSS if is_light else DARK_QSS)
+
+    # Custom-painted widgets (including milestone ladders) read the palette
+    # instead of QSS, so keep the palette highlight aligned with the app's
+    # existing point color.
+    accent = QColor(LIGHT_ACCENT if is_light else DARK_ACCENT)
+    palette = app.palette()
+    palette.setColor(QPalette.ColorRole.Highlight, accent)
+    palette.setColor(QPalette.ColorRole.Link, accent)
+    palette.setColor(QPalette.ColorRole.HighlightedText, QColor("#ffffff"))
+    app.setPalette(palette)
+
     font = QFont("Segoe UI", 9)
     app.setFont(font)
