@@ -85,6 +85,9 @@ def parse_batting_table(html: str, away_team_id: int, home_team_id: int) -> Dict
                 so = int(cols[6])
                 lob = int(cols[7])
 
+                is_sub = ("&#160;" in r) or ("&nbsp;" in r) or (re.search(r"\b[a-z]-", name) is not None)
+                is_starter = not is_sub
+
                 batting_lines[pid] = BattingLine(
                     player_id=pid,
                     name=name,
@@ -96,9 +99,11 @@ def parse_batting_table(html: str, away_team_id: int, home_team_id: int) -> Dict
                     bb=bb,
                     so=so,
                     lob=lob,
+                    is_starter=is_starter,
                 )
             except ValueError:
                 pass
+
 
     return batting_lines
 

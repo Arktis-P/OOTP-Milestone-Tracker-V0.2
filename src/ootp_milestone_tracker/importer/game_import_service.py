@@ -116,7 +116,7 @@ class GameImportService:
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         ach.game_id,
-                        ach.player_id,
+                        ach.player_id if ach.player_id is not None else 0,
                         ach.competition_type,
                         ach.rule_key,
                         ach.title,
@@ -126,6 +126,7 @@ class GameImportService:
                         ach.opponent_player_id,
                         ach.context_text,
                     ),
+
                 )
                 ach_count += 1
 

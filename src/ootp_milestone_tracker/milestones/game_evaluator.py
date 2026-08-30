@@ -1,16 +1,18 @@
 from typing import List
 
 from .game_rules import (
+    BatterHitsFamilyRule,
+    BatterHRFamilyRule,
+    BatterRBIFamilyRule,
+    BatterSBFamilyRule,
     CycleRule,
     GameMilestoneAchievement,
     GameMilestoneRule,
     GrandSlamRule,
-    HitsThresholdRule,
-    MultiHRRule,
-    NoHitterRule,
-    PerfectGameRule,
-    ShutoutRule,
-    StrikeoutsThresholdRule,
+    PitcherHierarchyRule,
+    PitcherSOFamilyRule,
+    TeamBattingRules,
+    TeamPitchingHierarchyRule,
 )
 
 
@@ -18,14 +20,21 @@ class GameMilestoneEvaluator:
     def __init__(self, rules: List[GameMilestoneRule] = None):
         if rules is None:
             self.rules = [
-                HitsThresholdRule(5),
-                MultiHRRule(2),
-                StrikeoutsThresholdRule(10),
+                # Batter Threshold Families
+                BatterHitsFamilyRule(),
+                BatterRBIFamilyRule(),
+                BatterHRFamilyRule(),
+                BatterSBFamilyRule(),
+                # Batter Named Rules
                 GrandSlamRule(),
                 CycleRule(),
-                ShutoutRule(),
-                NoHitterRule(),
-                PerfectGameRule(),
+                # Pitcher Threshold Families
+                PitcherSOFamilyRule(),
+                # Pitcher Hierarchy Rule (Highest Only)
+                PitcherHierarchyRule(),
+                # Team Rules
+                TeamBattingRules(),
+                TeamPitchingHierarchyRule(),
             ]
         else:
             self.rules = rules

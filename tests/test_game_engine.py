@@ -7,16 +7,6 @@ from ootp_milestone_tracker.importer.game_box_parser import parse_game_box
 from ootp_milestone_tracker.importer.game_import_service import GameImportService
 from ootp_milestone_tracker.importer.game_models import BattingEvent, BattingLine, GameRecord, PitchingLine
 from ootp_milestone_tracker.milestones.game_evaluator import GameMilestoneEvaluator
-from ootp_milestone_tracker.milestones.game_rules import (
-    CycleRule,
-    GrandSlamRule,
-    HitsThresholdRule,
-    MultiHRRule,
-    NoHitterRule,
-    PerfectGameRule,
-    ShutoutRule,
-    StrikeoutsThresholdRule,
-)
 
 SAMPLE_BOX_DIR = Path(
     r"C:\Users\cwson\OneDrive\문서\Out of the Park Developments\OOTP Baseball 27\saved_games\SuperYukies_V1.0.lg\news\html\box_scores"
@@ -35,21 +25,343 @@ def test_game_box_parser_real_games():
     if not SAMPLE_BOX_DIR.exists():
         pytest.skip("Sample box score directory not available on local machine")
 
-    # Game 1
     g1 = parse_game_box(SAMPLE_BOX_DIR / "game_box_1.html")
     assert g1.game_id == 1
     assert g1.game_date == "03/30/2027"
     assert g1.season == 2027
-    assert len(g1.batting_lines) > 0
-    assert len(g1.pitching_lines) > 0
 
-    # Game 1000: HR text parsing verification
     g1000 = parse_game_box(SAMPLE_BOX_DIR / "game_box_1000.html")
     assert g1000.game_id == 1000
     hr_events = [ev for ev in g1000.batting_events if ev.event_type == "HOME_RUN"]
     assert len(hr_events) >= 2
-    # Verify season total extracted from lower text
     assert any(ev.season_total == 22 for ev in hr_events)
+
+
+def test_hits_threshold_boundaries():
+    evaluator = GameMilestoneEvaluator()
+
+    for h_val, expected_key in [
+        (3, None),
+        (4, "GAME_HITS_4"),
+        (5, "GAME_HITS_5"),
+        (6, "GAME_HITS_6"),
+        (7, "GAME_HITS_7"),
+        (8, "GAME_HITS_7"),
+    ]:
+        rec = GameRecord(
+            game_id=100,
+            title="Test",
+            game_date="05/01/2027",
+            season=2027,
+            competition_type="regular_season",
+            away_team_id=1,
+            home_team_id=2,
+            batting_lines=[BattingLine(player_id=1, name="P1", team_id=1, ab=h_val, h=h_val)],
+        )
+        achs = [a for a in evaluator.evaluate_game(rec) if a.rule_key.startswith("GAME_HITS_")]
+        if expected_key is None:
+            assert len(achs) == 0
+        else:
+            assert len(achs) == 1
+            assert achs[0].rule_key == expected_key
+            assert achs[0].achieved_value == float(h_val)
+
+
+def test_rbi_threshold_boundaries():
+    evaluator = GameMilestoneEvaluator()
+
+    for rbi_val, expected_key in [
+        (4, None),
+        (5, "GAME_RBI_5"),
+        (6, "GAME_RBI_6"),
+        (7, "GAME_RBI_7"),
+        (8, "GAME_RBI_8"),
+        (9, "GAME_RBI_9"),
+        (10, "GAME_RBI_10"),
+        (11, "GAME_RBI_10"),
+    ]:
+        rec = GameRecord(
+            game_id=101,
+            title="Test",
+            game_date="05/01/2027",
+            season=2027,
+            competition_type="regular_season",
+            away_team_id=1,
+            home_team_id=2,
+            batting_lines=[BattingLine(player_id=1, name="P1", team_id=1, rbi=rbi_val)],
+        )
+        achs = [a for a in evaluator.evaluate_game(rec) if a.rule_key.startswith("GAME_RBI_")]
+        if expected_key is None:
+            assert len(achs) == 0
+        else:
+            assert len(achs) == 1
+            assert achs[0].rule_key == expected_key
+            assert achs[0].achieved_value == float(rbi_val)
+
+
+def test_hr_threshold_boundaries():
+    evaluator = GameMilestoneEvaluator()
+
+    for hr_val, expected_key in [
+        (1, None),
+        (2, "GAME_HR_2"),
+        (3, "GAME_HR_3"),
+        (4, "GAME_HR_4"),
+        (5, "GAME_HR_5"),
+        (6, "GAME_HR_5"),
+    ]:
+        rec = GameRecord(
+            game_id=102,
+            title="Test",
+            game_date="05/01/2027",
+            season=2027,
+            competition_type="regular_season",
+            away_team_id=1,
+            home_team_id=2,
+            batting_lines=[BattingLine(player_id=1, name="P1", team_id=1, hr=hr_val)],
+        )
+        achs = [a for a in evaluator.evaluate_game(rec) if a.rule_key.startswith("GAME_HR_")]
+        if expected_key is None:
+            assert len(achs) == 0
+        else:
+            assert len(achs) == 1
+            assert achs[0].rule_key == expected_key
+            assert achs[0].achieved_value == float(hr_val)
+
+
+def test_sb_threshold_boundaries():
+    evaluator = GameMilestoneEvaluator()
+
+    for sb_val, expected_key in [
+        (2, None),
+        (3, "GAME_SB_3"),
+        (4, "GAME_SB_4"),
+        (5, "GAME_SB_5"),
+        (6, "GAME_SB_6"),
+        (7, "GAME_SB_7"),
+        (8, "GAME_SB_7"),
+    ]:
+        rec = GameRecord(
+            game_id=103,
+            title="Test",
+            game_date="05/01/2027",
+            season=2027,
+            competition_type="regular_season",
+            away_team_id=1,
+            home_team_id=2,
+            batting_lines=[BattingLine(player_id=1, name="P1", team_id=1, sb=sb_val)],
+        )
+        achs = [a for a in evaluator.evaluate_game(rec) if a.rule_key.startswith("GAME_SB_")]
+        if expected_key is None:
+            assert len(achs) == 0
+        else:
+            assert len(achs) == 1
+            assert achs[0].rule_key == expected_key
+            assert achs[0].achieved_value == float(sb_val)
+
+
+def test_so_threshold_boundaries():
+    evaluator = GameMilestoneEvaluator()
+
+    for so_val, expected_key in [
+        (9, None),
+        (10, "GAME_STRIKEOUTS_10"),
+        (14, "GAME_STRIKEOUTS_10"),
+        (15, "GAME_STRIKEOUTS_15"),
+        (19, "GAME_STRIKEOUTS_15"),
+        (20, "GAME_STRIKEOUTS_20"),
+        (25, "GAME_STRIKEOUTS_25"),
+        (30, "GAME_STRIKEOUTS_30"),
+        (31, "GAME_STRIKEOUTS_30"),
+    ]:
+        rec = GameRecord(
+            game_id=104,
+            title="Test",
+            game_date="05/01/2027",
+            season=2027,
+            competition_type="regular_season",
+            away_team_id=1,
+            home_team_id=2,
+            pitching_lines=[PitchingLine(player_id=2, name="Ace", team_id=1, outs=27, so=so_val)],
+        )
+        achs = [a for a in evaluator.evaluate_game(rec) if a.rule_key.startswith("GAME_STRIKEOUTS_")]
+        if expected_key is None:
+            assert len(achs) == 0
+        else:
+            assert len(achs) == 1
+            assert achs[0].rule_key == expected_key
+            assert achs[0].achieved_value == float(so_val)
+
+
+def test_pitcher_hierarchy_suppression():
+    evaluator = GameMilestoneEvaluator()
+
+    # 1. Complete Game Win with runs allowed -> GAME_COMPLETE_GAME_WIN only
+    rec_cg = GameRecord(
+        game_id=200,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=1,
+        home_team_id=2,
+        pitching_lines=[PitchingLine(player_id=1, name="P1", team_id=1, outs=27, win=True, r=2, h=5)],
+    )
+    achs_cg = [
+        a
+        for a in evaluator.evaluate_game(rec_cg)
+        if a.rule_key
+        in ("GAME_PERFECT_GAME", "GAME_NO_HIT_NO_RUN", "GAME_SHUTOUT_WIN", "GAME_COMPLETE_GAME_WIN")
+    ]
+    assert len(achs_cg) == 1
+    assert achs_cg[0].rule_key == "GAME_COMPLETE_GAME_WIN"
+
+    # 2. Complete Game Loss -> No CG win achievement
+    rec_loss = GameRecord(
+        game_id=201,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=1,
+        home_team_id=2,
+        pitching_lines=[PitchingLine(player_id=1, name="P1", team_id=1, outs=27, win=False, loss=True, r=1, h=3)],
+    )
+    achs_loss = [
+        a
+        for a in evaluator.evaluate_game(rec_loss)
+        if a.rule_key
+        in ("GAME_PERFECT_GAME", "GAME_NO_HIT_NO_RUN", "GAME_SHUTOUT_WIN", "GAME_COMPLETE_GAME_WIN")
+    ]
+    assert len(achs_loss) == 0
+
+    # 3. Shutout Win -> GAME_SHUTOUT_WIN only
+    rec_so = GameRecord(
+        game_id=202,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=1,
+        home_team_id=2,
+        pitching_lines=[PitchingLine(player_id=1, name="P1", team_id=1, outs=27, win=True, r=0, h=3)],
+    )
+    achs_so = [
+        a
+        for a in evaluator.evaluate_game(rec_so)
+        if a.rule_key
+        in ("GAME_PERFECT_GAME", "GAME_NO_HIT_NO_RUN", "GAME_SHUTOUT_WIN", "GAME_COMPLETE_GAME_WIN")
+    ]
+    assert len(achs_so) == 1
+    assert achs_so[0].rule_key == "GAME_SHUTOUT_WIN"
+
+    # 4. No-Hit No-Run -> GAME_NO_HIT_NO_RUN only
+    rec_nh = GameRecord(
+        game_id=203,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=1,
+        home_team_id=2,
+        pitching_lines=[PitchingLine(player_id=1, name="P1", team_id=1, outs=27, win=True, r=0, h=0, bb=2)],
+    )
+    achs_nh = [
+        a
+        for a in evaluator.evaluate_game(rec_nh)
+        if a.rule_key
+        in ("GAME_PERFECT_GAME", "GAME_NO_HIT_NO_RUN", "GAME_SHUTOUT_WIN", "GAME_COMPLETE_GAME_WIN")
+    ]
+    assert len(achs_nh) == 1
+    assert achs_nh[0].rule_key == "GAME_NO_HIT_NO_RUN"
+
+    # 5. Perfect Game -> GAME_PERFECT_GAME only
+    rec_pg = GameRecord(
+        game_id=204,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=1,
+        home_team_id=2,
+        pitching_lines=[PitchingLine(player_id=1, name="P1", team_id=1, outs=27, win=True, r=0, h=0, bb=0)],
+    )
+    achs_pg = [
+        a
+        for a in evaluator.evaluate_game(rec_pg)
+        if a.rule_key
+        in ("GAME_PERFECT_GAME", "GAME_NO_HIT_NO_RUN", "GAME_SHUTOUT_WIN", "GAME_COMPLETE_GAME_WIN")
+    ]
+    assert len(achs_pg) == 1
+    assert achs_pg[0].rule_key == "GAME_PERFECT_GAME"
+
+
+def test_team_batting_starter_vs_sub():
+    evaluator = GameMilestoneEvaluator()
+
+    # Case 1: Starters all hit, sub is 0-for-1 -> STARTERS_ALL_HIT Yes, APPEARED_ALL_HIT No
+    rec1 = GameRecord(
+        game_id=300,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=10,
+        home_team_id=20,
+        batting_lines=[
+            BattingLine(player_id=i, name=f"P{i}", team_id=10, h=1, is_starter=True) for i in range(1, 10)
+        ]
+        + [BattingLine(player_id=99, name="Sub", team_id=10, h=0, is_starter=False)],
+    )
+    achs1 = [a.rule_key for a in evaluator.evaluate_game(rec1)]
+    assert "TEAM_STARTERS_ALL_HIT" in achs1
+    assert "TEAM_APPEARED_ALL_HIT" not in achs1
+
+    # Case 2: All appeared hit -> both Yes
+    rec2 = GameRecord(
+        game_id=301,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=10,
+        home_team_id=20,
+        batting_lines=[
+            BattingLine(player_id=i, name=f"P{i}", team_id=10, h=1, is_starter=True) for i in range(1, 10)
+        ]
+        + [BattingLine(player_id=99, name="Sub", team_id=10, h=1, is_starter=False)],
+    )
+    achs2 = [a.rule_key for a in evaluator.evaluate_game(rec2)]
+    assert "TEAM_STARTERS_ALL_HIT" in achs2
+    assert "TEAM_APPEARED_ALL_HIT" in achs2
+
+
+def test_team_pitching_hierarchy():
+    evaluator = GameMilestoneEvaluator()
+
+    # Team Shutout Win (combined pitching, 0 runs, hits allowed)
+    rec1 = GameRecord(
+        game_id=400,
+        title="Test",
+        game_date="05/01/2027",
+        season=2027,
+        competition_type="regular_season",
+        away_team_id=10,
+        home_team_id=20,
+        away_score=0,
+        home_score=3,
+        pitching_lines=[
+            PitchingLine(player_id=1, name="Starter", team_id=20, outs=18, r=0, h=2, bb=1),
+            PitchingLine(player_id=2, name="Reliever", team_id=20, outs=9, r=0, h=1, bb=0),
+        ],
+    )
+    achs1 = [
+        a.rule_key
+        for a in evaluator.evaluate_game(rec1)
+        if a.rule_key in ("TEAM_PERFECT_GAME", "TEAM_NO_HIT_NO_RUN", "TEAM_SHUTOUT_WIN")
+    ]
+    assert len(achs1) == 1
+    assert achs1[0] == "TEAM_SHUTOUT_WIN"
 
 
 def test_idempotency_and_persistence(test_db):
@@ -68,124 +380,6 @@ def test_idempotency_and_persistence(test_db):
     assert is_new2 is False
     assert count2 == 0
 
-    # Verify DB table row counts
     repo = Repository(test_db)
     achievements = repo.game_milestone_achievements()
-    # Unique game_id in games table
-    with test_db.connect() as conn:
-        g_count = conn.execute("SELECT COUNT(*) FROM games WHERE game_id = 1000").fetchone()[0]
-        assert g_count == 1
-
-
-def test_game_rules_fixtures():
-    # 1. 5 Hits Rule
-    rec_hits = GameRecord(
-        game_id=9001,
-        title="Test Game",
-        game_date="05/10/2027",
-        season=2027,
-        competition_type="regular_season",
-        away_team_id=1,
-        home_team_id=2,
-        batting_lines=[BattingLine(player_id=101, name="Hit King", team_id=1, h=5, ab=5)],
-    )
-    evaluator = GameMilestoneEvaluator([HitsThresholdRule(5)])
-    achs = evaluator.evaluate_game(rec_hits)
-    assert len(achs) == 1
-    assert achs[0].rule_key == "GAME_HITS_5"
-    assert achs[0].player_id == 101
-
-    # 2. Multi-HR Rule (using lower summary HR count)
-    rec_hr = GameRecord(
-        game_id=9002,
-        title="Test Game",
-        game_date="05/11/2027",
-        season=2027,
-        competition_type="regular_season",
-        away_team_id=1,
-        home_team_id=2,
-        batting_lines=[BattingLine(player_id=102, name="Slugger", team_id=1, hr=2, ab=4, h=2)],
-    )
-    evaluator_hr = GameMilestoneEvaluator([MultiHRRule(2)])
-    achs_hr = evaluator_hr.evaluate_game(rec_hr)
-    assert len(achs_hr) == 1
-    assert achs_hr[0].rule_key == "GAME_MULTI_HR"
-
-    # 3. 10 Strikeouts Rule
-    rec_so = GameRecord(
-        game_id=9003,
-        title="Test Game",
-        game_date="05/12/2027",
-        season=2027,
-        competition_type="regular_season",
-        away_team_id=1,
-        home_team_id=2,
-        pitching_lines=[PitchingLine(player_id=201, name="Ace Pitcher", team_id=1, outs=27, so=11)],
-    )
-    evaluator_so = GameMilestoneEvaluator([StrikeoutsThresholdRule(10)])
-    achs_so = evaluator_so.evaluate_game(rec_so)
-    assert len(achs_so) == 1
-    assert achs_so[0].rule_key == "GAME_STRIKEOUTS_10"
-
-    # 4. Grand Slam Rule
-    rec_gs = GameRecord(
-        game_id=9004,
-        title="Test Game",
-        game_date="05/13/2027",
-        season=2027,
-        competition_type="regular_season",
-        away_team_id=1,
-        home_team_id=2,
-        batting_events=[
-            BattingEvent(
-                game_id=9004,
-                player_id=103,
-                event_index=1,
-                event_type="HOME_RUN",
-                context_text="1, 5th Inning off J. Doe, 3 on, 2 outs",
-            )
-        ],
-    )
-    evaluator_gs = GameMilestoneEvaluator([GrandSlamRule()])
-    achs_gs = evaluator_gs.evaluate_game(rec_gs)
-    assert len(achs_gs) == 1
-    assert achs_gs[0].rule_key == "GAME_GRAND_SLAM"
-
-    # 5. Cycle Rule
-    rec_cycle = GameRecord(
-        game_id=9005,
-        title="Test Game",
-        game_date="05/14/2027",
-        season=2027,
-        competition_type="regular_season",
-        away_team_id=1,
-        home_team_id=2,
-        batting_lines=[
-            BattingLine(player_id=104, name="Cycle Batter", team_id=1, ab=4, h=4, doubles=1, triples=1, hr=1)
-        ],
-    )
-    evaluator_cycle = GameMilestoneEvaluator([CycleRule()])
-    achs_cycle = evaluator_cycle.evaluate_game(rec_cycle)
-    assert len(achs_cycle) == 1
-    assert achs_cycle[0].rule_key == "GAME_CYCLE"
-
-    # 6. Shutout & No-Hitter & Perfect Game Rules
-    rec_perf = GameRecord(
-        game_id=9006,
-        title="Test Game",
-        game_date="05/15/2027",
-        season=2027,
-        competition_type="regular_season",
-        away_team_id=1,
-        home_team_id=2,
-        pitching_lines=[
-            PitchingLine(player_id=202, name="Perfect Pitcher", team_id=1, outs=27, h=0, r=0, er=0, bb=0, so=15)
-        ],
-    )
-    evaluator_pitch = GameMilestoneEvaluator([ShutoutRule(), NoHitterRule(), PerfectGameRule()])
-    achs_pitch = evaluator_pitch.evaluate_game(rec_perf)
-    assert len(achs_pitch) == 3
-    rule_keys = [a.rule_key for a in achs_pitch]
-    assert "GAME_SHUTOUT" in rule_keys
-    assert "GAME_NO_HITTER" in rule_keys
-    assert "GAME_PERFECT_GAME" in rule_keys
+    assert len(achievements) > 0

@@ -18,6 +18,8 @@ class BattingLine:
     triples: int = 0
     hr: int = 0
     sb: int = 0
+    is_starter: bool = True
+
 
 
 @dataclass
