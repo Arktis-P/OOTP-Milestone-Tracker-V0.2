@@ -309,9 +309,9 @@ def test_team_batting_starter_vs_sub():
         away_team_id=10,
         home_team_id=20,
         batting_lines=[
-            BattingLine(player_id=i, name=f"P{i}", team_id=10, h=1, is_starter=True) for i in range(1, 10)
+            BattingLine(player_id=i, name=f"P{i}", team_id=10, ab=3, h=1, is_starter=True) for i in range(1, 10)
         ]
-        + [BattingLine(player_id=99, name="Sub", team_id=10, h=0, is_starter=False)],
+        + [BattingLine(player_id=99, name="Sub", team_id=10, ab=1, h=0, is_starter=False)],
     )
     achs1 = [a.rule_key for a in evaluator.evaluate_game(rec1)]
     assert "TEAM_STARTERS_ALL_HIT" in achs1
@@ -327,13 +327,14 @@ def test_team_batting_starter_vs_sub():
         away_team_id=10,
         home_team_id=20,
         batting_lines=[
-            BattingLine(player_id=i, name=f"P{i}", team_id=10, h=1, is_starter=True) for i in range(1, 10)
+            BattingLine(player_id=i, name=f"P{i}", team_id=10, ab=3, h=1, is_starter=True) for i in range(1, 10)
         ]
-        + [BattingLine(player_id=99, name="Sub", team_id=10, h=1, is_starter=False)],
+        + [BattingLine(player_id=99, name="Sub", team_id=10, ab=1, h=1, is_starter=False)],
     )
     achs2 = [a.rule_key for a in evaluator.evaluate_game(rec2)]
     assert "TEAM_STARTERS_ALL_HIT" in achs2
     assert "TEAM_APPEARED_ALL_HIT" in achs2
+
 
 
 def test_team_pitching_hierarchy():

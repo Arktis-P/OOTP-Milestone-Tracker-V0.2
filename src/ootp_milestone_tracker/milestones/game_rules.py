@@ -200,7 +200,13 @@ class PitcherHierarchyRule(GameMilestoneRule):
         for line in record.pitching_lines:
             # Complete Game Win requires outs >= 27 and win = True
             if line.outs >= 27 and line.win:
-                if line.h == 0 and line.r == 0 and line.bb == 0:
+                is_perfect = (
+                    line.h == 0
+                    and line.r == 0
+                    and line.bb == 0
+                    and (line.bf == line.outs if line.bf > 0 else True)
+                )
+                if is_perfect:
                     achievements.append(
                         GameMilestoneAchievement(
                             game_id=record.game_id,
@@ -211,6 +217,7 @@ class PitcherHierarchyRule(GameMilestoneRule):
                             achieved_value=float(line.outs / 3.0),
                         )
                     )
+
                 elif line.h == 0 and line.r == 0:
                     achievements.append(
                         GameMilestoneAchievement(
@@ -282,8 +289,10 @@ class TeamBattingRules(GameMilestoneRule):
                         )
                     )
 
-            if lines:
-                if all(l.h >= 1 for l in lines):
+            # Appeared batters with offensive plate appearances
+            appeared = [l for l in lines if l.ab > 0 or l.bb > 0 or l.h > 0 or l.rbi > 0]
+            if appeared:
+                if all(l.h >= 1 for l in appeared):
                     achievements.append(
                         GameMilestoneAchievement(
                             game_id=record.game_id,
@@ -293,7 +302,7 @@ class TeamBattingRules(GameMilestoneRule):
                             title="팀 출장 전원 안타",
                         )
                     )
-                if all(l.rbi >= 1 for l in lines):
+                if all(l.rbi >= 1 for l in appeared):
                     achievements.append(
                         GameMilestoneAchievement(
                             game_id=record.game_id,
@@ -304,6 +313,7 @@ class TeamBattingRules(GameMilestoneRule):
                         )
                     )
         return achievements
+
 
 
 # --- Team Pitching Hierarchy Rule (Highest Only) ---
