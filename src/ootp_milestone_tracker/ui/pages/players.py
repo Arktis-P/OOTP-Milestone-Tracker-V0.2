@@ -4,7 +4,8 @@ from PySide6.QtWidgets import (
     QScrollArea, QSplitter, QTableWidget, QTableWidgetItem, QTabWidget, QVBoxLayout, QWidget,
 )
 
-from ..widgets import MilestoneGauge
+from ...core.milestone_catalog import milestone_ladder
+from ..widgets import MilestoneGauge, MilestoneLadderGauge
 
 
 class PlayersPage(QWidget):
@@ -157,7 +158,30 @@ class PlayersPage(QWidget):
             widget = item.widget()
             if widget:
                 widget.deleteLater()
-        for row in self.repo.player_milestones(player["id"]):
+
+        milestone_rows = self.repo.player_milestones(player["id"])
+        rendered_ladders = set()
+        for row in milestone_rows:
+            ladder_key = (row["scope"], row["stat_key"])
+            ladder = milestone_ladder(*ladder_key)
+            if ladder:
+                if ladder_key in rendered_ladders:
+                    continue
+                related_rows = [
+                    candidate for candidate in milestone_rows
+                    if (candidate["scope"], candidate["stat_key"]) == ladder_key
+                ]
+                current_value = max(float(candidate["current_value"]) for candidate in related_rows)
+                gauge = MilestoneLadderGauge(
+                    ladder["title"],
+                    current_value,
+                    ladder["thresholds"],
+                    ladder["unit"],
+                )
+                self.milestone_layout.insertWidget(self.milestone_layout.count() - 1, gauge)
+                rendered_ladders.add(ladder_key)
+                continue
+
             self.milestone_layout.insertWidget(self.milestone_layout.count() - 1, MilestoneGauge(row))
 
         awards = self.repo.awards(player["id"])
