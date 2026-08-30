@@ -1,19 +1,36 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QComboBox, QHBoxLayout, QHeaderView, QLineEdit, QPushButton, QTableWidget, QTableWidgetItem,
+    QComboBox, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QPushButton, QTableWidget, QTableWidgetItem,
     QTabWidget, QVBoxLayout, QWidget,
 )
 
+from ..dialogs.finalize_season_dialog import FinalizeSeasonDialog
 from ..dialogs.game_milestone_settings_dialog import GameMilestoneSettingsDialog
+from ...services.season_service import SeasonService
 
 
 class MilestonesPage(QWidget):
     def __init__(self, repo):
         super().__init__()
         self.repo = repo
+        self.season_service = SeasonService(repo.database)
+        self.active_season = 2027
+
         layout = QVBoxLayout(self)
         layout.setContentsMargins(18, 16, 18, 18)
         layout.setSpacing(10)
+
+        # Action & Control Bar
+        control_bar = QHBoxLayout()
+        self.season_status_label = QLabel()
+        control_bar.addWidget(self.season_status_label)
+        control_bar.addStretch()
+
+        self.finalize_btn = QPushButton("Finalize Regular Season")
+        self.finalize_btn.clicked.connect(self.open_finalize_dialog)
+        control_bar.addWidget(self.finalize_btn)
+
+        layout.addLayout(control_bar)
 
         filters = QHBoxLayout()
         self.search = QLineEdit()
@@ -77,8 +94,28 @@ class MilestonesPage(QWidget):
             ach_header.setSectionResizeMode(col, QHeaderView.ResizeMode.ResizeToContents)
         ach_layout.addWidget(self.ach_table)
 
+        # Tab 3: Season Achievements
+        self.season_ach_tab = QWidget()
+        season_ach_layout = QVBoxLayout(self.season_ach_tab)
+        season_ach_layout.setContentsMargins(0, 8, 0, 0)
+
+        self.season_ach_table = QTableWidget(0, 7)
+        self.season_ach_table.setHorizontalHeaderLabels(["Date", "Player/Team", "Season", "Competition", "Milestone", "Value", "Source"])
+        self.season_ach_table.setAlternatingRowColors(True)
+        self.season_ach_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.season_ach_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.season_ach_table.setSortingEnabled(True)
+        self.season_ach_table.verticalHeader().setVisible(False)
+        self.season_ach_table.verticalHeader().setDefaultSectionSize(29)
+        s_header = self.season_ach_table.horizontalHeader()
+        s_header.setSectionResizeMode(4, QHeaderView.ResizeMode.Stretch)
+        for col in (0, 1, 2, 3, 5, 6):
+            s_header.setSectionResizeMode(col, QHeaderView.ResizeMode.ResizeToContents)
+        season_ach_layout.addWidget(self.season_ach_table)
+
         self.tabs.addTab(self.targets_tab, "Milestone Targets")
         self.tabs.addTab(self.achievements_tab, "Game Achievements")
+        self.tabs.addTab(self.season_ach_tab, "Season Achievements")
         layout.addWidget(self.tabs, 1)
 
         self.search.textChanged.connect(self.refresh)
@@ -91,7 +128,27 @@ class MilestonesPage(QWidget):
         if dialog.exec():
             self.refresh()
 
+    def open_finalize_dialog(self):
+        dialog = FinalizeSeasonDialog(self.repo, self.active_season, self)
+        if dialog.exec():
+            self.refresh()
+
+    def update_control_bar(self):
+        tracked = self.repo.tracked_team()
+        tid = tracked["id"] if tracked else 0
+        processed, target, is_eligible = self.season_service.check_finalization_eligibility(self.active_season, tid)
+
+        state = self.repo.current_season_state(self.active_season)
+        status_str = state["status"] if state else ("Ready to finalize" if is_eligible else "In Progress")
+
+        self.season_status_label.setText(
+            f"<b>Regular Season {self.active_season}</b> · {processed} / {target} games processed · <i>{status_str}</i>"
+        )
+        self.finalize_btn.setEnabled(is_eligible or (state and state["status"].startswith("finalized")))
+
     def refresh(self):
+        self.update_control_bar()
+
         # 1. Targets table
         rows = self.repo.milestones(
             tracked_only=bool(self.visibility.currentData()),
@@ -133,3 +190,25 @@ class MilestonesPage(QWidget):
                 item = QTableWidgetItem(value)
                 self.ach_table.setItem(i, col, item)
         self.ach_table.setSortingEnabled(True)
+
+        # 3. Season Achievements table
+        s_rows = self.repo.season_milestone_achievements(
+            tracked_only=bool(self.visibility.currentData())
+        )
+        self.season_ach_table.setSortingEnabled(False)
+        self.season_ach_table.setRowCount(len(s_rows))
+        for i, row in enumerate(s_rows):
+            val_str = f"{row['achieved_value']:.3f}" if "AVG" in row["rule_key"] or "OBP" in row["rule_key"] or "OPS" in row["rule_key"] or "ERA" in row["rule_key"] else f"{row['achieved_value']:,.0f}"
+            values = [
+                row["achieved_date"] or "Season Final",
+                row["entity_name"],
+                str(row["season"]),
+                row["competition_type"].replace("_", " ").title(),
+                row["title"],
+                val_str,
+                row["source"],
+            ]
+            for col, value in enumerate(values):
+                item = QTableWidgetItem(value)
+                self.season_ach_table.setItem(i, col, item)
+        self.season_ach_table.setSortingEnabled(True)

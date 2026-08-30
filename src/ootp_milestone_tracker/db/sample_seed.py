@@ -74,9 +74,18 @@ SETTINGS = [
 def seed_sample_data(conn) -> None:
     conn.executemany("INSERT INTO teams VALUES (?, ?, ?, ?)", TEAMS)
     conn.executemany("INSERT INTO players VALUES (?, ?, ?, ?, ?, ?, ?)", PLAYERS)
-    conn.executemany("INSERT INTO batting_seasons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", BATTING)
-    conn.executemany("INSERT INTO pitching_seasons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PITCHING)
+    conn.executemany(
+        """INSERT INTO batting_seasons (player_id, season, g, pa, ab, h, hr, rbi, r, bb, sb, avg, obp, slg, war)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        BATTING,
+    )
+    conn.executemany(
+        """INSERT INTO pitching_seasons (player_id, season, g, gs, w, l, sv, ip, so, era, whip, war)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        PITCHING,
+    )
     conn.executemany("INSERT INTO awards(player_id, season, award_name) VALUES (?, ?, ?)", AWARDS)
+
     conn.executemany(
         """INSERT INTO milestones(entity_type, entity_id, scope, stat_key, label,
         current_value, target_value, achieved, achieved_season, sort_order)

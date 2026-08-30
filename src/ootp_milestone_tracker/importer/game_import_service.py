@@ -131,7 +131,13 @@ class GameImportService:
                 ach_count += 1
 
             conn.commit()
-            return True, ach_count
+
+        # Rebuild season live aggregates and threshold crossings
+        from ..services.season_service import SeasonService
+        SeasonService(self.database).rebuild_season(record.season)
+
+        return True, ach_count
+
 
     def import_game_file(self, box_path: Path, log_path: Optional[Path] = None) -> Tuple[bool, int]:
         record = parse_game_box(box_path)
