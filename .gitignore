@@ -19,6 +19,7 @@ artifacts/builds/*
 build/
 dist/
 *.spec
+*.egg-info/
 
 # IDE / OS
 .vscode/
