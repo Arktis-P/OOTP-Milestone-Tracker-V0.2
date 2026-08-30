@@ -34,12 +34,18 @@ class GameMilestoneRule:
 
 
 class BatterHitsFamilyRule(GameMilestoneRule):
-    THRESHOLDS = [4, 5, 6, 7]
+    DEFAULT_THRESHOLDS = [4, 5, 6, 7]
+
+    def __init__(self, thresholds: Optional[List[int]] = None, enabled: bool = True):
+        self.thresholds = thresholds if thresholds is not None else self.DEFAULT_THRESHOLDS
+        self.enabled = enabled
 
     def evaluate(self, record, play_events=None) -> List[GameMilestoneAchievement]:
+        if not self.enabled or not self.thresholds:
+            return []
         achievements = []
         for line in record.batting_lines:
-            t = highest_reached(line.h, self.THRESHOLDS)
+            t = highest_reached(line.h, self.thresholds)
             if t is not None:
                 achievements.append(
                     GameMilestoneAchievement(
@@ -55,12 +61,18 @@ class BatterHitsFamilyRule(GameMilestoneRule):
 
 
 class BatterRBIFamilyRule(GameMilestoneRule):
-    THRESHOLDS = [5, 6, 7, 8, 9, 10]
+    DEFAULT_THRESHOLDS = [5, 6, 7, 8, 9, 10]
+
+    def __init__(self, thresholds: Optional[List[int]] = None, enabled: bool = True):
+        self.thresholds = thresholds if thresholds is not None else self.DEFAULT_THRESHOLDS
+        self.enabled = enabled
 
     def evaluate(self, record, play_events=None) -> List[GameMilestoneAchievement]:
+        if not self.enabled or not self.thresholds:
+            return []
         achievements = []
         for line in record.batting_lines:
-            t = highest_reached(line.rbi, self.THRESHOLDS)
+            t = highest_reached(line.rbi, self.thresholds)
             if t is not None:
                 achievements.append(
                     GameMilestoneAchievement(
@@ -76,12 +88,18 @@ class BatterRBIFamilyRule(GameMilestoneRule):
 
 
 class BatterHRFamilyRule(GameMilestoneRule):
-    THRESHOLDS = [2, 3, 4, 5]
+    DEFAULT_THRESHOLDS = [2, 3, 4, 5]
+
+    def __init__(self, thresholds: Optional[List[int]] = None, enabled: bool = True):
+        self.thresholds = thresholds if thresholds is not None else self.DEFAULT_THRESHOLDS
+        self.enabled = enabled
 
     def evaluate(self, record, play_events=None) -> List[GameMilestoneAchievement]:
+        if not self.enabled or not self.thresholds:
+            return []
         achievements = []
         for line in record.batting_lines:
-            t = highest_reached(line.hr, self.THRESHOLDS)
+            t = highest_reached(line.hr, self.thresholds)
             if t is not None:
                 achievements.append(
                     GameMilestoneAchievement(
@@ -97,12 +115,18 @@ class BatterHRFamilyRule(GameMilestoneRule):
 
 
 class BatterSBFamilyRule(GameMilestoneRule):
-    THRESHOLDS = [3, 4, 5, 6, 7]
+    DEFAULT_THRESHOLDS = [3, 4, 5, 6, 7]
+
+    def __init__(self, thresholds: Optional[List[int]] = None, enabled: bool = True):
+        self.thresholds = thresholds if thresholds is not None else self.DEFAULT_THRESHOLDS
+        self.enabled = enabled
 
     def evaluate(self, record, play_events=None) -> List[GameMilestoneAchievement]:
+        if not self.enabled or not self.thresholds:
+            return []
         achievements = []
         for line in record.batting_lines:
-            t = highest_reached(line.sb, self.THRESHOLDS)
+            t = highest_reached(line.sb, self.thresholds)
             if t is not None:
                 achievements.append(
                     GameMilestoneAchievement(
@@ -167,12 +191,18 @@ class CycleRule(GameMilestoneRule):
 
 
 class PitcherSOFamilyRule(GameMilestoneRule):
-    THRESHOLDS = [10, 15, 20, 25, 30]
+    DEFAULT_THRESHOLDS = [10, 15, 20, 25, 30]
+
+    def __init__(self, thresholds: Optional[List[int]] = None, enabled: bool = True):
+        self.thresholds = thresholds if thresholds is not None else self.DEFAULT_THRESHOLDS
+        self.enabled = enabled
 
     def evaluate(self, record, play_events=None) -> List[GameMilestoneAchievement]:
+        if not self.enabled or not self.thresholds:
+            return []
         achievements = []
         for line in record.pitching_lines:
-            t = highest_reached(line.so, self.THRESHOLDS)
+            t = highest_reached(line.so, self.thresholds)
             if t is not None:
                 achievements.append(
                     GameMilestoneAchievement(
@@ -289,8 +319,8 @@ class TeamBattingRules(GameMilestoneRule):
                         )
                     )
 
-            # Appeared batters with offensive plate appearances
-            appeared = [l for l in lines if l.ab > 0 or l.bb > 0 or l.h > 0 or l.rbi > 0]
+            # Appeared batters: all parsed player rows in upper batting table for this team
+            appeared = lines
             if appeared:
                 if all(l.h >= 1 for l in appeared):
                     achievements.append(
@@ -313,7 +343,6 @@ class TeamBattingRules(GameMilestoneRule):
                         )
                     )
         return achievements
-
 
 
 # --- Team Pitching Hierarchy Rule (Highest Only) ---

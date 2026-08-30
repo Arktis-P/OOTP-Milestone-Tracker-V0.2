@@ -1,3 +1,10 @@
+import json
+from typing import Dict, List, Optional
+
+from ..importer.game_models import BattingEvent, BattingLine, GameRecord, PitchingLine
+from ..milestones.game_evaluator import DEFAULT_GAME_MILESTONE_SETTINGS, GameMilestoneEvaluator
+
+
 class Repository:
     def __init__(self, database):
         self.database = database
@@ -138,3 +145,165 @@ class Repository:
             ORDER BY g.game_date DESC, a.id DESC""",
             tuple(params),
         )
+
+    def get_game_milestone_rule_settings(self) -> Dict:
+        """Read game_milestone_rule_settings table. Seed defaults if table is empty."""
+        rows = self._all("SELECT * FROM game_milestone_rule_settings")
+        if not rows:
+            self.save_game_milestone_rule_settings(DEFAULT_GAME_MILESTONE_SETTINGS)
+            return DEFAULT_GAME_MILESTONE_SETTINGS
+
+        settings = {}
+        for r in rows:
+            key = r["family_key"]
+            enabled = bool(r["enabled"])
+            try:
+                thresholds = json.loads(r["thresholds_json"])
+            except Exception:
+                thresholds = DEFAULT_GAME_MILESTONE_SETTINGS.get(key, {}).get("thresholds", [])
+            settings[key] = {"enabled": enabled, "thresholds": thresholds}
+
+        # Fill missing keys if any
+        for key, default_val in DEFAULT_GAME_MILESTONE_SETTINGS.items():
+            if key not in settings:
+                settings[key] = default_val
+
+        return settings
+
+    def save_game_milestone_rule_settings(self, settings: Dict):
+        """Save settings to game_milestone_rule_settings table transactionally."""
+        with self.database.connect() as conn:
+            for key, cfg in settings.items():
+                enabled = 1 if cfg.get("enabled", True) else 0
+                thresholds = cfg.get("thresholds", [])
+                # Normalize thresholds: positive ints, unique, sorted ascending
+                thresholds = sorted(list(dict.fromkeys(int(t) for t in thresholds if int(t) > 0)))
+                conn.execute(
+                    """INSERT INTO game_milestone_rule_settings (family_key, enabled, thresholds_json)
+                    VALUES (?, ?, ?)
+                    ON CONFLICT(family_key) DO UPDATE SET enabled=excluded.enabled, thresholds_json=excluded.thresholds_json""",
+                    (key, enabled, json.dumps(thresholds)),
+                )
+            conn.commit()
+
+    def rebuild_game_milestone_achievements(self, settings: Optional[Dict] = None):
+        """Rebuild numeric family achievements from the stored Game Ledger after settings change."""
+        if settings is None:
+            settings = self.get_game_milestone_rule_settings()
+
+        evaluator = GameMilestoneEvaluator(settings=settings)
+
+        with self.database.connect() as conn:
+            games_rows = conn.execute("SELECT * FROM games").fetchall()
+
+            # Delete existing numeric family achievement rows
+            conn.execute(
+                """DELETE FROM game_milestone_achievements
+                WHERE rule_key LIKE 'GAME_HITS_%'
+                   OR rule_key LIKE 'GAME_RBI_%'
+                   OR rule_key LIKE 'GAME_HR_%'
+                   OR rule_key LIKE 'GAME_SB_%'
+                   OR rule_key LIKE 'GAME_STRIKEOUTS_%'"""
+            )
+
+            for g_row in games_rows:
+                game_id = g_row["game_id"]
+                b_rows = conn.execute("SELECT * FROM player_game_batting WHERE game_id = ?", (game_id,)).fetchall()
+                batting_lines = [
+                    BattingLine(
+                        player_id=b["player_id"],
+                        name="",
+                        team_id=b["team_id"],
+                        ab=b["ab"],
+                        r=b["r"],
+                        h=b["h"],
+                        rbi=b["rbi"],
+                        bb=b["bb"],
+                        so=b["so"],
+                        lob=b["lob"],
+                        doubles=b["doubles"],
+                        triples=b["triples"],
+                        hr=b["hr"],
+                        sb=b["sb"],
+                    )
+                    for b in b_rows
+                ]
+
+                p_rows = conn.execute("SELECT * FROM player_game_pitching WHERE game_id = ?", (game_id,)).fetchall()
+                pitching_lines = [
+                    PitchingLine(
+                        player_id=p["player_id"],
+                        name="",
+                        team_id=p["team_id"],
+                        outs=p["outs"],
+                        h=p["h"],
+                        r=p["r"],
+                        er=p["er"],
+                        bb=p["bb"],
+                        so=p["so"],
+                        hr=p["hr"],
+                        bf=p["bf"],
+                        pitches=p["pitches"],
+                        win=bool(p["win"]),
+                        loss=bool(p["loss"]),
+                        save=bool(p["save"]),
+                        hold=bool(p["hold"]),
+                    )
+                    for p in p_rows
+                ]
+
+                ev_rows = conn.execute("SELECT * FROM game_batting_events WHERE game_id = ?", (game_id,)).fetchall()
+                batting_events = [
+                    BattingEvent(
+                        game_id=game_id,
+                        player_id=ev["player_id"],
+                        event_index=ev["event_index"],
+                        event_type=ev["event_type"],
+                        season_total=ev["season_total"],
+                        opponent_player_id=ev["opponent_player_id"],
+                        context_text=ev["context_text"],
+                    )
+                    for ev in ev_rows
+                ]
+
+                rec = GameRecord(
+                    game_id=game_id,
+                    title="",
+                    game_date=g_row["game_date"],
+                    season=g_row["season"],
+                    competition_type=g_row["competition_type"],
+                    away_team_id=g_row["away_team_id"],
+                    home_team_id=g_row["home_team_id"],
+                    league_id=g_row["league_id"],
+                    away_score=g_row["away_score"],
+                    home_score=g_row["home_score"],
+                    source_hash=g_row["source_hash"] or "",
+                    batting_lines=batting_lines,
+                    pitching_lines=pitching_lines,
+                    batting_events=batting_events,
+                )
+
+                achs = evaluator.evaluate_game(rec)
+                for ach in achs:
+                    if any(
+                        ach.rule_key.startswith(prefix)
+                        for prefix in ("GAME_HITS_", "GAME_RBI_", "GAME_HR_", "GAME_SB_", "GAME_STRIKEOUTS_")
+                    ):
+                        conn.execute(
+                            """INSERT OR IGNORE INTO game_milestone_achievements
+                            (game_id, player_id, competition_type, rule_key, title, achieved_value, inning, half, opponent_player_id, context_text)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                            (
+                                ach.game_id,
+                                ach.player_id if ach.player_id is not None else 0,
+                                ach.competition_type,
+                                ach.rule_key,
+                                ach.title,
+                                ach.achieved_value,
+                                ach.inning,
+                                ach.half,
+                                ach.opponent_player_id,
+                                ach.context_text,
+                            ),
+                        )
+            conn.commit()

@@ -156,6 +156,12 @@ CREATE TABLE IF NOT EXISTS game_milestone_achievements (
     UNIQUE(game_id, player_id, rule_key)
 );
 
+CREATE TABLE IF NOT EXISTS game_milestone_rule_settings (
+    family_key TEXT PRIMARY KEY,
+    enabled INTEGER NOT NULL DEFAULT 1,
+    thresholds_json TEXT NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_players_team ON players(team_id);
 CREATE INDEX IF NOT EXISTS idx_milestones_entity ON milestones(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_milestones_scope ON milestones(scope);

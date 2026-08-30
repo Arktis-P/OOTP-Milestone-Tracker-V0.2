@@ -1,8 +1,10 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QComboBox, QHBoxLayout, QHeaderView, QLineEdit, QTableWidget, QTableWidgetItem,
+    QComboBox, QHBoxLayout, QHeaderView, QLineEdit, QPushButton, QTableWidget, QTableWidgetItem,
     QTabWidget, QVBoxLayout, QWidget,
 )
+
+from ..dialogs.game_milestone_settings_dialog import GameMilestoneSettingsDialog
 
 
 class MilestonesPage(QWidget):
@@ -52,6 +54,14 @@ class MilestonesPage(QWidget):
         self.achievements_tab = QWidget()
         ach_layout = QVBoxLayout(self.achievements_tab)
         ach_layout.setContentsMargins(0, 8, 0, 0)
+
+        ach_top_bar = QHBoxLayout()
+        ach_top_bar.addStretch()
+        self.settings_btn = QPushButton("Game Milestone Settings")
+        self.settings_btn.clicked.connect(self.open_settings_dialog)
+        ach_top_bar.addWidget(self.settings_btn)
+        ach_layout.addLayout(ach_top_bar)
+
         self.ach_table = QTableWidget(0, 6)
         self.ach_table.setHorizontalHeaderLabels(["Date", "Player", "Competition", "Milestone", "Opponent/Game", "Context"])
         self.ach_table.setAlternatingRowColors(True)
@@ -75,6 +85,11 @@ class MilestonesPage(QWidget):
         self.scope.currentIndexChanged.connect(self.refresh)
         self.visibility.currentIndexChanged.connect(self.refresh)
         self.refresh()
+
+    def open_settings_dialog(self):
+        dialog = GameMilestoneSettingsDialog(self.repo, self)
+        if dialog.exec():
+            self.refresh()
 
     def refresh(self):
         # 1. Targets table
