@@ -144,7 +144,9 @@ class MilestonesPage(QWidget):
         self.season_status_label.setText(
             f"<b>Regular Season {self.active_season}</b> · {processed} / {target} games processed · <i>{status_str}</i>"
         )
-        self.finalize_btn.setEnabled(is_eligible or (state and state["status"].startswith("finalized")))
+        is_finalized = bool(state and state["status"].startswith("finalized"))
+        self.finalize_btn.setEnabled(bool(is_eligible or is_finalized))
+
 
     def refresh(self):
         self.update_control_bar()
