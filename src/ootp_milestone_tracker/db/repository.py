@@ -112,3 +112,29 @@ class Repository:
         with self.database.connect() as conn:
             conn.execute("UPDATE players SET name_ko = ? WHERE id = ?", (name_ko.strip(), player_id))
             conn.commit()
+
+    def game_milestone_achievements(self, player_id: Optional[int] = None, tracked_only: bool = False):
+        clauses = []
+        params = []
+        if player_id is not None:
+            clauses.append("a.player_id = ?")
+            params.append(player_id)
+        if tracked_only:
+            clauses.append("t.is_tracked = 1")
+
+        where = "WHERE " + " AND ".join(clauses) if clauses else ""
+        return self._all(
+            f"""SELECT a.*, g.game_date, g.season, COALESCE(p.name_ko, p.name_en, 'Player #' || a.player_id) AS player_name,
+            COALESCE(op.name_ko, op.name_en, '') AS opponent_name,
+            ht.short_name AS home_team_short, at.short_name AS away_team_short
+            FROM game_milestone_achievements a
+            JOIN games g ON g.game_id = a.game_id
+            LEFT JOIN players p ON p.id = a.player_id
+            LEFT JOIN teams t ON t.id = p.team_id
+            LEFT JOIN players op ON op.id = a.opponent_player_id
+            LEFT JOIN teams ht ON ht.id = g.home_team_id
+            LEFT JOIN teams at ON at.id = g.away_team_id
+            {where}
+            ORDER BY g.game_date DESC, a.id DESC""",
+            tuple(params),
+        )

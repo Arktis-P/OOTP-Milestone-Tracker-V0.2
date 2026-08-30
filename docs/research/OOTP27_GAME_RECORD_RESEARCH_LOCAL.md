@@ -30,18 +30,29 @@
 - Verified contexts in sample: `regular_season` CONFIRMED.
 
 ## 4. Game-Player Delta Map
+### Source Semantics Matrix
+| FIELD | SOURCE REGION | SEMANTICS | USED AS GAME DELTA? |
+| --- | --- | --- | --- |
+| AB | Upper Table (Col 1) | Per-game At Bats | YES (`GAME_DELTA`) |
+| R | Upper Table (Col 2) | Per-game Runs | YES (`GAME_DELTA`) |
+| H | Upper Table (Col 3) | Per-game Hits | YES (`GAME_DELTA`) |
+| RBI | Upper Table (Col 4) | Per-game Runs Batted In | YES (`GAME_DELTA`) |
+| BB | Upper Table (Col 5) | Per-game Walks | YES (`GAME_DELTA`) |
+| SO | Upper Table (Col 6) | Per-game Strikeouts | YES (`GAME_DELTA`) |
+| LOB | Upper Table (Col 7) | Per-game Left On Base | YES (`GAME_DELTA`) |
+| AVG | Upper Table (Col 8) | Season Batting Average | NO (`DERIVED_RATE`) |
+| HR (Upper) | Upper Table (Col 9) | Season Total Home Runs | NO (`SEASON_TOTAL`) |
+| SB (Upper) | Upper Table (Col 10) | Season Total Stolen Bases | NO (`SEASON_TOTAL`) |
+| 2B | Lower Text (`Doubles:`) | Game Count + Season Total | YES (`GAME_DELTA`) |
+| 3B | Lower Text (`Triples:`) | Game Count + Season Total | YES (`GAME_DELTA`) |
+| HR (Lower) | Lower Text (`Home Runs:`) | Game Count + Season Total + Pitcher/Context | YES (`GAME_DELTA`) |
+| SB (Lower) | Lower Text (`Stolen Bases:`/`SB:`) | Game Count + Season Total | YES (`GAME_DELTA`) |
+
 - **Batting Line Fields (Per Game)**:
   - `player_id` (int): From `player_<id>.html`
-  - `ab` (At Bats, int): Col 1
-  - `r` (Runs, int): Col 2
-  - `h` (Hits, int): Col 3
-  - `rbi` (Runs Batted In, int): Col 4
-  - `bb` (Walks, int): Col 5
-  - `so` (Strikeouts, int): Col 6
-  - `lob` (Left On Base, int): Col 7
-  - `hr` (Home Runs, int): Col 9
-  - `sb` (Stolen Bases, int): Col 10
-  - *Summable vs Derived*: `AB`, `R`, `H`, `RBI`, `BB`, `SO`, `LOB`, `HR`, `SB` are additive deltas. `AVG` (Col 8) is a derived rate (`H / AB`) and must NOT be summed directly.
+  - `ab`, `r`, `h`, `rbi`, `bb`, `so`, `lob`: Extracted from Upper Table (Cols 1-7).
+  - `doubles`, `triples`, `hr`, `sb`: Extracted from Lower Text Summary.
+  - *Summable vs Derived*: `AB`, `R`, `H`, `RBI`, `BB`, `SO`, `LOB`, `2B`, `3B`, `HR`, `SB` are additive deltas. `AVG` (Col 8) is a derived rate (`H / AB`) and upper table Cols 9 & 10 are season totals; they must NOT be summed as game deltas.
 - **Pitching Line Fields (Per Game)**:
   - `player_id` (int): From `player_<id>.html`
   - `outs` (Innings Pitched converted to outs, int): Col 1 (`4.1` = 13 outs, `4.2` = 14 outs, `4.0` = 12 outs)
