@@ -4,6 +4,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
+from ...importer.source_locator import default_league_save, saved_games_roots
+
 
 class SettingsPage(QWidget):
     def __init__(self, repo, on_data_changed, on_theme_changed):
@@ -24,11 +26,18 @@ class SettingsPage(QWidget):
         form.setLabelAlignment(Qt.AlignmentFlag.AlignLeft)
         save_row = QHBoxLayout()
         self.save_folder = QLineEdit()
+        detect = QPushButton("Auto-detect")
+        detect.clicked.connect(self._autodetect)
         browse = QPushButton("Browse")
         browse.clicked.connect(self._browse)
         save_row.addWidget(self.save_folder, 1)
+        save_row.addWidget(detect)
         save_row.addWidget(browse)
-        form.addRow("OOTP save folder", save_row)
+        form.addRow("OOTP .lg save", save_row)
+
+        path_note = QLabel("Auto-detect resolves the current Windows Documents location, including redirected OneDrive Documents folders.")
+        path_note.setObjectName("muted")
+        form.addRow("", path_note)
 
         self.team = QComboBox()
         form.addRow("Tracked team", self.team)
@@ -60,13 +69,27 @@ class SettingsPage(QWidget):
 
         self.refresh()
 
+    def _autodetect(self):
+        detected = default_league_save()
+        if detected:
+            self.save_folder.setText(str(detected))
+
     def _browse(self):
-        path = QFileDialog.getExistingDirectory(self, "Select OOTP save folder", self.save_folder.text())
+        start = self.save_folder.text().strip()
+        if not start:
+            roots = saved_games_roots()
+            start = str(next((path for path in roots if path.is_dir()), roots[0] if roots else ""))
+        path = QFileDialog.getExistingDirectory(self, "Select OOTP .lg save folder", start)
         if path:
             self.save_folder.setText(path)
 
     def refresh(self):
-        self.save_folder.setText(self.repo.get_setting("save_folder", ""))
+        saved = self.repo.get_setting("save_folder", "")
+        if saved:
+            self.save_folder.setText(saved)
+        else:
+            self._autodetect()
+
         self.team.clear()
         tracked_id = None
         for row in self.repo.teams():
