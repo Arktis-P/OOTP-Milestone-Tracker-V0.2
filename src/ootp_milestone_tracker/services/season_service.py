@@ -84,6 +84,7 @@ class SeasonService:
             rbi_cfg = settings.get("SEASON_RBI", DEFAULT_SEASON_MILESTONE_SETTINGS["SEASON_RBI"])
             runs_cfg = settings.get("SEASON_RUNS", DEFAULT_SEASON_MILESTONE_SETTINGS["SEASON_RUNS"])
             sb_cfg = settings.get("SEASON_SB", DEFAULT_SEASON_MILESTONE_SETTINGS["SEASON_SB"])
+            bb_cfg = settings.get("SEASON_BB", DEFAULT_SEASON_MILESTONE_SETTINGS["SEASON_BB"])
 
             ip_cfg = settings.get("SEASON_IP", DEFAULT_SEASON_MILESTONE_SETTINGS["SEASON_IP"])
             so_cfg = settings.get("SEASON_STRIKEOUTS", DEFAULT_SEASON_MILESTONE_SETTINGS["SEASON_STRIKEOUTS"])
@@ -105,7 +106,7 @@ class SeasonService:
                     tot = batting_cum.setdefault(
                         key, {"h": 0, "hr": 0, "rbi": 0, "r": 0, "sb": 0, "ab": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "g": 0}
                     )
-                    prev_h, prev_hr, prev_rbi, prev_r, prev_sb = tot["h"], tot["hr"], tot["rbi"], tot["r"], tot["sb"]
+                    prev_h, prev_hr, prev_rbi, prev_r, prev_sb, prev_bb = tot["h"], tot["hr"], tot["rbi"], tot["r"], tot["sb"], tot["bb"]
 
                     tot["g"] += 1
                     tot["ab"] += b["ab"]
@@ -126,6 +127,8 @@ class SeasonService:
                         self._check_crossing(conn, "player", pid, season, comp, "SEASON_RBI", "시즌 {}타점", prev_rbi, tot["rbi"], rbi_cfg, game_id, game_date)
                         self._check_crossing(conn, "player", pid, season, comp, "SEASON_RUNS", "시즌 {}득점", prev_r, tot["r"], runs_cfg, game_id, game_date)
                         self._check_crossing(conn, "player", pid, season, comp, "SEASON_SB", "시즌 {}도루", prev_sb, tot["sb"], sb_cfg, game_id, game_date)
+                        self._check_crossing(conn, "player", pid, season, comp, "SEASON_BB", "시즌 {}볼넷", prev_bb, tot["bb"], bb_cfg, game_id, game_date)
+
 
                 # Process Pitching
                 p_lines = conn.execute("SELECT * FROM player_game_pitching WHERE game_id = ?", (game_id,)).fetchall()

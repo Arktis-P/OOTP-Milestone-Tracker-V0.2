@@ -132,11 +132,14 @@ class GameImportService:
 
             conn.commit()
 
-        # Rebuild season live aggregates and threshold crossings
+        # Rebuild season & career live aggregates and threshold crossings
         from ..services.season_service import SeasonService
+        from ..services.career_service import CareerService
         SeasonService(self.database).rebuild_season(record.season)
+        CareerService(self.database).rebuild_career_milestones()
 
         return True, ach_count
+
 
 
     def import_game_file(self, box_path: Path, log_path: Optional[Path] = None) -> Tuple[bool, int]:

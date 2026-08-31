@@ -73,7 +73,6 @@ CREATE TABLE IF NOT EXISTS pitching_seasons (
     PRIMARY KEY (player_id, season, competition_type)
 );
 
-
 CREATE TABLE IF NOT EXISTS team_seasons (
     team_id INTEGER NOT NULL,
     season INTEGER NOT NULL,
@@ -83,7 +82,6 @@ CREATE TABLE IF NOT EXISTS team_seasons (
     l INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (team_id, season, competition_type)
 );
-
 
 CREATE TABLE IF NOT EXISTS season_states (
     season INTEGER NOT NULL,
@@ -220,6 +218,7 @@ CREATE TABLE IF NOT EXISTS game_milestone_achievements (
     half TEXT,
     opponent_player_id INTEGER,
     context_text TEXT,
+    structured_context_json TEXT,
     UNIQUE(game_id, player_id, rule_key)
 );
 
@@ -243,10 +242,48 @@ CREATE TABLE IF NOT EXISTS season_milestone_achievements (
     achieved_date TEXT,
     source TEXT NOT NULL,
     context_text TEXT,
+    structured_context_json TEXT,
     UNIQUE(entity_type, entity_id, season, competition_type, rule_key)
 );
 
 CREATE TABLE IF NOT EXISTS season_milestone_rule_settings (
+    family_key TEXT PRIMARY KEY,
+    enabled INTEGER NOT NULL DEFAULT 1,
+    thresholds_json TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS career_checkpoints (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_id INTEGER NOT NULL,
+    competition_type TEXT NOT NULL DEFAULT 'regular_season',
+    season INTEGER NOT NULL,
+    checkpoint_type TEXT NOT NULL,
+    represented_game_cutoff INTEGER,
+    batting_json TEXT,
+    pitching_json TEXT,
+    source_hash TEXT,
+    created_at TEXT NOT NULL,
+    UNIQUE(player_id, competition_type, season, checkpoint_type)
+);
+
+CREATE TABLE IF NOT EXISTS career_milestone_achievements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    entity_type TEXT NOT NULL CHECK(entity_type IN ('player', 'team')),
+    entity_id INTEGER NOT NULL,
+    competition_type TEXT NOT NULL DEFAULT 'regular_season',
+    rule_key TEXT NOT NULL,
+    title TEXT NOT NULL,
+    threshold_value REAL NOT NULL,
+    achieved_value REAL NOT NULL,
+    achieved_game_id INTEGER,
+    achieved_date TEXT,
+    source TEXT NOT NULL DEFAULT 'game_crossing',
+    context_text TEXT,
+    structured_context_json TEXT,
+    UNIQUE(entity_type, entity_id, competition_type, rule_key)
+);
+
+CREATE TABLE IF NOT EXISTS career_milestone_rule_settings (
     family_key TEXT PRIMARY KEY,
     enabled INTEGER NOT NULL DEFAULT 1,
     thresholds_json TEXT NOT NULL
@@ -259,4 +296,5 @@ CREATE INDEX IF NOT EXISTS idx_game_batting_player ON player_game_batting(player
 CREATE INDEX IF NOT EXISTS idx_game_pitching_player ON player_game_pitching(player_id);
 CREATE INDEX IF NOT EXISTS idx_game_achievements_player ON game_milestone_achievements(player_id);
 CREATE INDEX IF NOT EXISTS idx_season_achievements_entity ON season_milestone_achievements(entity_type, entity_id, season);
+CREATE INDEX IF NOT EXISTS idx_career_achievements_entity ON career_milestone_achievements(entity_type, entity_id);
 """

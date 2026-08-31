@@ -8,7 +8,9 @@ DEFAULT_SEASON_MILESTONE_SETTINGS = {
     "SEASON_RBI": {"enabled": True, "thresholds": [75, 100, 125, 150, 175, 200]},
     "SEASON_RUNS": {"enabled": True, "thresholds": [75, 100, 125, 150, 175, 200]},
     "SEASON_SB": {"enabled": True, "thresholds": [20, 30, 40, 50, 60, 70, 80, 90, 100]},
+    "SEASON_BB": {"enabled": True, "thresholds": [50, 100, 150, 200, 250, 300]},
     "SEASON_IP": {"enabled": True, "thresholds": [150, 200, 250, 300, 350]},
+
     "SEASON_STRIKEOUTS": {"enabled": True, "thresholds": [150, 200, 250, 300, 350, 400]},
     "SEASON_WINS": {"enabled": True, "thresholds": [10, 15, 20, 25, 30]},
     "SEASON_HOLDS": {"enabled": True, "thresholds": [10, 15, 20, 25, 30]},

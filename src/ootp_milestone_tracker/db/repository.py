@@ -336,3 +336,25 @@ class Repository:
         return self._one(
             "SELECT * FROM season_states WHERE season = ? AND tracked_team_id = ?", (season, tid)
         )
+
+    def career_milestone_achievements(self, player_id: Optional[int] = None, tracked_only: bool = False):
+        clauses = []
+        params = []
+        if player_id is not None:
+            clauses.append("a.entity_id = ? AND a.entity_type = 'player'")
+            params.append(player_id)
+        if tracked_only:
+            clauses.append("COALESCE(t.is_tracked, tt.is_tracked, 0) = 1")
+
+        where = "WHERE " + " AND ".join(clauses) if clauses else ""
+        return self._all(
+            f"""SELECT a.*, COALESCE(p.name_ko, p.name_en, tt.name, 'ID #' || a.entity_id) AS entity_name,
+            COALESCE(t.name, tt.name) AS team_name
+            FROM career_milestone_achievements a
+            LEFT JOIN players p ON a.entity_type = 'player' AND p.id = a.entity_id
+            LEFT JOIN teams t ON t.id = p.team_id
+            LEFT JOIN teams tt ON a.entity_type = 'team' AND tt.id = a.entity_id
+            {where}
+            ORDER BY a.achieved_date DESC, a.id DESC""",
+            tuple(params),
+        )

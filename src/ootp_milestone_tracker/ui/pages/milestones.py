@@ -113,9 +113,29 @@ class MilestonesPage(QWidget):
             s_header.setSectionResizeMode(col, QHeaderView.ResizeMode.ResizeToContents)
         season_ach_layout.addWidget(self.season_ach_table)
 
+        # Tab 4: Career Achievements
+        self.career_ach_tab = QWidget()
+        career_ach_layout = QVBoxLayout(self.career_ach_tab)
+        career_ach_layout.setContentsMargins(0, 8, 0, 0)
+
+        self.career_ach_table = QTableWidget(0, 6)
+        self.career_ach_table.setHorizontalHeaderLabels(["Date", "Player/Team", "Competition", "Milestone", "Value", "Source"])
+        self.career_ach_table.setAlternatingRowColors(True)
+        self.career_ach_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.career_ach_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.career_ach_table.setSortingEnabled(True)
+        self.career_ach_table.verticalHeader().setVisible(False)
+        self.career_ach_table.verticalHeader().setDefaultSectionSize(29)
+        c_header = self.career_ach_table.horizontalHeader()
+        c_header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+        for col in (0, 1, 2, 4, 5):
+            c_header.setSectionResizeMode(col, QHeaderView.ResizeMode.ResizeToContents)
+        career_ach_layout.addWidget(self.career_ach_table)
+
         self.tabs.addTab(self.targets_tab, "Milestone Targets")
         self.tabs.addTab(self.achievements_tab, "Game Achievements")
         self.tabs.addTab(self.season_ach_tab, "Season Achievements")
+        self.tabs.addTab(self.career_ach_tab, "Career Achievements")
         layout.addWidget(self.tabs, 1)
 
         self.search.textChanged.connect(self.refresh)
@@ -146,7 +166,6 @@ class MilestonesPage(QWidget):
         )
         is_finalized = bool(state and state["status"].startswith("finalized"))
         self.finalize_btn.setEnabled(bool(is_eligible or is_finalized))
-
 
     def refresh(self):
         self.update_control_bar()
@@ -214,3 +233,24 @@ class MilestonesPage(QWidget):
                 item = QTableWidgetItem(value)
                 self.season_ach_table.setItem(i, col, item)
         self.season_ach_table.setSortingEnabled(True)
+
+        # 4. Career Achievements table
+        c_rows = self.repo.career_milestone_achievements(
+            tracked_only=bool(self.visibility.currentData())
+        )
+        self.career_ach_table.setSortingEnabled(False)
+        self.career_ach_table.setRowCount(len(c_rows))
+        for i, row in enumerate(c_rows):
+            val_str = f"{row['achieved_value']:,.0f}"
+            values = [
+                row["achieved_date"] or "Career Final",
+                row["entity_name"],
+                row["competition_type"].replace("_", " ").title(),
+                row["title"],
+                val_str,
+                row["source"],
+            ]
+            for col, value in enumerate(values):
+                item = QTableWidgetItem(value)
+                self.career_ach_table.setItem(i, col, item)
+        self.career_ach_table.setSortingEnabled(True)
