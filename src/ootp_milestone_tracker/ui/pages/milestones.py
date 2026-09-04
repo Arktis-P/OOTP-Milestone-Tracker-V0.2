@@ -136,7 +136,36 @@ class MilestonesPage(QWidget):
         self.tabs.addTab(self.achievements_tab, "Game Achievements")
         self.tabs.addTab(self.season_ach_tab, "Season Achievements")
         self.tabs.addTab(self.career_ach_tab, "Career Achievements")
+
+        # Tab 5: History / Awards
+        self.history_tab = QWidget()
+        history_layout = QVBoxLayout(self.history_tab)
+        history_layout.setContentsMargins(0, 8, 0, 0)
+
+        history_top_bar = QHBoxLayout()
+        history_top_bar.addStretch()
+        self.manual_award_btn = QPushButton("수동 수상 기록 추가")
+        self.manual_award_btn.clicked.connect(self.open_manual_award_dialog)
+        history_top_bar.addWidget(self.manual_award_btn)
+        history_layout.addLayout(history_top_bar)
+
+        self.history_table = QTableWidget(0, 5)
+        self.history_table.setHorizontalHeaderLabels(["Date/Season", "Player", "Type", "Description", "Source"])
+        self.history_table.setAlternatingRowColors(True)
+        self.history_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.history_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.history_table.setSortingEnabled(True)
+        self.history_table.verticalHeader().setVisible(False)
+        self.history_table.verticalHeader().setDefaultSectionSize(29)
+        h_header = self.history_table.horizontalHeader()
+        h_header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+        for col in (0, 1, 2, 4):
+            h_header.setSectionResizeMode(col, QHeaderView.ResizeMode.ResizeToContents)
+        history_layout.addWidget(self.history_table)
+
+        self.tabs.addTab(self.history_tab, "History / Awards")
         layout.addWidget(self.tabs, 1)
+
 
         self.search.textChanged.connect(self.refresh)
         self.scope.currentIndexChanged.connect(self.refresh)
@@ -150,6 +179,12 @@ class MilestonesPage(QWidget):
 
     def open_finalize_dialog(self):
         dialog = FinalizeSeasonDialog(self.repo, self.active_season, self)
+        if dialog.exec():
+            self.refresh()
+
+    def open_manual_award_dialog(self):
+        from ..dialogs.manual_award_dialog import ManualAwardDialog
+        dialog = ManualAwardDialog(self.repo, self)
         if dialog.exec():
             self.refresh()
 
@@ -254,3 +289,34 @@ class MilestonesPage(QWidget):
                 item = QTableWidgetItem(value)
                 self.career_ach_table.setItem(i, col, item)
         self.career_ach_table.setSortingEnabled(True)
+
+        # 5. History / Awards table
+        h_rows = self.repo.history_events(
+            tracked_only=bool(self.visibility.currentData()),
+            search=self.search.text()
+        )
+        type_ko_map = {
+            "INJURY": "부상",
+            "ALL_STAR": "올스타",
+            "AWARD": "수상",
+            "MONTHLY_AWARD": "이달의 수상",
+            "MANUAL_LEAGUE_TITLE": "수동 수상"
+        }
+        self.history_table.setSortingEnabled(False)
+        self.history_table.setRowCount(len(h_rows))
+        for i, row in enumerate(h_rows):
+            date_str = row["event_date"] or (str(row["season"]) if row["season"] else "-")
+            type_str = type_ko_map.get(row["event_type"], row["event_type"])
+            src_str = "자동" if row["source_mode"] == "AUTOMATIC_MESSAGE" else "수동"
+            values = [
+                date_str,
+                row["player_name"],
+                type_str,
+                row["title"],
+                src_str
+            ]
+            for col, value in enumerate(values):
+                item = QTableWidgetItem(value)
+                self.history_table.setItem(i, col, item)
+        self.history_table.setSortingEnabled(True)
+

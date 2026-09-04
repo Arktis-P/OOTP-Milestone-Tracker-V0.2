@@ -289,6 +289,31 @@ CREATE TABLE IF NOT EXISTS career_milestone_rule_settings (
     thresholds_json TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS player_history_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_family TEXT NOT NULL,
+    source_event_id TEXT NOT NULL,
+    source_signature TEXT NOT NULL,
+    source_mode TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    event_subtype TEXT NOT NULL,
+    player_id INTEGER NOT NULL,
+    team_id INTEGER,
+    league_id INTEGER,
+    league_label TEXT,
+    season INTEGER,
+    event_date TEXT,
+    position_label TEXT,
+    title TEXT NOT NULL,
+    context_text TEXT,
+    structured_context_json TEXT,
+    resolution_status TEXT NOT NULL DEFAULT 'published',
+    source_ref TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(source_family, source_event_id, player_id, event_subtype)
+);
+
 CREATE INDEX IF NOT EXISTS idx_players_team ON players(team_id);
 CREATE INDEX IF NOT EXISTS idx_milestones_entity ON milestones(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_milestones_scope ON milestones(scope);
@@ -297,4 +322,8 @@ CREATE INDEX IF NOT EXISTS idx_game_pitching_player ON player_game_pitching(play
 CREATE INDEX IF NOT EXISTS idx_game_achievements_player ON game_milestone_achievements(player_id);
 CREATE INDEX IF NOT EXISTS idx_season_achievements_entity ON season_milestone_achievements(entity_type, entity_id, season);
 CREATE INDEX IF NOT EXISTS idx_career_achievements_entity ON career_milestone_achievements(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_player_history_player ON player_history_events(player_id);
+CREATE INDEX IF NOT EXISTS idx_player_history_type ON player_history_events(event_type, event_subtype);
+CREATE INDEX IF NOT EXISTS idx_player_history_season ON player_history_events(season);
 """
+

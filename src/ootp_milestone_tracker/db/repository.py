@@ -358,3 +358,63 @@ class Repository:
             ORDER BY a.achieved_date DESC, a.id DESC""",
             tuple(params),
         )
+
+    def upsert_player_history_event(self, rec: dict) -> bool:
+        sql = """
+        INSERT INTO player_history_events (
+            source_family, source_event_id, source_signature, source_mode,
+            event_type, event_subtype, player_id, team_id, league_id,
+            league_label, season, event_date, position_label, title,
+            context_text, structured_context_json, resolution_status,
+            source_ref, created_at, updated_at
+        ) VALUES (
+            :source_family, :source_event_id, :source_signature, :source_mode,
+            :event_type, :event_subtype, :player_id, :team_id, :league_id,
+            :league_label, :season, :event_date, :position_label, :title,
+            :context_text, :structured_context_json, :resolution_status,
+            :source_ref, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+        ) ON CONFLICT(source_family, source_event_id, player_id, event_subtype) DO UPDATE SET
+            source_signature = excluded.source_signature,
+            title = excluded.title,
+            context_text = excluded.context_text,
+            structured_context_json = excluded.structured_context_json,
+            resolution_status = excluded.resolution_status,
+            updated_at = CURRENT_TIMESTAMP
+        """
+        with self.database.connect() as conn:
+            conn.execute(sql, rec)
+            conn.commit()
+        return True
+
+    def history_events(self, tracked_only: bool = False, event_type: str = "", search: str = "") -> List[dict]:
+        clauses = ["h.resolution_status = 'published'"]
+        params = []
+        if tracked_only:
+            clauses.append("COALESCE(t.is_tracked, 0) = 1")
+        if event_type:
+            clauses.append("h.event_type = ?")
+            params.append(event_type)
+        if search.strip():
+            like = f"%{search.strip()}%"
+            clauses.append("(h.title LIKE ? OR p.name_en LIKE ? OR p.name_ko LIKE ? OR h.context_text LIKE ?)")
+            params.extend([like, like, like, like])
+            
+        where = "WHERE " + " AND ".join(clauses)
+        sql = f"""
+        SELECT h.*, COALESCE(p.name_ko, p.name_en, 'Player #' || h.player_id) AS player_name,
+               COALESCE(t.name, 'Team #' || h.team_id, '') AS team_name,
+               COALESCE(t.is_tracked, 0) AS is_tracked
+        FROM player_history_events h
+        LEFT JOIN players p ON p.id = h.player_id
+        LEFT JOIN teams t ON t.id = COALESCE(h.team_id, p.team_id)
+        {where}
+        ORDER BY COALESCE(h.event_date, h.season || '-01-01', '0000-00-00') DESC, h.id DESC
+        """
+        return self._all(sql, tuple(params))
+
+    def max_scanned_message_id(self) -> int:
+        res = self._one("SELECT MAX(CAST(SUBSTR(source_event_id, 5) AS INTEGER)) as max_id FROM player_history_events WHERE source_family = 'MESSAGES' AND source_event_id LIKE 'msg_%'")
+        if res and res.get("max_id") is not None:
+            return int(res["max_id"])
+        return 0
+
