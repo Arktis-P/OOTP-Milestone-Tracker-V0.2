@@ -3,6 +3,7 @@ from pathlib import Path
 
 from .sample_seed import seed_sample_data
 from .schema import SCHEMA_SQL
+from .transaction_schema import TRANSACTION_SCHEMA_SQL
 
 
 class Database:
@@ -19,6 +20,7 @@ class Database:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as conn:
             conn.executescript(SCHEMA_SQL)
+            conn.executescript(TRANSACTION_SCHEMA_SQL)
             count = conn.execute("SELECT COUNT(*) FROM teams").fetchone()[0]
             if count == 0:
                 seed_sample_data(conn)
