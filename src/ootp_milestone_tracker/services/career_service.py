@@ -47,11 +47,11 @@ class CareerService:
                 )
             conn.commit()
 
-    def get_career_totals(self, player_id: int, competition_type: str = "regular_season") -> Dict:
+    def get_career_totals(self, player_id: int, competition_type: str = "regular_season", conn: Optional[sqlite3.Connection] = None) -> Dict:
         """Compute career totals combining latest career_checkpoint + game ledger deltas."""
-        with self.database.connect() as conn:
+        def _compute(c):
             # 1. Get latest checkpoint
-            cp = conn.execute(
+            cp = c.execute(
                 """SELECT * FROM career_checkpoints
                 WHERE player_id = ? AND competition_type = ?
                 ORDER BY season DESC, id DESC LIMIT 1""",
@@ -63,14 +63,14 @@ class CareerService:
             p_base = json.loads(cp["pitching_json"]) if cp and cp["pitching_json"] else {}
 
             # 2. Get post-checkpoint game deltas
-            b_rows = conn.execute(
+            b_rows = c.execute(
                 """SELECT b.* FROM player_game_batting b
                 JOIN games g ON g.game_id = b.game_id
                 WHERE b.player_id = ? AND g.competition_type = ? AND g.game_id > ?""",
                 (player_id, competition_type, cutoff_game),
             ).fetchall()
 
-            p_rows = conn.execute(
+            p_rows = c.execute(
                 """SELECT p.* FROM player_game_pitching p
                 JOIN games g ON g.game_id = p.game_id
                 WHERE p.player_id = ? AND g.competition_type = ? AND g.game_id > ?""",
@@ -95,6 +95,11 @@ class CareerService:
             }
             tot["ip"] = tot["outs"] / 3.0
             return tot
+
+        if conn is not None:
+            return _compute(conn)
+        with self.database.connect() as new_conn:
+            return _compute(new_conn)
 
     def rebuild_career_milestones(self, player_id: Optional[int] = None, competition_type: str = "regular_season"):
         """Rebuild career milestones and update targets chronologically."""
@@ -127,7 +132,7 @@ class CareerService:
             }
 
             for pid in pids:
-                totals = self.get_career_totals(pid, competition_type)
+                totals = self.get_career_totals(pid, competition_type, conn=conn)
 
                 # Get games sorted chronologically
                 b_games = conn.execute(
