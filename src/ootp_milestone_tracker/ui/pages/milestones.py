@@ -300,7 +300,8 @@ class MilestonesPage(QWidget):
             "ALL_STAR": "올스타",
             "AWARD": "수상",
             "MONTHLY_AWARD": "이달의 수상",
-            "MANUAL_LEAGUE_TITLE": "수동 수상"
+            "MANUAL_LEAGUE_TITLE": "수동 수상",
+            "TRANSACTION": "이적/계약"
         }
         self.history_table.setSortingEnabled(False)
         self.history_table.setRowCount(len(h_rows))

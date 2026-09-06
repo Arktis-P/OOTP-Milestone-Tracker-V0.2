@@ -314,6 +314,36 @@ CREATE TABLE IF NOT EXISTS player_history_events (
     UNIQUE(source_family, source_event_id, player_id, event_subtype)
 );
 
+CREATE TABLE IF NOT EXISTS transaction_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_family TEXT NOT NULL,
+    source_event_id TEXT NOT NULL,
+    source_signature TEXT NOT NULL,
+    event_key TEXT NOT NULL,
+    transaction_type TEXT NOT NULL,
+    event_date TEXT,
+    season INTEGER,
+    description TEXT NOT NULL,
+    structured_context_json TEXT,
+    source_ref TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(source_family, source_event_id, event_key)
+);
+
+CREATE TABLE IF NOT EXISTS transaction_participants (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    transaction_id INTEGER NOT NULL REFERENCES transaction_events(id) ON DELETE CASCADE,
+    participant_kind TEXT NOT NULL,
+    player_id INTEGER,
+    display_text TEXT NOT NULL,
+    from_team_id INTEGER,
+    to_team_id INTEGER,
+    cash_amount INTEGER,
+    role TEXT,
+    sequence INTEGER NOT NULL DEFAULT 0
+);
+
 CREATE INDEX IF NOT EXISTS idx_players_team ON players(team_id);
 CREATE INDEX IF NOT EXISTS idx_milestones_entity ON milestones(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_milestones_scope ON milestones(scope);
@@ -325,5 +355,9 @@ CREATE INDEX IF NOT EXISTS idx_career_achievements_entity ON career_milestone_ac
 CREATE INDEX IF NOT EXISTS idx_player_history_player ON player_history_events(player_id);
 CREATE INDEX IF NOT EXISTS idx_player_history_type ON player_history_events(event_type, event_subtype);
 CREATE INDEX IF NOT EXISTS idx_player_history_season ON player_history_events(season);
+CREATE INDEX IF NOT EXISTS idx_trans_events_source ON transaction_events(source_family, source_event_id);
+CREATE INDEX IF NOT EXISTS idx_trans_participants_trans ON transaction_participants(transaction_id);
+CREATE INDEX IF NOT EXISTS idx_trans_participants_player ON transaction_participants(player_id);
 """
+
 

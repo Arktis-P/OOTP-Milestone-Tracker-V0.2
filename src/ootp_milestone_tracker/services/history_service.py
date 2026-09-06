@@ -8,6 +8,8 @@ from ootp_milestone_tracker.importer.message_source import discover_messages
 from ootp_milestone_tracker.importer.message_parser import (
     parse_injury_message, parse_allstar_message, parse_award_message, parse_monthly_award_message
 )
+from ootp_milestone_tracker.importer.transaction_parser import parse_transaction_message
+from ootp_milestone_tracker.services.transaction_service import TransactionService
 from ootp_milestone_tracker.services.history_renderer import (
     render_manual_league_title_description, translate_league
 )
@@ -15,6 +17,7 @@ from ootp_milestone_tracker.services.history_renderer import (
 class HistoryService:
     def __init__(self, repository: Repository):
         self.repo = repository
+        self.txn_service = TransactionService(repository)
 
     def scan_and_backfill_history(self, save_dir: Path, incremental_only: bool = False) -> Dict[str, int]:
         min_msg_id = None
@@ -43,6 +46,17 @@ class HistoryService:
                 rec_dict = asdict(ev)
                 self.repo.upsert_player_history_event(rec_dict)
                 inserted_count += 1
+
+            # Parse Task 014 Transaction event family
+            txn_events = parse_transaction_message(msg)
+            if txn_events:
+                persisted = self.txn_service.replace_source_transactions(
+                    "MESSAGES",
+                    f"msg_{msg.msg_id}",
+                    msg.signature,
+                    txn_events
+                )
+                inserted_count += persisted
 
         return {
             "messages_scanned": scanned_count,
