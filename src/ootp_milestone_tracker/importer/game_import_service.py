@@ -13,7 +13,7 @@ class GameImportService:
         self.database = database
         self.evaluator = evaluator or GameMilestoneEvaluator()
 
-    def import_game(self, record: GameRecord, play_events=None) -> Tuple[bool, int]:
+    def import_game(self, record: GameRecord, play_events=None, rebuild_aggregates: bool = True) -> Tuple[bool, int]:
         """Idempotently import a GameRecord and evaluate game milestones into SQLite.
         Returns (is_new_import, achievement_count).
         """
@@ -132,17 +132,16 @@ class GameImportService:
 
             conn.commit()
 
-        # Rebuild season & career live aggregates and threshold crossings
-        from ..services.season_service import SeasonService
-        from ..services.career_service import CareerService
-        SeasonService(self.database).rebuild_season(record.season)
-        CareerService(self.database).rebuild_career_milestones()
+        # Rebuild season & career live aggregates and threshold crossings if requested
+        if rebuild_aggregates:
+            from ..services.season_service import SeasonService
+            from ..services.career_service import CareerService
+            SeasonService(self.database).rebuild_season(record.season)
+            CareerService(self.database).rebuild_career_milestones()
 
         return True, ach_count
 
-
-
-    def import_game_file(self, box_path: Path, log_path: Optional[Path] = None) -> Tuple[bool, int]:
+    def import_game_file(self, box_path: Path, log_path: Optional[Path] = None, rebuild_aggregates: bool = True) -> Tuple[bool, int]:
         record = parse_game_box(box_path)
         play_events = parse_play_log(log_path) if log_path and log_path.exists() else None
-        return self.import_game(record, play_events)
+        return self.import_game(record, play_events, rebuild_aggregates=rebuild_aggregates)
