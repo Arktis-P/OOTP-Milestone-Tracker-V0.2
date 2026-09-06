@@ -37,4 +37,35 @@ CREATE INDEX IF NOT EXISTS idx_transaction_participant_player
     ON transaction_participants(player_id);
 CREATE INDEX IF NOT EXISTS idx_transaction_participant_teams
     ON transaction_participants(from_team_id, to_team_id);
+
+CREATE TABLE IF NOT EXISTS injury_episodes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_id INTEGER NOT NULL,
+    original_msg_id INTEGER,
+    occurrence_date TEXT,
+    diagnosis TEXT NOT NULL,
+    body_part TEXT,
+    expected_duration TEXT,
+    status TEXT NOT NULL DEFAULT 'active',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(player_id, original_msg_id)
+);
+
+CREATE TABLE IF NOT EXISTS injury_episode_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    episode_id INTEGER NOT NULL REFERENCES injury_episodes(id) ON DELETE CASCADE,
+    msg_id INTEGER NOT NULL,
+    event_date TEXT,
+    event_type TEXT NOT NULL,
+    description TEXT NOT NULL,
+    source_ref TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(episode_id, msg_id, event_type)
+);
+
+CREATE INDEX IF NOT EXISTS idx_injury_episodes_player
+    ON injury_episodes(player_id, status);
+CREATE INDEX IF NOT EXISTS idx_injury_episode_events_episode
+    ON injury_episode_events(episode_id);
 """

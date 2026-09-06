@@ -1,12 +1,14 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QComboBox, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QPushButton, QTableWidget, QTableWidgetItem,
+    QComboBox, QHBoxLayout, QHeaderView, QLabel, QLineEdit, QMessageBox, QPushButton, QTableWidget, QTableWidgetItem,
     QTabWidget, QVBoxLayout, QWidget,
 )
 
 from ..dialogs.finalize_season_dialog import FinalizeSeasonDialog
 from ..dialogs.game_milestone_settings_dialog import GameMilestoneSettingsDialog
 from ...services.season_service import SeasonService
+from ...services.history_service import HistoryService
+from ...services.reset_service import ResetService
 
 
 class MilestonesPage(QWidget):
@@ -14,6 +16,8 @@ class MilestonesPage(QWidget):
         super().__init__()
         self.repo = repo
         self.season_service = SeasonService(repo.database)
+        self.history_service = HistoryService(repo)
+        self.reset_service = ResetService(repo)
         self.active_season = 2027
 
         layout = QVBoxLayout(self)
@@ -144,6 +148,19 @@ class MilestonesPage(QWidget):
 
         history_top_bar = QHBoxLayout()
         history_top_bar.addStretch()
+
+        self.scan_history_btn = QPushButton("이력 재스캔")
+        self.scan_history_btn.clicked.connect(self.run_history_rescan)
+        history_top_bar.addWidget(self.scan_history_btn)
+
+        self.reset_history_btn = QPushButton("이력 초기화")
+        self.reset_history_btn.clicked.connect(self.run_history_reset)
+        history_top_bar.addWidget(self.reset_history_btn)
+
+        self.reset_all_btn = QPushButton("전체 데이터 초기화")
+        self.reset_all_btn.clicked.connect(self.run_all_reset)
+        history_top_bar.addWidget(self.reset_all_btn)
+
         self.manual_award_btn = QPushButton("수동 수상 기록 추가")
         self.manual_award_btn.clicked.connect(self.open_manual_award_dialog)
         history_top_bar.addWidget(self.manual_award_btn)
@@ -186,6 +203,55 @@ class MilestonesPage(QWidget):
         from ..dialogs.manual_award_dialog import ManualAwardDialog
         dialog = ManualAwardDialog(self.repo, self)
         if dialog.exec():
+            self.refresh()
+
+    def run_history_rescan(self):
+        save_path = self.repo.get_setting("save_path")
+        if not save_path:
+            QMessageBox.warning(self, "경고", "OOTP 저장소 경로가 설정되어 있지 않습니다.")
+            return
+
+        from pathlib import Path
+        save_dir = Path(save_path)
+        if not save_dir.exists():
+            QMessageBox.warning(self, "경고", f"지정된 저장소 경로가 존재하지 않습니다: {save_path}")
+            return
+
+        res = self.history_service.scan_and_backfill_history(save_dir, incremental_only=False)
+        QMessageBox.information(
+            self,
+            "이력 재스캔 완료",
+            f"메시지 스캔: {res['messages_scanned']}개\n생성/저장된 이력: {res['events_persisted']}개"
+        )
+        self.refresh()
+
+    def run_history_reset(self):
+        reply = QMessageBox.question(
+            self,
+            "이력 트래킹 초기화",
+            "자동 생성된 메시지 이력 및 트랜잭션/부상 데이터를 초기화하시겠습니까?\n(수동 입력 수상 및 게임 레저/설정은 보존됩니다)",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+        if reply == QMessageBox.StandardButton.Yes:
+            counts = self.reset_service.reset_history_tracking(preserve_manual=True)
+            summary = "\n".join(f"- {k}: {v}행 삭제" for k, v in counts.items())
+            QMessageBox.information(self, "이력 초기화 완료", f"이력 트래킹 데이터가 초기화되었습니다.\n\n{summary}")
+            self.refresh()
+
+    def run_all_reset(self):
+        reply = QMessageBox.warning(
+            self,
+            "전체 트래킹 데이터 초기화",
+            "게임 레저, 마일스톤 달성 기록, 메시지 이력을 포함한 모든 트래킹 데이터를 초기화하시겠습니까?\n"
+            "(앱 설정 및 추적 구단 설정은 보존되며, OOTP 저장소 파일은 손상되지 않습니다)",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+        if reply == QMessageBox.StandardButton.Yes:
+            counts = self.reset_service.reset_all_tracking()
+            summary = "\n".join(f"- {k}: {v}행 삭제" for k, v in counts.items())
+            QMessageBox.information(self, "전체 초기화 완료", f"모든 트래킹 데이터가 초기화되었습니다.\n\n{summary}")
             self.refresh()
 
     def update_control_bar(self):
@@ -301,7 +367,12 @@ class MilestonesPage(QWidget):
             "AWARD": "수상",
             "MONTHLY_AWARD": "이달의 수상",
             "MANUAL_LEAGUE_TITLE": "수동 수상",
-            "TRANSACTION": "이적/계약"
+            "TRANSACTION": "이적/계약",
+            "MLB_DEBUT": "데뷔",
+            "DRAFT": "드래프트",
+            "RETIREMENT": "은퇴",
+            "HALL_OF_FAME": "명예의 전당",
+            "ROSTER_MOVE": "로스터 이동"
         }
         self.history_table.setSortingEnabled(False)
         self.history_table.setRowCount(len(h_rows))

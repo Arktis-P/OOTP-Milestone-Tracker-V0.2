@@ -8,7 +8,9 @@ from ootp_milestone_tracker.importer.message_source import discover_messages
 from ootp_milestone_tracker.importer.message_parser import (
     parse_injury_message, parse_allstar_message, parse_award_message, parse_monthly_award_message
 )
+from ootp_milestone_tracker.importer.career_event_parser import parse_career_event_message
 from ootp_milestone_tracker.importer.transaction_parser import parse_transaction_message
+from ootp_milestone_tracker.services.injury_episode_service import InjuryEpisodeService
 from ootp_milestone_tracker.services.transaction_service import TransactionService
 from ootp_milestone_tracker.services.history_renderer import (
     render_manual_league_title_description, translate_league
@@ -18,6 +20,7 @@ class HistoryService:
     def __init__(self, repository: Repository):
         self.repo = repository
         self.txn_service = TransactionService(repository)
+        self.injury_episode_service = InjuryEpisodeService(repository)
 
     def scan_and_backfill_history(self, save_dir: Path, incremental_only: bool = False) -> Dict[str, int]:
         min_msg_id = None
@@ -40,6 +43,9 @@ class HistoryService:
             events.extend(parse_award_message(msg))
             events.extend(parse_monthly_award_message(msg))
 
+            # Parse Task 015 career event families (Debut, Draft, Retirement, HOF, Roster Move, Secondary Txns)
+            events.extend(parse_career_event_message(msg))
+
             for ev in events:
                 if ev.resolution_status == "unresolved":
                     unresolved_count += 1
@@ -57,6 +63,9 @@ class HistoryService:
                     txn_events
                 )
                 inserted_count += persisted
+
+            # Process Injury Episodes & Follow-up Events
+            self.injury_episode_service.process_message_for_injury_episode(msg)
 
         return {
             "messages_scanned": scanned_count,
