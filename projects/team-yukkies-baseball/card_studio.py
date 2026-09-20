@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from card_layout import CARD_HEIGHT, CARD_WIDTH
+from card_layout_v2 import CARD_HEIGHT, CARD_WIDTH
 from card_renderer_modular import ModularCardRenderer
 PROJECT_DIR = Path(__file__).resolve().parent
 DEFAULT_CSV = PROJECT_DIR / "PLAYER_RATINGS.csv"
@@ -221,7 +221,7 @@ class CardStudioWindow(QMainWindow):
         scroll.setAlignment(Qt.AlignCenter)
         self.preview = QLabel("선수를 선택하세요")
         self.preview.setAlignment(Qt.AlignCenter)
-        self.preview.setMinimumSize(520, 650)
+        self.preview.setMinimumSize(450, 800)
         self.preview.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         scroll.setWidget(self.preview)
         layout.addWidget(scroll, 1)
@@ -265,7 +265,7 @@ class CardStudioWindow(QMainWindow):
         layout.addWidget(export_side)
         layout.addWidget(export_both)
         layout.addStretch()
-        self.status = QLabel("CSV와 에셋 변경은 미리보기에 즉시 반영됩니다.")
+        self.status = QLabel(f"미리보기와 PNG 출력은 동일한 {CARD_WIDTH} × {CARD_HEIGHT} (9:16) 렌더를 사용합니다.")
         self.status.setWordWrap(True)
         self.status.setObjectName("muted")
         layout.addWidget(self.status)

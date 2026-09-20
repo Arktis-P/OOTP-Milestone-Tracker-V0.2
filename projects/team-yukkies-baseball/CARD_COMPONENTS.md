@@ -2,100 +2,92 @@
 
 ## 기준
 
-BASE 카드는 제공된 타자/투수 레퍼런스의 **스포츠 트레이딩 카드 구성**을 기준으로 한다.
-앱 UI처럼 여러 독립 박스를 배치하지 않고, 선수 사진이 중심이 되며 정보 영역은 사진을 보조한다.
+BASE 카드는 제공된 타자/투수 레퍼런스 4장의 **9:16 스포츠 트레이딩 카드 구성**을 기준으로 한다.
+타자와 투수는 세부 데이터만 달라지고 외곽 프레임, 헤더, 패널, 선 두께, 컬러 체계는 공유한다.
 
 ## 렌더 구조
 
-- 카드 크기: **700 × 1050 (2:3)**
-- 레이아웃 좌표: `card_layout.py`
+- 카드 크기: **900 × 1600 (9:16)**
+- 레이아웃 좌표: `card_layout_v2.py`
 - 렌더러: `card_renderer_modular.py`
-- 실제 그래픽 파츠: `templates/baseball/*.svg`
+- 그래픽 파츠: `templates/baseball_v2/`
+- 미리보기와 PNG 내보내기는 같은 `ModularCardRenderer.render()` 결과를 사용
 - 선수 이미지/팀 로고만 사용자 에셋
-- 앞면 타자 / 앞면 투수 / 뒷면 타자 / 뒷면 투수는 서로 다른 구성으로 렌더링
-
-기존 `templates/components/`는 이전 시안용이며 새 BASE 카드 렌더러에서 사용하지 않는다.
+- 기존 `card_layout.py` / `templates/baseball/`은 레거시 자산으로 유지
 
 ## 앞면
 
-### 공통 비율
+공통 흐름은 다음과 같다.
 
-- Header: y 20–196, 약 17%
-- Player artwork: y 140–855, 약 68%
-- Header와 artwork는 약 56px 겹침
-- Summary stats: y 865–975, 약 10.5%
-- Footer: y 978–1020, 약 4%
+1. 은색 외곽 프레임
+2. 큰 선수 사진
+3. 사진 위로 겹치는 상단 헤더
+4. 좌상단 포지션 + 등번호
+5. 우상단 투타
+6. 우측 OVR 블록
+7. 하단 6칸 스탯 스트립
+8. 하단 팀명
 
-Header는 **큰 팀 로고 / 선수명·팀명 / OVR** 3영역으로 고정한다.
-포지션 배지는 사진 좌측 상단에 겹쳐 배치한다.
+### 타자
 
-### 타자 앞면
+`CON / POW / GAP / EYE / SPD / FLD`
 
-하단 7칸:
+### 투수
 
-`CON / POW / EYE / SPD / BSR / FLD / ARM`
+`STF / MOV / CTL / CMD / STA / VEL`
 
-등번호는 포지션 배지 옆에 표시한다.
+VEL은 실제 km/h를 표시한다.
 
-### 투수 앞면
+## 뒷면 공통
 
-하단 6칸:
+- 상단: 팀 로고 / 선수명 / 팀명 / 프로필 / 원작 / 등번호
+- 20–80 Detailed Ratings
+- 역할별 전용 영역
+- Scouting Report
 
-`STF / MOV / CTL / CMD / STA / FLD`
+### 타자
 
-대표 구속은 앞면에 넣지 않는다.
-등번호는 상단 선수 정보 영역에 표시한다.
+- Ratings: Contact / Power / Gap / Eye / Baserunning / Stealing / Arm
+- Fielding Positions: 활성 `def_*`만 표시
+- 다이아몬드 위 주 포지션은 블루 마커, 부 포지션은 화이트 마커
+- Scouting Report
 
-## 타자 뒷면
+### 투수
 
-- Header: y 20–205
-- Rating Breakdown: y 210–590
-- Fielding Positions: y 595–825
-- Scouting Report: y 830–1015
+- Ratings: Stuff / Movement / Control / Command / Stamina / Fielding
+- Fastball Velocity
+- Pitch Arsenal
+- Scouting Report
 
-Rating은 `Contact / Power / Eye / Speed / Baserunning / Fielding / Arm`을 표시한다.
-
-Fielding 영역:
-- 왼쪽 약 40%: Primary/Secondary 포지션 목록
-- 오른쪽 약 50%: 실제 야구장 형태의 다이아몬드
-- 주 포지션은 파란 마커로 강조
-
-## 투수 뒷면
-
-- Header: y 20–205
-- Rating Breakdown: y 210–535
-- Fastball Velocity: y 540–610
-- Pitch Mix: y 615–825
-- Scouting Report: y 830–1015
-
-구종별 개별 구속은 현재 데이터에 존재하지 않으므로 만들지 않는다.
-Pitch Mix에는 구종명, 20–80 막대, 등급만 표시한다.
+Pitch Arsenal은 구종별 개별 구속 없이 20–80 등급만 표시한다.
 
 ## 그래픽 규칙
 
-- 레이아웃과 정보 밀도는 레퍼런스를 따른다.
-- 미니멀화는 **장식 감소**로만 처리한다.
-- 강한 금속 광택, 글로우, 복잡한 베벨은 사용하지 않는다.
-- 흰색/연회색 바탕 + 네이비 + 제한적인 블루 포인트를 사용한다.
-- 앞면 사진 면적을 줄여 정보 UI를 추가하지 않는다.
-- 뒷면 섹션 사이 간격은 5px 내외로 유지해 하나의 인쇄 카드처럼 보이게 한다.
+- 흰색/연회색 바탕 + 네이비 + 선명한 블루 + 얇은 은색 프레임
+- 장식보다 선수 이미지와 데이터 위계가 우선
+- 헤더와 선수 사진을 일부 겹쳐 단일 카드처럼 보이게 한다
+- 독립 앱 패널처럼 보이는 큰 여백을 피한다
+- 숫자와 라벨은 폭이 좁은 스포츠 카드 계열 서체 느낌으로 렌더한다
+- 긴 선수명은 자동 축소하여 헤더 폭 안에 유지한다
 
 ## SVG 세트
 
-`templates/baseball/`
+`templates/baseball_v2/`
 
-- `base_frame.svg`
+### common
+- `card_shell.svg`
 - `front_header.svg`
-- `front_photo_frame.svg`
+- `photo_frame.svg`
 - `position_badge.svg`
-- `front_stats_7.svg`
-- `front_stats_6.svg`
+- `front_stats_rail.svg`
 - `back_header.svg`
-- `back_section.svg`
-- `velocity_banner.svg`
+- `section_panel.svg`
 - `rating_track.svg`
 - `rating_fill.svg`
-- `field_diamond.svg`
-- `position_chip.svg`
-- `position_chip_primary.svg`
 - `divider.svg`
+
+### batter
+- `field_diamond.svg`
+
+### pitcher
+- `velocity_banner.svg`

@@ -4,26 +4,39 @@ from pathlib import Path
 from typing import Any
 
 from PySide6.QtCore import QRectF, Qt
-from PySide6.QtGui import QColor, QFont, QImage, QPainter, QPainterPath, QPen, QPixmap
+from PySide6.QtGui import (
+    QColor,
+    QFont,
+    QFontMetricsF,
+    QImage,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QPixmap,
+)
 from PySide6.QtSvg import QSvgRenderer
 
-from card_layout import (
+from card_layout_v2 import (
     BACK_BATTER,
     BACK_COMMON,
     BACK_PITCHER,
     CARD_HEIGHT,
     CARD_WIDTH,
     FRONT,
+    PALETTE,
     RATING,
 )
 
-INK = QColor("#14233A")
-MUTED = QColor("#7B8794")
-NAVY = QColor("#153B61")
-ACCENT = QColor("#2F7FF6")
-WHITE = QColor("#FFFFFF")
-SOFT = QColor("#F3F6F8")
-GRID = QColor("#D8E0E7")
+INK = QColor(PALETTE["ink"])
+MUTED = QColor("#69798A")
+NAVY = QColor(PALETTE["navy"])
+ACCENT = QColor(PALETTE["blue"])
+ACCENT_BRIGHT = QColor(PALETTE["blue_bright"])
+SILVER = QColor(PALETTE["silver"])
+WHITE = QColor(PALETTE["white"])
+PAPER = QColor(PALETTE["paper"])
+SOFT = QColor(PALETTE["paper_alt"])
+GRID = QColor(PALETTE["track"])
 
 
 def _rect(spec: tuple[int, int, int, int]) -> QRectF:
@@ -34,6 +47,16 @@ def _short_hand(value: str) -> str:
     return {"RIGHT": "R", "LEFT": "L", "SWITCH": "S"}.get(
         value.upper(), value[:1].upper() or "-"
     )
+
+
+def _arm_slot(value: str) -> str:
+    labels = {
+        "OVERHAND": "Overhand",
+        "THREE_QUARTER": "Three-Quarter",
+        "SIDEARM": "Sidearm",
+        "UNDERHAND": "Underhand",
+    }
+    return labels.get(value.upper(), value.replace("_", " ").title())
 
 
 class SvgComponentLibrary:
@@ -53,12 +76,12 @@ class SvgComponentLibrary:
 
 
 class ModularCardRenderer:
-    """Reference-driven baseball card renderer with four separate compositions."""
+    """Reference-driven 9:16 Team Yukkies baseball-card renderer."""
 
     def __init__(self, project_dir: Path) -> None:
         self.project_dir = Path(project_dir)
         self.components = SvgComponentLibrary(
-            self.project_dir / "templates" / "baseball"
+            self.project_dir / "templates" / "baseball_v2"
         )
 
     def render(self, player: Any, side: str) -> QImage:
@@ -67,14 +90,15 @@ class ModularCardRenderer:
             CARD_HEIGHT,
             QImage.Format_ARGB32_Premultiplied,
         )
-        image.fill(WHITE)
+        image.fill(PAPER)
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.TextAntialiasing)
         painter.setRenderHint(QPainter.SmoothPixmapTransform)
         self.components.draw(
             painter,
-            "base_frame",
+            "common/card_shell",
             QRectF(0, 0, CARD_WIDTH, CARD_HEIGHT),
         )
 
@@ -92,10 +116,20 @@ class ModularCardRenderer:
         painter.end()
         return image
 
-    def _font(self, size: int, bold: bool = False) -> QFont:
-        font = QFont("Malgun Gothic")
+    def _font(
+        self,
+        size: int,
+        bold: bool = False,
+        *,
+        condensed: bool = False,
+        italic: bool = False,
+    ) -> QFont:
+        font = QFont("Bahnschrift" if condensed else "Malgun Gothic")
         font.setPointSize(size)
         font.setWeight(QFont.Bold if bold else QFont.Normal)
+        if condensed:
+            font.setStretch(82)
+        font.setItalic(italic)
         return font
 
     def _text(
@@ -107,10 +141,43 @@ class ModularCardRenderer:
         color: QColor = INK,
         bold: bool = False,
         align: Qt.AlignmentFlag = Qt.AlignLeft | Qt.AlignVCenter,
+        *,
+        condensed: bool = False,
+        italic: bool = False,
     ) -> None:
         painter.setPen(color)
-        painter.setFont(self._font(size, bold))
+        painter.setFont(self._font(size, bold, condensed=condensed, italic=italic))
         painter.drawText(rect, align, text)
+
+    def _fit_text(
+        self,
+        painter: QPainter,
+        rect: QRectF,
+        text: str,
+        size: int,
+        min_size: int,
+        color: QColor = INK,
+        bold: bool = True,
+        align: Qt.AlignmentFlag = Qt.AlignLeft | Qt.AlignVCenter,
+        *,
+        condensed: bool = True,
+    ) -> None:
+        chosen = size
+        while chosen > min_size:
+            font = self._font(chosen, bold, condensed=condensed)
+            if QFontMetricsF(font).horizontalAdvance(text) <= rect.width():
+                break
+            chosen -= 1
+        self._text(
+            painter,
+            rect,
+            text,
+            chosen,
+            color,
+            bold,
+            align,
+            condensed=condensed,
+        )
 
     def _draw_image(
         self,
@@ -156,6 +223,46 @@ class ModularCardRenderer:
             (player.number("baserunning") + player.number("stealing")) / 2
         )
 
+    def _bt(self, player: Any) -> str:
+        return f"{_short_hand(player.get('bats'))}/{_short_hand(player.get('throws'))}"
+
+    def _draw_outline_badge(
+        self,
+        painter: QPainter,
+        rect: QRectF,
+        text: str,
+        *,
+        fill: QColor = PAPER,
+        text_color: QColor = NAVY,
+        font_size: int = 18,
+    ) -> None:
+        painter.save()
+        path = QPainterPath()
+        cut = min(16.0, rect.height() * 0.22)
+        path.moveTo(rect.left() + cut, rect.top())
+        path.lineTo(rect.right() - cut, rect.top())
+        path.lineTo(rect.right(), rect.top() + cut)
+        path.lineTo(rect.right(), rect.bottom() - cut)
+        path.lineTo(rect.right() - cut, rect.bottom())
+        path.lineTo(rect.left() + cut, rect.bottom())
+        path.lineTo(rect.left(), rect.bottom() - cut)
+        path.lineTo(rect.left(), rect.top() + cut)
+        path.closeSubpath()
+        painter.fillPath(path, fill)
+        painter.setPen(QPen(SILVER, 3))
+        painter.drawPath(path)
+        painter.restore()
+        self._text(
+            painter,
+            rect,
+            text,
+            font_size,
+            text_color,
+            True,
+            Qt.AlignCenter,
+            condensed=True,
+        )
+
     def _draw_front_artwork(self, painter: QPainter, player: Any) -> None:
         inner = _rect(FRONT["photo_inner"])
         clip = QPainterPath()
@@ -167,18 +274,19 @@ class ModularCardRenderer:
             painter.fillRect(inner, SOFT)
             self._text(
                 painter,
-                QRectF(inner.x(), inner.center().y() - 28, inner.width(), 34),
+                QRectF(inner.x(), inner.center().y() - 34, inner.width(), 42),
                 "PLAYER IMAGE",
-                17,
+                21,
                 MUTED,
                 True,
                 Qt.AlignCenter,
+                condensed=True,
             )
             self._text(
                 painter,
-                QRectF(inner.x(), inner.center().y() + 8, inner.width(), 26),
-                "우측 패널에서 이미지를 등록하세요",
-                8,
+                QRectF(inner.x(), inner.center().y() + 12, inner.width(), 32),
+                "우측 패널에서 선수 이미지를 등록하세요",
+                10,
                 MUTED,
                 False,
                 Qt.AlignCenter,
@@ -187,18 +295,16 @@ class ModularCardRenderer:
         painter.restore()
         self.components.draw(
             painter,
-            "front_photo_frame",
+            "common/photo_frame",
             _rect(FRONT["photo_outer"]),
         )
 
-    def _draw_front_header(
-        self,
-        painter: QPainter,
-        player: Any,
-        *,
-        pitcher: bool,
-    ) -> None:
-        self.components.draw(painter, "front_header", _rect(FRONT["header"]))
+    def _draw_front_header(self, painter: QPainter, player: Any) -> None:
+        self.components.draw(
+            painter,
+            "common/front_header",
+            _rect(FRONT["header"]),
+        )
 
         logo_rect = _rect(FRONT["logo"])
         if not self._draw_image(
@@ -211,170 +317,190 @@ class ModularCardRenderer:
                 painter,
                 logo_rect,
                 "TEAM",
-                10,
+                13,
                 MUTED,
                 True,
                 Qt.AlignCenter,
+                condensed=True,
             )
 
-        self._text(painter, _rect(FRONT["name"]), player.name, 23, INK, True)
+        self._fit_text(
+            painter,
+            _rect(FRONT["name"]),
+            player.name,
+            29,
+            19,
+            INK,
+            True,
+        )
         self._text(
             painter,
             _rect(FRONT["team"]),
             player.team_name.upper(),
-            9,
+            13,
             NAVY,
             True,
+            condensed=True,
         )
-
-        if pitcher:
-            self._text(
-                painter,
-                _rect(FRONT["number_pitcher"]),
-                f"#{player.get('uniform_number', '-')}",
-                12,
-                NAVY,
-                True,
-            )
-
         self._text(
             painter,
             _rect(FRONT["ovr_label"]),
             "OVR",
-            8,
+            14,
             WHITE,
             True,
             Qt.AlignCenter,
+            condensed=True,
         )
         self._text(
             painter,
             _rect(FRONT["ovr_value"]),
             str(player.number("overall")),
-            31,
+            42,
             WHITE,
             True,
             Qt.AlignCenter,
+            condensed=True,
         )
 
-    def _draw_front_position(
-        self,
-        painter: QPainter,
-        player: Any,
-        *,
-        pitcher: bool,
-    ) -> None:
+    def _draw_front_identity(self, painter: QPainter, player: Any) -> None:
         self.components.draw(
             painter,
-            "position_badge",
+            "common/position_badge",
             _rect(FRONT["position_badge"]),
         )
         self._text(
             painter,
             _rect(FRONT["position_text"]),
             player.position,
-            25,
+            30,
             WHITE,
             True,
             Qt.AlignCenter,
+            condensed=True,
         )
-        if not pitcher:
-            self._text(
-                painter,
-                _rect(FRONT["number_batter"]),
-                f"#{player.get('uniform_number', '-')}",
-                18,
-                NAVY,
-                True,
-            )
+        self._draw_outline_badge(
+            painter,
+            _rect(FRONT["number"]),
+            f"#{player.get('uniform_number', '-')}",
+            font_size=22,
+        )
+        self._draw_outline_badge(
+            painter,
+            _rect(FRONT["handedness"]),
+            self._bt(player),
+            font_size=19,
+        )
 
     def _draw_front_stats(
         self,
         painter: QPainter,
-        stats: list[tuple[str, str]],
+        stats: list[tuple[str, str, str | None]],
     ) -> None:
-        panel_name = "front_stats_7" if len(stats) == 7 else "front_stats_6"
         panel = _rect(FRONT["stats"])
-        self.components.draw(painter, panel_name, panel)
+        self.components.draw(painter, "common/front_stats_rail", panel)
 
         cell_w = panel.width() / len(stats)
-        for index, (label, value) in enumerate(stats):
+        painter.save()
+        painter.setPen(QPen(NAVY, 2))
+        for index in range(1, len(stats)):
+            x = panel.x() + index * cell_w
+            painter.drawLine(
+                int(x),
+                int(panel.y() + 38),
+                int(x),
+                int(panel.y() + 137),
+            )
+        painter.restore()
+
+        for index, (label, value, unit) in enumerate(stats):
             x = panel.x() + index * cell_w
             self._text(
                 painter,
-                QRectF(x + 4, panel.y() + 11, cell_w - 8, 28),
+                QRectF(x + 5, panel.y() + 30, cell_w - 10, 35),
                 label,
-                8,
-                MUTED,
+                13,
+                INK,
                 True,
                 Qt.AlignCenter,
+                condensed=True,
             )
             self._text(
                 painter,
-                QRectF(x + 4, panel.y() + 40, cell_w - 8, 53),
+                QRectF(x + 5, panel.y() + 67, cell_w - 10, 66),
                 value,
-                18,
-                NAVY,
+                27 if unit is None else 23,
+                INK,
                 True,
                 Qt.AlignCenter,
+                condensed=True,
             )
+            if unit:
+                self._text(
+                    painter,
+                    QRectF(x + 5, panel.y() + 124, cell_w - 10, 25),
+                    unit,
+                    10,
+                    INK,
+                    True,
+                    Qt.AlignCenter,
+                    condensed=True,
+                )
 
     def _draw_front_footer(self, painter: QPainter, player: Any) -> None:
         footer = _rect(FRONT["footer"])
         self.components.draw(
             painter,
-            "divider",
-            QRectF(footer.x() + 35, footer.y() + 3, footer.width() - 70, 4),
+            "common/divider",
+            QRectF(footer.x() + 84, footer.y() + 6, footer.width() - 168, 4),
         )
         self._text(
             painter,
-            QRectF(
-                footer.x(),
-                footer.y() + 8,
-                footer.width(),
-                footer.height() - 8,
-            ),
+            QRectF(footer.x(), footer.y() + 8, footer.width(), footer.height() - 8),
             player.team_name.upper(),
-            7,
-            MUTED,
+            10,
+            NAVY,
             True,
             Qt.AlignCenter,
+            condensed=True,
         )
 
     def _draw_batter_front(self, painter: QPainter, player: Any) -> None:
         self._draw_front_artwork(painter, player)
-        self._draw_front_header(painter, player, pitcher=False)
-        self._draw_front_position(painter, player, pitcher=False)
-
+        self._draw_front_header(painter, player)
+        self._draw_front_identity(painter, player)
         stats = [
-            ("CON", str(player.number("contact"))),
-            ("POW", str(player.number("power"))),
-            ("EYE", str(player.number("eye"))),
-            ("SPD", str(self._speed(player))),
-            ("BSR", str(player.number("baserunning"))),
-            ("FLD", str(self._primary_fielding(player))),
-            ("ARM", str(player.number("arm"))),
+            ("CON", str(player.number("contact")), None),
+            ("POW", str(player.number("power")), None),
+            ("GAP", str(player.number("gap")), None),
+            ("EYE", str(player.number("eye")), None),
+            ("SPD", str(self._speed(player)), None),
+            ("FLD", str(self._primary_fielding(player)), None),
         ]
         self._draw_front_stats(painter, stats)
         self._draw_front_footer(painter, player)
 
     def _draw_pitcher_front(self, painter: QPainter, player: Any) -> None:
         self._draw_front_artwork(painter, player)
-        self._draw_front_header(painter, player, pitcher=True)
-        self._draw_front_position(painter, player, pitcher=True)
-
+        self._draw_front_header(painter, player)
+        self._draw_front_identity(painter, player)
         stats = [
-            ("STF", str(player.number("stuff"))),
-            ("MOV", str(player.number("movement"))),
-            ("CTL", str(player.number("control"))),
-            ("CMD", str(player.number("command"))),
-            ("STA", str(player.number("stamina"))),
-            ("FLD", str(player.number("pitcher_fielding"))),
+            ("STF", str(player.number("stuff")), None),
+            ("MOV", str(player.number("movement")), None),
+            ("CTL", str(player.number("control")), None),
+            ("CMD", str(player.number("command")), None),
+            ("STA", str(player.number("stamina")), None),
+            ("VEL", str(player.number("velocity_kmh")), "km/h"),
         ]
         self._draw_front_stats(painter, stats)
         self._draw_front_footer(painter, player)
 
     def _draw_back_header(self, painter: QPainter, player: Any) -> None:
-        self.components.draw(painter, "back_header", _rect(BACK_COMMON["header"]))
+        self.components.draw(
+            painter,
+            "common/back_header",
+            _rect(BACK_COMMON["header"]),
+        )
 
         logo_rect = _rect(BACK_COMMON["logo"])
         if not self._draw_image(
@@ -387,44 +513,64 @@ class ModularCardRenderer:
                 painter,
                 logo_rect,
                 "TEAM",
-                10,
+                13,
                 MUTED,
                 True,
                 Qt.AlignCenter,
+                condensed=True,
             )
 
-        self._text(painter, _rect(BACK_COMMON["name"]), player.name, 22, INK, True)
+        self._fit_text(
+            painter,
+            _rect(BACK_COMMON["name"]),
+            player.name,
+            28,
+            18,
+            INK,
+            True,
+        )
         self._text(
             painter,
             _rect(BACK_COMMON["team"]),
             player.team_name.upper(),
-            9,
-            MUTED,
+            13,
+            NAVY,
             True,
+            condensed=True,
         )
 
-        bats = _short_hand(player.get("bats"))
-        throws = _short_hand(player.get("throws"))
-        arm_slot = ""
+        profile = f"{player.position} / {self._bt(player)}"
         if player.is_pitcher and player.get("arm_slot"):
-            arm_slot = f" / {player.get('arm_slot').replace('_', ' ').title()}"
-
-        self._text(
+            profile += f" / {_arm_slot(player.get('arm_slot'))}"
+        profile += f" / #{player.get('uniform_number', '-')}"
+        self._fit_text(
             painter,
             _rect(BACK_COMMON["profile"]),
-            f"{player.position} / {bats}-{throws}{arm_slot}",
-            10,
+            profile,
+            15,
+            11,
             NAVY,
             True,
         )
         self._text(
             painter,
+            _rect(BACK_COMMON["franchise"]),
+            player.get("series"),
+            11,
+            INK,
+            False,
+            Qt.AlignLeft | Qt.AlignVCenter,
+            italic=True,
+        )
+        self._text(
+            painter,
             _rect(BACK_COMMON["number"]),
             f"#{player.get('uniform_number', '-')}",
-            20,
-            MUTED,
+            27,
+            QColor("#AAB3BD"),
             True,
             Qt.AlignRight | Qt.AlignVCenter,
+            condensed=True,
         )
 
     def _draw_rating_panel(
@@ -434,89 +580,90 @@ class ModularCardRenderer:
         rows: list[tuple[str, int]],
     ) -> None:
         panel = _rect(panel_spec)
-        self.components.draw(painter, "back_section", panel)
+        self.components.draw(painter, "common/section_panel", panel)
         self._text(
             painter,
-            QRectF(
-                panel.x() + RATING["title_x"],
-                panel.y() + RATING["title_y"],
-                RATING["title_w"],
-                RATING["title_h"],
-            ),
-            "20–80 RATING BREAKDOWN",
+            QRectF(panel.x() + RATING["title_left"], panel.y() + 14, 470, 58),
+            "20–80 Detailed Ratings",
+            22,
+            INK,
+            True,
+            condensed=True,
+        )
+        self._text(
+            painter,
+            QRectF(panel.right() - 320, panel.y() + 21, 286, 48),
+            "SCALE: 20 (LOW) – 80 (ELITE)",
             11,
             NAVY,
-            True,
+            False,
+            Qt.AlignRight | Qt.AlignVCenter,
+            condensed=True,
         )
 
-        bar_x = panel.x() + RATING["bar_x"]
-        bar_w = RATING["bar_w"]
-        scale_y = panel.y() + 49
-        for index, scale in enumerate((20, 30, 40, 50, 60, 70, 80)):
-            x = bar_x + (bar_w * index / 6)
-            self._text(
-                painter,
-                QRectF(x - 16, scale_y, 32, 18),
-                str(scale),
-                7,
-                MUTED,
-                False,
-                Qt.AlignCenter,
-            )
+        label_x = panel.x() + 34
+        bar_x = panel.x() + RATING["bar_left"]
+        value_w = RATING["value_width"]
+        value_x = panel.right() - 35 - value_w
+        bar_w = value_x - 22 - bar_x
+        scale_y = panel.y() + RATING["scale_top"]
+        row_top = panel.y() + RATING["rows_top"]
+        row_h = (panel.height() - RATING["rows_top"] - 26) / len(rows)
 
-        row_top = panel.y() + 72
-        row_h = (panel.height() - 86) / len(rows)
-
+        painter.save()
         painter.setPen(QPen(GRID, 1))
-        for index in range(7):
+        for index, scale in enumerate((20, 30, 40, 50, 60, 70, 80)):
             x = bar_x + (bar_w * index / 6)
             painter.drawLine(
                 int(x),
-                int(row_top - 2),
+                int(row_top - 4),
                 int(x),
-                int(panel.bottom() - 12),
+                int(panel.bottom() - 20),
             )
+            self._text(
+                painter,
+                QRectF(x - 24, scale_y, 48, 28),
+                str(scale),
+                10,
+                INK,
+                False,
+                Qt.AlignCenter,
+                condensed=True,
+            )
+        painter.restore()
 
         for index, (label, value) in enumerate(rows):
             y = row_top + index * row_h
             self._text(
                 painter,
-                QRectF(
-                    panel.x() + RATING["label_x"],
-                    y,
-                    RATING["bar_x"] - RATING["label_x"] - 12,
-                    row_h,
-                ),
+                QRectF(label_x, y, RATING["label_width"] - 36, row_h),
                 label,
-                8,
+                13,
                 INK,
                 True,
+                condensed=True,
             )
 
-            track = QRectF(bar_x, y + row_h / 2 - 7, bar_w, 14)
-            self.components.draw(painter, "rating_track", track)
+            track = QRectF(bar_x, y + row_h / 2 - 10, bar_w, 20)
+            self.components.draw(painter, "common/rating_track", track)
             ratio = max(0.0, min(1.0, (value - 20) / 60))
             if ratio > 0:
                 painter.save()
                 painter.setClipRect(
                     QRectF(track.x(), track.y(), track.width() * ratio, track.height())
                 )
-                self.components.draw(painter, "rating_fill", track)
+                self.components.draw(painter, "common/rating_fill", track)
                 painter.restore()
 
             self._text(
                 painter,
-                QRectF(
-                    panel.x() + RATING["value_x"],
-                    y,
-                    RATING["value_w"],
-                    row_h,
-                ),
+                QRectF(value_x, y, value_w, row_h),
                 str(value),
-                9,
-                NAVY,
+                15,
+                INK,
                 True,
                 Qt.AlignRight | Qt.AlignVCenter,
+                condensed=True,
             )
 
     def _active_fielding(self, player: Any) -> list[tuple[str, int]]:
@@ -525,7 +672,6 @@ class ModularCardRenderer:
             value = player.number(f"def_{pos.lower()}")
             if value > 0:
                 entries.append((pos, value))
-
         entries.sort(
             key=lambda item: (
                 0 if item[0] == player.position else 1,
@@ -535,93 +681,100 @@ class ModularCardRenderer:
         )
         return entries
 
-    def _draw_fielding_panel(self, painter: QPainter, player: Any) -> None:
-        panel = _rect(BACK_BATTER["fielding"])
-        self.components.draw(painter, "back_section", panel)
+    def _draw_position_chip(
+        self,
+        painter: QPainter,
+        rect: QRectF,
+        pos: str,
+        value: int | None,
+        primary: bool,
+    ) -> None:
+        painter.save()
+        painter.setBrush(ACCENT if primary else PAPER)
+        painter.setPen(QPen(WHITE if primary else NAVY, 3))
+        painter.drawRoundedRect(rect, 8, 8)
+        painter.restore()
+        text = pos if value is None else f"{pos}\n{value}"
         self._text(
             painter,
-            QRectF(panel.x() + 22, panel.y() + 12, 300, 32),
-            "FIELDING POSITIONS",
-            11,
-            NAVY,
+            rect,
+            text,
+            12 if value is None else 10,
+            WHITE if primary else NAVY,
             True,
+            Qt.AlignCenter,
+            condensed=True,
+        )
+
+    def _draw_fielding_panel(self, painter: QPainter, player: Any) -> None:
+        panel = _rect(BACK_BATTER["fielding"])
+        self.components.draw(painter, "common/section_panel", panel)
+        self._text(
+            painter,
+            QRectF(panel.x() + 32, panel.y() + 12, 360, 52),
+            "Fielding Positions",
+            22,
+            INK,
+            True,
+            condensed=True,
         )
 
         entries = self._active_fielding(player)
-        list_x = panel.x() + 22
-        list_y = panel.y() + 60
-        for index, (pos, value) in enumerate(entries[:4]):
-            y = list_y + index * 39
+        list_x = panel.x() + 34
+        list_y = panel.y() + 82
+        visible_list = entries[:4]
+        for index, (pos, value) in enumerate(visible_list):
+            y = list_y + index * 55
             primary = pos == player.position
-            chip = QRectF(list_x, y, 58, 32)
-            self.components.draw(
-                painter,
-                "position_chip_primary" if primary else "position_chip",
-                chip,
-            )
+            chip = QRectF(list_x, y, 72, 44)
+            self._draw_position_chip(painter, chip, pos, None, primary)
             self._text(
                 painter,
-                chip,
-                pos,
-                8,
-                WHITE if primary else NAVY,
-                True,
-                Qt.AlignCenter,
-            )
-            self._text(
-                painter,
-                QRectF(list_x + 72, y, 112, 32),
+                QRectF(list_x + 92, y, 124, 44),
                 "Primary" if primary else "Secondary",
-                8,
-                MUTED,
-                True,
+                12,
+                INK,
+                False,
+                Qt.AlignLeft | Qt.AlignVCenter,
+                condensed=True,
             )
             self._text(
                 painter,
-                QRectF(list_x + 186, y, 38, 32),
+                QRectF(list_x + 214, y, 50, 44),
                 str(value),
-                9,
-                NAVY,
+                14,
+                INK,
                 True,
                 Qt.AlignRight | Qt.AlignVCenter,
+                condensed=True,
             )
 
-        field = QRectF(panel.x() + 300, panel.y() + 53, 330, 194)
-        self.components.draw(painter, "field_diamond", field)
-
+        field = QRectF(panel.x() + 326, panel.y() + 64, 486, 248)
+        self.components.draw(painter, "batter/field_diamond", field)
         marker_pos = {
-            "C": (0.50, 0.87),
-            "1B": (0.74, 0.65),
-            "2B": (0.62, 0.46),
-            "3B": (0.26, 0.65),
-            "SS": (0.38, 0.46),
-            "LF": (0.20, 0.25),
-            "CF": (0.50, 0.15),
-            "RF": (0.80, 0.25),
+            "C": (0.50, 0.88),
+            "1B": (0.75, 0.66),
+            "2B": (0.62, 0.45),
+            "3B": (0.25, 0.66),
+            "SS": (0.38, 0.45),
+            "LF": (0.20, 0.23),
+            "CF": (0.50, 0.14),
+            "RF": (0.80, 0.23),
         }
-
         for pos, value in entries:
             px, py = marker_pos[pos]
             chip = QRectF(
-                field.x() + field.width() * px - 25,
-                field.y() + field.height() * py - 17,
-                50,
-                34,
+                field.x() + field.width() * px - 34,
+                field.y() + field.height() * py - 30,
+                68,
+                60,
             )
-            primary = pos == player.position
-            self.components.draw(
-                painter,
-                "position_chip_primary" if primary else "position_chip",
-                chip,
-            )
-            self._text(
+            self._draw_position_chip(
                 painter,
                 chip,
-                f"{pos}\n{value}",
-                7,
-                WHITE if primary else NAVY,
-                True,
-                Qt.AlignCenter,
+                pos,
+                value,
+                pos == player.position,
             )
 
     def _draw_scouting_panel(
@@ -631,40 +784,60 @@ class ModularCardRenderer:
         player: Any,
     ) -> None:
         panel = _rect(panel_spec)
-        self.components.draw(painter, "back_section", panel)
+        self.components.draw(painter, "common/section_panel", panel)
         self._text(
             painter,
-            QRectF(panel.x() + 22, panel.y() + 12, 300, 32),
-            "SCOUTING REPORT",
-            11,
-            NAVY,
+            QRectF(panel.x() + 32, panel.y() + 12, 360, 52),
+            "Scouting Report",
+            22,
+            INK,
             True,
+            condensed=True,
         )
+        painter.save()
+        painter.setPen(QPen(GRID, 2))
+        painter.drawLine(
+            int(panel.x() + 32),
+            int(panel.y() + 68),
+            int(panel.right() - 32),
+            int(panel.y() + 68),
+        )
+        painter.restore()
         self._text(
             painter,
             QRectF(
-                panel.x() + 22,
-                panel.y() + 58,
-                panel.width() - 44,
-                panel.height() - 76,
+                panel.x() + 34,
+                panel.y() + 82,
+                panel.width() - 68,
+                panel.height() - 120,
             ),
             player.get("scouting_report", "스카우팅 리포트가 없습니다."),
-            9,
+            12,
             INK,
             False,
             Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+        )
+        self._text(
+            painter,
+            QRectF(panel.x(), panel.bottom() - 38, panel.width(), 28),
+            player.team_name.upper(),
+            10,
+            NAVY,
+            True,
+            Qt.AlignCenter,
+            condensed=True,
         )
 
     def _draw_batter_back(self, painter: QPainter, player: Any) -> None:
         self._draw_back_header(painter, player)
         rows = [
-            ("CONTACT", player.number("contact")),
-            ("POWER", player.number("power")),
-            ("EYE", player.number("eye")),
-            ("SPEED", self._speed(player)),
-            ("BASERUNNING", player.number("baserunning")),
-            ("FIELDING", self._primary_fielding(player)),
-            ("ARM", player.number("arm")),
+            ("Contact", player.number("contact")),
+            ("Power", player.number("power")),
+            ("Gap", player.number("gap")),
+            ("Eye", player.number("eye")),
+            ("Baserunning", player.number("baserunning")),
+            ("Stealing", player.number("stealing")),
+            ("Arm", player.number("arm")),
         ]
         self._draw_rating_panel(painter, BACK_BATTER["ratings"], rows)
         self._draw_fielding_panel(painter, player)
@@ -687,114 +860,128 @@ class ModularCardRenderer:
             ("Screwball", "pitch_screwball"),
             ("Knuckleball", "pitch_knuckleball"),
         ]
-        active = [
+        return [
             (label, player.number(key))
             for label, key in pitches
             if player.number(key) > 0
         ]
-        active.sort(key=lambda item: (-item[1], item[0]))
-        return active
 
     def _draw_velocity_banner(self, painter: QPainter, player: Any) -> None:
         panel = _rect(BACK_PITCHER["velocity"])
-        self.components.draw(painter, "velocity_banner", panel)
+        self.components.draw(painter, "pitcher/velocity_banner", panel)
         self._text(
             painter,
-            QRectF(panel.x() + 22, panel.y() + 8, 280, panel.height() - 16),
-            "FASTBALL VELOCITY",
-            11,
-            NAVY,
+            QRectF(panel.x() + 32, panel.y() + 7, 430, panel.height() - 14),
+            "Fastball Velocity",
+            22,
+            INK,
             True,
+            Qt.AlignLeft | Qt.AlignVCenter,
+            condensed=True,
         )
         self._text(
             painter,
-            QRectF(panel.x() + 370, panel.y() + 5, 260, panel.height() - 10),
-            f"{player.number('velocity_kmh')} km/h",
-            20,
+            QRectF(panel.x() + 515, panel.y() + 3, 180, panel.height() - 8),
+            str(player.number("velocity_kmh")),
+            34,
             WHITE,
             True,
             Qt.AlignRight | Qt.AlignVCenter,
+            condensed=True,
+        )
+        self._text(
+            painter,
+            QRectF(panel.x() + 704, panel.y() + 14, 108, panel.height() - 24),
+            "km/h",
+            18,
+            WHITE,
+            True,
+            Qt.AlignLeft | Qt.AlignVCenter,
+            condensed=True,
         )
 
-    def _draw_pitch_mix(self, painter: QPainter, player: Any) -> None:
-        panel = _rect(BACK_PITCHER["pitch_mix"])
-        self.components.draw(painter, "back_section", panel)
+    def _draw_pitch_arsenal(self, painter: QPainter, player: Any) -> None:
+        panel = _rect(BACK_PITCHER["pitch_arsenal"])
+        self.components.draw(painter, "common/section_panel", panel)
         self._text(
             painter,
-            QRectF(panel.x() + 22, panel.y() + 12, 270, 32),
-            "PITCH MIX",
-            11,
-            NAVY,
+            QRectF(panel.x() + 32, panel.y() + 10, 360, 52),
+            "Pitch Arsenal",
+            22,
+            INK,
             True,
+            condensed=True,
         )
         self._text(
             painter,
-            QRectF(panel.right() - 150, panel.y() + 12, 128, 32),
+            QRectF(panel.right() - 220, panel.y() + 14, 184, 42),
             "20–80 GRADE",
-            7,
-            MUTED,
-            True,
+            11,
+            NAVY,
+            False,
             Qt.AlignRight | Qt.AlignVCenter,
+            condensed=True,
         )
 
         active = self._active_pitches(player)
         visible = active[:6]
-        row_top = panel.y() + 54
-        row_h = 25
+        row_top = panel.y() + 68
+        row_h = 32
         for index, (label, value) in enumerate(visible):
             y = row_top + index * row_h
-            self._text(
+            self._fit_text(
                 painter,
-                QRectF(panel.x() + 22, y, 180, row_h),
+                QRectF(panel.x() + 32, y, 250, row_h),
                 label,
-                8,
+                13,
+                9,
                 INK,
                 True,
             )
-            track = QRectF(panel.x() + 210, y + 6, 345, 13)
-            self.components.draw(painter, "rating_track", track)
-
+            track = QRectF(panel.x() + 292, y + 8, 404, 18)
+            self.components.draw(painter, "common/rating_track", track)
             ratio = max(0.0, min(1.0, (value - 20) / 60))
             if ratio > 0:
                 painter.save()
                 painter.setClipRect(
                     QRectF(track.x(), track.y(), track.width() * ratio, track.height())
                 )
-                self.components.draw(painter, "rating_fill", track)
+                self.components.draw(painter, "common/rating_fill", track)
                 painter.restore()
-
             self._text(
                 painter,
-                QRectF(panel.right() - 70, y, 48, row_h),
+                QRectF(panel.right() - 102, y, 66, row_h),
                 str(value),
-                9,
-                NAVY,
+                14,
+                INK,
                 True,
                 Qt.AlignRight | Qt.AlignVCenter,
+                condensed=True,
             )
 
         if len(active) > len(visible):
             self._text(
                 painter,
-                QRectF(panel.x() + 22, panel.bottom() - 28, panel.width() - 44, 18),
+                QRectF(panel.x() + 32, panel.bottom() - 28, panel.width() - 68, 20),
                 f"+{len(active) - len(visible)} OTHER PITCHES",
-                7,
+                9,
                 MUTED,
                 False,
                 Qt.AlignRight | Qt.AlignVCenter,
+                condensed=True,
             )
 
     def _draw_pitcher_back(self, painter: QPainter, player: Any) -> None:
         self._draw_back_header(painter, player)
         rows = [
-            ("STUFF", player.number("stuff")),
-            ("MOVEMENT", player.number("movement")),
-            ("CONTROL", player.number("control")),
-            ("COMMAND", player.number("command")),
-            ("STAMINA", player.number("stamina")),
-            ("FIELDING", player.number("pitcher_fielding")),
+            ("Stuff", player.number("stuff")),
+            ("Movement", player.number("movement")),
+            ("Control", player.number("control")),
+            ("Command", player.number("command")),
+            ("Stamina", player.number("stamina")),
+            ("Fielding", player.number("pitcher_fielding")),
         ]
         self._draw_rating_panel(painter, BACK_PITCHER["ratings"], rows)
         self._draw_velocity_banner(painter, player)
-        self._draw_pitch_mix(painter, player)
+        self._draw_pitch_arsenal(painter, player)
         self._draw_scouting_panel(painter, BACK_PITCHER["scouting"], player)
