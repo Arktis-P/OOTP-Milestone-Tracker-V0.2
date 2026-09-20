@@ -27,10 +27,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from card_layout import CARD_HEIGHT, CARD_WIDTH
 from card_renderer_modular import ModularCardRenderer
-
-CARD_WIDTH = 750
-CARD_HEIGHT = 1050
 PROJECT_DIR = Path(__file__).resolve().parent
 DEFAULT_CSV = PROJECT_DIR / "PLAYER_RATINGS.csv"
 PLAYER_ASSETS = PROJECT_DIR / "assets" / "players"
