@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "canvas": {"width": 900, "height": 1600, "aspect": "9:16"},
+  "layout_module": "card_layout_v2.py",
+  "shared_assets": {
+    "card_shell": "common/card_shell.svg",
+    "front_header": "common/front_header.svg",
+    "photo_frame": "common/photo_frame.svg",
+    "position_badge": "common/position_badge.svg",
+    "front_stats_rail": "common/front_stats_rail.svg",
+    "back_header": "common/back_header.svg",
+    "section_panel": "common/section_panel.svg",
+    "rating_track": "common/rating_track.svg",
+    "rating_fill": "common/rating_fill.svg",
+    "divider": "common/divider.svg"
+  },
+  "batter_assets": {
+    "field_diamond": "batter/field_diamond.svg"
+  },
+  "pitcher_assets": {
+    "velocity_banner": "pitcher/velocity_banner.svg"
+  },
+  "compositions": {
+    "batter_front": ["card_shell", "photo", "photo_frame", "front_header", "position_badge", "front_stats_rail", "divider"],
+    "pitcher_front": ["card_shell", "photo", "photo_frame", "front_header", "position_badge", "front_stats_rail", "divider"],
+    "batter_back": ["card_shell", "back_header", "section_panel", "rating_track", "rating_fill", "field_diamond", "divider"],
+    "pitcher_back": ["card_shell", "back_header", "section_panel", "rating_track", "rating_fill", "velocity_banner", "divider"]
+  }
+}
