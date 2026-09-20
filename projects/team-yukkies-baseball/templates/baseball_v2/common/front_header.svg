@@ -1,7 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 844 260">
-<path d="M0 0H808L844 36V226L810 260H0Z" fill="#F7F8FA" stroke="#123A67" stroke-width="4"/>
-<path d="M14 14H794L824 44V214L796 246H14Z" fill="none" stroke="#C9D0D7" stroke-width="3"/>
-<path d="M666 14H794L824 44V214L796 246H666Z" fill="#1F69B7" stroke="#123A67" stroke-width="4"/>
-<path d="M666 14h28l-12 18h-28z" fill="#3688EA"/>
-<path d="M236 188H638" stroke="#123A67" stroke-width="3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 806 198">
+<defs>
+  <linearGradient id="silver" x1="0" x2="1"><stop stop-color="#A2ADB7"/><stop offset=".22" stop-color="#F7F9FA"/><stop offset=".56" stop-color="#C2CBD2"/><stop offset=".82" stop-color="#FFFFFF"/><stop offset="1" stop-color="#A1ADB7"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2798F4"/><stop offset=".48" stop-color="#1B70BA"/><stop offset="1" stop-color="#0B315A"/></linearGradient>
+</defs>
+<path d="M0 0H524L544 18H611L628 0H789L806 18V157L788 176H224L202 198H0Z" fill="#F9FAFB" stroke="url(#silver)" stroke-width="4"/>
+<path d="M2 3H522L542 21H613L630 3H787L803 19V154L786 173H222L200 195H2Z" fill="none" stroke="#123B67" stroke-width="4"/>
+<path d="M535 1H615L626 14H788L804 30V61H573Z" fill="url(#blue)"/>
+<path d="M630 2H771L801 30V157L770 190H646L620 164V28Z" fill="url(#blue)" stroke="#C8D0D7" stroke-width="5"/>
+<path d="M640 12H765L791 36V151L763 180H653L630 157V36Z" fill="none" stroke="#0B2F56" stroke-width="3"/>
+<path d="M17 175H603" stroke="#123B67" stroke-width="3"/>
+<path d="M610 0h42l-16 19h-42z" fill="#2D95F4"/>
 </svg>

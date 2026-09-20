@@ -1,4 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 832 1122" preserveAspectRatio="none">
-<path d="M0 28L28 0H804L832 28V1094L804 1122H28L0 1094Z" fill="none" stroke="#123A67" stroke-width="5"/>
-<path d="M8 30L30 8H802L824 30V1092L802 1114H30L8 1092Z" fill="none" stroke="#D7DDE4" stroke-width="3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 807 1139" preserveAspectRatio="none">
+<defs>
+ <linearGradient id="edge" x1="0" x2="1"><stop stop-color="#A7B2BC"/><stop offset=".5" stop-color="#F8FAFB"/><stop offset="1" stop-color="#9EAAB4"/></linearGradient>
+ <linearGradient id="blue" x1="0" x2="1"><stop stop-color="#0D355F"/><stop offset=".55" stop-color="#1F7AC7"/><stop offset="1" stop-color="#0B2F57"/></linearGradient>
+</defs>
+<path d="M0 21L21 0H786L807 21V1118L786 1139H21L0 1118Z" fill="none" stroke="url(#edge)" stroke-width="8"/>
+<path d="M5 25L25 5H782L802 25V1114L782 1134H25L5 1114Z" fill="none" stroke="#123B67" stroke-width="4"/>
+<path d="M9 29L29 9H778L798 29" fill="none" stroke="#E9EDF0" stroke-width="3"/>
+<path d="M0 21L21 0H260L240 22H0ZM807 21L786 0H745L766 22H807Z" fill="url(#blue)"/>
+<path d="M0 1118L21 1139H61L41 1117H0ZM807 1118L786 1139H746L766 1117H807Z" fill="url(#blue)"/>
 </svg>

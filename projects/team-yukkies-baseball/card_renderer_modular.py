@@ -572,6 +572,18 @@ class ModularCardRenderer:
             Qt.AlignRight | Qt.AlignVCenter,
             condensed=True,
         )
+        tagline = player.get("team_tagline", "PLAY\nBRIGHTER\nTOGETHER")
+        self._text(
+            painter,
+            _rect(BACK_COMMON["tagline"]),
+            tagline,
+            10,
+            MUTED,
+            True,
+            Qt.AlignRight | Qt.AlignVCenter,
+            condensed=True,
+            italic=True,
+        )
 
     def _draw_rating_panel(
         self,

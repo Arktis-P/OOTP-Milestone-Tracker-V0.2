@@ -1,7 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600">
-<defs><linearGradient id="silver" x1="0" x2="1"><stop offset="0" stop-color="#AAB4BE"/><stop offset=".18" stop-color="#F2F5F7"/><stop offset=".5" stop-color="#C8D0D7"/><stop offset=".82" stop-color="#F7F9FA"/><stop offset="1" stop-color="#9BA7B2"/></linearGradient></defs>
-<path d="M16 16H884V1584H16Z" fill="#F7F8FA" stroke="url(#silver)" stroke-width="16"/>
-<path d="M34 42L52 28H848L866 46V1554L848 1572H52L34 1554Z" fill="none" stroke="#123A67" stroke-width="5"/>
-<path d="M42 50L58 38H842L858 52V1548L842 1562H58L42 1548Z" fill="none" stroke="#D3D9DF" stroke-width="3"/>
-<path d="M18 18l26 0-26 26M882 18h-26l26 26M18 1582h26l-26-26M882 1582h-26l26-26" fill="none" stroke="#F7F9FA" stroke-width="3"/>
+<defs>
+  <linearGradient id="silver" x1="0" x2="1">
+    <stop offset="0" stop-color="#88949F"/><stop offset=".08" stop-color="#E7ECEF"/>
+    <stop offset=".18" stop-color="#A5B0BA"/><stop offset=".34" stop-color="#FAFBFC"/>
+    <stop offset=".50" stop-color="#BCC6CE"/><stop offset=".67" stop-color="#FFFFFF"/>
+    <stop offset=".84" stop-color="#A6B2BC"/><stop offset="1" stop-color="#E6EBEF"/>
+  </linearGradient>
+  <linearGradient id="blue" x1="0" x2="1"><stop stop-color="#0D355F"/><stop offset=".55" stop-color="#1D6FB8"/><stop offset="1" stop-color="#0B2E55"/></linearGradient>
+</defs>
+<rect width="900" height="1600" fill="#AEB7C2"/>
+<path d="M14 14H886V1586H14Z" fill="url(#silver)" stroke="#F9FBFC" stroke-width="3"/>
+<path d="M30 40L54 23H846L871 47V1552L846 1578H54L30 1553Z" fill="#F8F9FA" stroke="#7E8A95" stroke-width="3"/>
+<path d="M38 48L58 32H840L861 52V1546L840 1568H58L39 1547Z" fill="none" stroke="#123B67" stroke-width="7"/>
+<path d="M46 55L63 41H835L853 57V1541L836 1560H63L47 1542Z" fill="none" stroke="#E5EAEE" stroke-width="3"/>
+<path d="M31 41L53 24H91L71 42L45 67Z" fill="#EEF2F5"/>
+<path d="M869 47L846 24H809L830 43L855 68Z" fill="#EEF2F5"/>
+<path d="M31 1553L54 1577H91L71 1558L45 1533Z" fill="#EEF2F5"/>
+<path d="M869 1552L846 1577H809L830 1558L855 1532Z" fill="#EEF2F5"/>
+<path d="M46 55h28l-18 18H46zM854 55h-28l18 18h10zM46 1541h28l-18-18H46zM854 1541h-28l18-18h10z" fill="url(#blue)"/>
+<path d="M20 20l26 0M20 20l0 26M880 20l-26 0M880 20l0 26M20 1580l26 0M20 1580l0-26M880 1580l-26 0M880 1580l0-26" stroke="#F9FBFC" stroke-width="2"/>
 </svg>

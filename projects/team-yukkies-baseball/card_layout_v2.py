@@ -5,67 +5,70 @@ CARD_HEIGHT = 1600
 ASPECT_RATIO = (9, 16)
 
 PALETTE = {
-    "ink": "#10224A",
-    "navy": "#123A67",
-    "blue": "#2376D8",
-    "blue_bright": "#3688EA",
-    "silver": "#C9D0D7",
-    "silver_dark": "#8E9AA5",
-    "paper": "#F7F8FA",
-    "paper_alt": "#EEF2F6",
-    "track": "#D7DDE4",
+    "ink": "#0B1942",
+    "navy": "#123B67",
+    "blue": "#1778D6",
+    "blue_bright": "#2D95F4",
+    "silver": "#C8D0D7",
+    "silver_dark": "#7F8C98",
+    "paper": "#F8F9FA",
+    "paper_alt": "#EEF2F5",
+    "track": "#D7DDE3",
     "white": "#FFFFFF",
 }
 
+# Reference images are 941 x 1672. These coordinates preserve the same
+# visual hierarchy on a normalized 900 x 1600 canvas.
 FRONT = {
-    "header": (28, 28, 844, 260),
-    "logo": (54, 56, 180, 168),
-    "name": (270, 64, 390, 62),
-    "team": (270, 124, 390, 42),
-    "ovr_label": (700, 54, 142, 44),
-    "ovr_value": (694, 94, 154, 112),
-    "photo_outer": (34, 220, 832, 1122),
-    "photo_inner": (42, 228, 816, 1106),
-    "position_badge": (40, 278, 128, 112),
-    "position_text": (48, 294, 112, 78),
-    "number": (170, 284, 110, 90),
-    "handedness": (742, 284, 114, 74),
-    "stats": (28, 1346, 844, 180),
-    "footer": (28, 1528, 844, 44),
+    "header": (46, 54, 806, 198),
+    "logo": (60, 74, 184, 144),
+    "name": (276, 70, 390, 62),
+    "team": (286, 126, 352, 42),
+    "ovr_label": (690, 67, 142, 42),
+    "ovr_value": (678, 103, 164, 106),
+    "photo_outer": (45, 205, 807, 1139),
+    "photo_inner": (53, 213, 791, 1122),
+    "position_badge": (49, 270, 124, 113),
+    "position_text": (55, 286, 112, 79),
+    "number": (176, 265, 132, 103),
+    "handedness": (713, 270, 140, 90),
+    "stats": (43, 1348, 814, 196),
+    "footer": (43, 1538, 814, 42),
 }
 
 BACK_COMMON = {
-    "header": (28, 28, 844, 268),
-    "logo": (54, 52, 176, 166),
-    "name": (270, 58, 430, 58),
-    "team": (270, 116, 430, 38),
-    "profile": (270, 158, 470, 44),
-    "franchise": (270, 202, 470, 34),
-    "number": (742, 56, 100, 72),
+    "header": (45, 54, 810, 240),
+    "logo": (61, 72, 185, 170),
+    "name": (276, 69, 428, 58),
+    "team": (276, 122, 430, 38),
+    "profile": (276, 160, 438, 42),
+    "franchise": (276, 199, 438, 34),
+    "number": (738, 61, 100, 72),
+    "tagline": (718, 143, 120, 82),
 }
 
 BACK_BATTER = {
-    "ratings": (28, 302, 844, 550),
-    "fielding": (28, 858, 844, 330),
-    "scouting": (28, 1194, 844, 378),
+    "ratings": (43, 304, 814, 542),
+    "fielding": (43, 856, 814, 330),
+    "scouting": (43, 1196, 814, 378),
 }
 
 BACK_PITCHER = {
-    "ratings": (28, 302, 844, 510),
-    "velocity": (28, 818, 844, 92),
-    "pitch_arsenal": (28, 916, 844, 280),
-    "scouting": (28, 1202, 844, 370),
+    "ratings": (43, 304, 814, 502),
+    "velocity": (43, 816, 814, 92),
+    "pitch_arsenal": (43, 918, 814, 282),
+    "scouting": (43, 1210, 814, 364),
 }
 
 RATING = {
     "title_left": 32,
-    "title_top": 20,
+    "title_top": 18,
     "label_width": 190,
     "bar_left": 205,
     "bar_right_margin": 80,
     "value_width": 54,
-    "scale_top": 74,
-    "rows_top": 106,
+    "scale_top": 76,
+    "rows_top": 112,
 }
 
 
