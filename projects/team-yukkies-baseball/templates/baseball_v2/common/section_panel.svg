@@ -1,10 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 100" preserveAspectRatio="none">
 <defs>
- <linearGradient id="silver" x1="0" x2="1"><stop stop-color="#A6B1BA"/><stop offset=".25" stop-color="#F9FAFB"/><stop offset=".58" stop-color="#C4CDD4"/><stop offset="1" stop-color="#A0ACB6"/></linearGradient>
- <linearGradient id="blue" x1="0" x2="1"><stop stop-color="#0D355F"/><stop offset=".65" stop-color="#1C74BC"/><stop offset="1" stop-color="#0A2C52"/></linearGradient>
+ <linearGradient id="silver" x1="0" x2="1">
+   <stop stop-color="#A8B2BB"/><stop offset=".22" stop-color="#F7F9FA"/>
+   <stop offset=".62" stop-color="#CBD2D8"/><stop offset="1" stop-color="#A5AFB8"/>
+ </linearGradient>
 </defs>
-<path d="M0 9L10 0H804L814 10V90L804 100H10L0 90Z" fill="#F9FAFB" stroke="url(#silver)" stroke-width="6"/>
-<path d="M5 12L13 5H801L809 13V87L801 95H13L5 87Z" fill="none" stroke="#123B67" stroke-width="4"/>
-<path d="M13 18L19 12H795L801 18V82L795 88H19L13 82Z" fill="none" stroke="#D4DAE0" stroke-width="2"/>
-<path d="M0 9L10 0H38L24 17H0ZM814 10L804 0H776L790 17H814ZM0 91L10 100H38L24 83H0ZM814 90L804 100H776L790 83H814Z" fill="url(#blue)"/>
+<path d="M8 1H806L813 8V92L806 99H8L1 92V8Z" fill="#FAFBFC" stroke="url(#silver)" stroke-width="3"/>
+<path d="M11 7H803L807 11V89L803 93H11L7 89V11Z" fill="none" stroke="#123B67" stroke-width="2"/>
+<path d="M18 9H796" stroke="#1D75BE" stroke-width="5"/>
+<path d="M22 61H792" stroke="#D7DDE3" stroke-width="1.5"/>
 </svg>

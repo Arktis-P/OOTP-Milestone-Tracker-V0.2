@@ -1,11 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 810 240">
 <defs>
- <linearGradient id="silver" x1="0" x2="1"><stop stop-color="#A7B2BC"/><stop offset=".28" stop-color="#F8FAFB"/><stop offset=".6" stop-color="#C4CCD3"/><stop offset="1" stop-color="#9CA9B3"/></linearGradient>
- <linearGradient id="blue" x1="0" x2="1"><stop stop-color="#0D355F"/><stop offset=".55" stop-color="#1C75BE"/><stop offset="1" stop-color="#0B2E56"/></linearGradient>
+ <linearGradient id="silver" x1="0" x2="1">
+   <stop stop-color="#A7B2BC"/><stop offset=".28" stop-color="#F8FAFB"/>
+   <stop offset=".62" stop-color="#C7CFD6"/><stop offset="1" stop-color="#A2ACB5"/>
+ </linearGradient>
 </defs>
-<path d="M0 0H776L810 34V208L779 240H0Z" fill="#F9FAFB" stroke="url(#silver)" stroke-width="6"/>
-<path d="M5 6H773L804 37V204L775 234H5Z" fill="none" stroke="#123B67" stroke-width="4"/>
-<path d="M14 15H768L794 41V198L769 225H14Z" fill="none" stroke="#D0D7DD" stroke-width="2"/>
-<path d="M0 218H810V240H0Z" fill="url(#blue)"/>
-<path d="M552 0h65l-15 18h-65z" fill="url(#blue)"/>
+<path d="M2 2H774L808 34V206L776 238H2Z" fill="#FAFBFC" stroke="url(#silver)" stroke-width="4"/>
+<path d="M8 8H771L802 39V202L772 232H8Z" fill="none" stroke="#123B67" stroke-width="2.5"/>
+<path d="M18 18H762" stroke="#1D75BE" stroke-width="5"/>
+<path d="M18 216H780" stroke="#123B67" stroke-width="4"/>
 </svg>

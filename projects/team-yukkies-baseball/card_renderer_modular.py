@@ -60,6 +60,15 @@ def _arm_slot(value: str) -> str:
     return labels.get(value.upper(), value.replace("_", " ").title())
 
 
+def _contains_hangul(text: str) -> bool:
+    return any(
+        "\u1100" <= ch <= "\u11ff"
+        or "\u3130" <= ch <= "\u318f"
+        or "\uac00" <= ch <= "\ud7a3"
+        for ch in text
+    )
+
+
 class SvgComponentLibrary:
     def __init__(self, root: Path) -> None:
         self.root = root
@@ -150,7 +159,12 @@ class ModularCardRenderer:
         italic: bool = False,
     ) -> None:
         painter.setPen(color)
-        painter.setFont(self._font(size, bold, condensed=condensed, italic=italic))
+        # Never force Korean through the condensed Latin display face.
+        # This is the main safeguard against the "fan-translation patch" look.
+        use_condensed = condensed and not _contains_hangul(text)
+        painter.setFont(
+            self._font(size, bold, condensed=use_condensed, italic=italic)
+        )
         painter.drawText(rect, align, text)
 
     def _fit_text(
@@ -167,8 +181,9 @@ class ModularCardRenderer:
         condensed: bool = True,
     ) -> None:
         chosen = size
+        use_condensed = condensed and not _contains_hangul(text)
         while chosen > min_size:
-            font = self._font(chosen, bold, condensed=condensed)
+            font = self._font(chosen, bold, condensed=use_condensed)
             if QFontMetricsF(font).horizontalAdvance(text) <= rect.width():
                 break
             chosen -= 1
@@ -180,7 +195,35 @@ class ModularCardRenderer:
             color,
             bold,
             align,
-            condensed=condensed,
+            condensed=use_condensed,
+        )
+
+    def _fit_wrapped_text(
+        self,
+        painter: QPainter,
+        rect: QRectF,
+        text: str,
+        size: int,
+        min_size: int,
+        color: QColor = INK,
+    ) -> None:
+        flags = Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap
+        chosen = size
+        while chosen > min_size:
+            font = self._font(chosen, False, condensed=False)
+            bounds = QFontMetricsF(font).boundingRect(rect, flags, text)
+            if bounds.height() <= rect.height():
+                break
+            chosen -= 1
+        self._text(
+            painter,
+            rect,
+            text,
+            chosen,
+            color,
+            False,
+            flags,
+            condensed=False,
         )
 
     def _draw_image(
@@ -577,18 +620,6 @@ class ModularCardRenderer:
             Qt.AlignRight | Qt.AlignVCenter,
             condensed=True,
         )
-        tagline = player.get("team_tagline", "PLAY\nBRIGHTER\nTOGETHER")
-        self._text(
-            painter,
-            _rect(BACK_COMMON["tagline"]),
-            tagline,
-            TYPOGRAPHY["back_tagline"],
-            MUTED,
-            True,
-            Qt.AlignRight | Qt.AlignVCenter,
-            condensed=True,
-            italic=True,
-        )
 
     def _draw_rating_panel(
         self,
@@ -600,7 +631,7 @@ class ModularCardRenderer:
         self.components.draw(painter, "common/section_panel", panel)
         self._text(
             painter,
-            QRectF(panel.x() + RATING["title_left"], panel.y() + 14, 470, 58),
+            QRectF(panel.x() + RATING["title_left"], panel.y() + 16, 470, 42),
             "20–80 Detailed Ratings",
             TYPOGRAPHY["section_title"],
             INK,
@@ -609,7 +640,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(panel.right() - 320, panel.y() + 21, 286, 48),
+            QRectF(panel.right() - 320, panel.y() + 18, 286, 38),
             "SCALE: 20 (LOW) – 80 (ELITE)",
             TYPOGRAPHY["scale_note"],
             NAVY,
@@ -728,7 +759,7 @@ class ModularCardRenderer:
         self.components.draw(painter, "common/section_panel", panel)
         self._text(
             painter,
-            QRectF(panel.x() + 32, panel.y() + 12, 360, 52),
+            QRectF(panel.x() + 32, panel.y() + 16, 360, 42),
             "Fielding Positions",
             TYPOGRAPHY["section_title"],
             INK,
@@ -804,7 +835,7 @@ class ModularCardRenderer:
         self.components.draw(painter, "common/section_panel", panel)
         self._text(
             painter,
-            QRectF(panel.x() + 32, panel.y() + 12, 360, 52),
+            QRectF(panel.x() + 32, panel.y() + 16, 360, 42),
             "Scouting Report",
             TYPOGRAPHY["section_title"],
             INK,
@@ -820,30 +851,18 @@ class ModularCardRenderer:
             int(panel.y() + 68),
         )
         painter.restore()
-        self._text(
+        self._fit_wrapped_text(
             painter,
             QRectF(
                 panel.x() + 34,
                 panel.y() + 82,
                 panel.width() - 68,
-                panel.height() - 120,
+                panel.height() - 104,
             ),
             player.get("scouting_report", "스카우팅 리포트가 없습니다."),
             TYPOGRAPHY["scouting_body"],
+            TYPOGRAPHY["scouting_body_min"],
             INK,
-            False,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
-            condensed=False,
-        )
-        self._text(
-            painter,
-            QRectF(panel.x(), panel.bottom() - 38, panel.width(), 28),
-            player.team_name.upper(),
-            TYPOGRAPHY["footer"],
-            NAVY,
-            True,
-            Qt.AlignCenter,
-            condensed=True,
         )
 
     def _draw_batter_back(self, painter: QPainter, player: Any) -> None:

@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 92">
 <defs>
- <linearGradient id="b" x1="0" x2="1"><stop stop-color="#1D72B9"/><stop offset="1" stop-color="#0B315A"/></linearGradient>
- <linearGradient id="silver" x1="0" x2="1"><stop stop-color="#A6B1BA"/><stop offset=".5" stop-color="#F8FAFB"/><stop offset="1" stop-color="#A4AFB8"/></linearGradient>
+ <linearGradient id="b" x1="0" x2="1"><stop stop-color="#257CC0"/><stop offset="1" stop-color="#103E6B"/></linearGradient>
+ <linearGradient id="silver" x1="0" x2="1"><stop stop-color="#AAB4BD"/><stop offset=".5" stop-color="#F8FAFB"/><stop offset="1" stop-color="#A6B0B9"/></linearGradient>
 </defs>
-<path d="M0 0H814V92H0Z" fill="#F9FAFB" stroke="url(#silver)" stroke-width="6"/>
-<path d="M4 5H810V87H4Z" fill="none" stroke="#123B67" stroke-width="4"/>
-<path d="M465 4H810V88H426Z" fill="url(#b)"/>
-<path d="M426 4H481L443 88H388Z" fill="#F9FAFB" stroke="#C8D0D7" stroke-width="2"/>
+<path d="M3 3H811V89H3Z" fill="#FAFBFC" stroke="url(#silver)" stroke-width="3"/>
+<path d="M8 8H806V84H8Z" fill="none" stroke="#123B67" stroke-width="2"/>
+<path d="M457 8H806V84H424L452 8Z" fill="url(#b)"/>
+<path d="M414 8H460L430 84H384Z" fill="#FAFBFC"/>
 </svg>

@@ -23,54 +23,51 @@ PALETTE = {
 # The reference cards are 941 x 1672, so these values preserve their
 # visual hierarchy instead of depending on monitor DPI / point sizes.
 TYPOGRAPHY = {
-    # Front: keep the OVR dominant, but pull the rest back toward the
-    # proportions visible in the current 450x800 preview/reference pair.
-    "front_name": 60,
-    "front_name_min": 48,
-    "front_team": 30,
-    "ovr_label": 40,
-    "ovr_value": 122,
-    "position": 66,
-    "number": 66,
-    "handedness": 52,
-    "stat_label": 30,
-    "stat_value": 62,
-    "stat_value_velocity": 54,
-    "stat_unit": 22,
-    "footer": 22,
+    # Front identity: photo first, metadata second.
+    "front_name": 52,
+    "front_name_min": 44,
+    "front_team": 24,
+    "ovr_label": 34,
+    "ovr_value": 110,
+    "position": 58,
+    "number": 58,
+    "handedness": 44,
+    "stat_label": 26,
+    "stat_value": 52,
+    "stat_value_velocity": 48,
+    "stat_unit": 18,
+    "footer": 18,
 
-    # Back header.
-    "back_name": 58,
-    "back_name_min": 46,
-    "back_team": 30,
-    "back_profile": 33,
-    "back_profile_min": 27,
-    "back_franchise": 28,
-    "back_number": 62,
-    "back_tagline": 25,
+    # Back identity.
+    "back_name": 50,
+    "back_name_min": 42,
+    "back_team": 24,
+    "back_profile": 28,
+    "back_profile_min": 24,
+    "back_franchise": 24,
+    "back_number": 56,
+    "back_tagline": 20,
 
-    # Back data panels. The previous pass was too large and collided with
-    # the decorative top rails; these values restore the reference hierarchy.
-    "section_title": 42,
-    "scale_note": 24,
-    "scale_tick": 24,
-    "rating_label": 32,
-    "rating_value": 34,
-    "position_chip": 30,
-    "position_chip_value": 23,
-    "field_role": 28,
-    "field_value": 34,
-
-    # Scouting copy is intentionally smaller than the rating labels.
-    "scouting_body": 26,
+    # Back data hierarchy: restrained, print-card-like.
+    "section_title": 34,
+    "scale_note": 18,
+    "scale_tick": 20,
+    "rating_label": 28,
+    "rating_value": 30,
+    "position_chip": 26,
+    "position_chip_value": 20,
+    "field_role": 22,
+    "field_value": 28,
+    "scouting_body": 22,
+    "scouting_body_min": 17,
 
     # Pitcher-only data.
-    "velocity_value": 84,
-    "velocity_unit": 42,
-    "pitch_label": 28,
-    "pitch_label_min": 23,
-    "pitch_value": 34,
-    "small_note": 20,
+    "velocity_value": 72,
+    "velocity_unit": 34,
+    "pitch_label": 24,
+    "pitch_label_min": 20,
+    "pitch_value": 30,
+    "small_note": 18,
 }
 
 # Coordinates below are the reference composition mapped from 941 x 1672
@@ -105,16 +102,16 @@ BACK_COMMON = {
 }
 
 BACK_BATTER = {
-    "ratings": (35, 305, 832, 528),
-    "fielding": (35, 838, 832, 316),
-    "scouting": (35, 1164, 832, 377),
+    "ratings": (35, 310, 832, 500),
+    "fielding": (35, 820, 832, 290),
+    "scouting": (35, 1120, 832, 421),
 }
 
 BACK_PITCHER = {
-    "ratings": (35, 305, 832, 475),
-    "velocity": (35, 786, 832, 94),
-    "pitch_arsenal": (35, 888, 832, 284),
-    "scouting": (35, 1180, 832, 361),
+    "ratings": (35, 310, 832, 440),
+    "velocity": (35, 760, 832, 92),
+    "pitch_arsenal": (35, 862, 832, 248),
+    "scouting": (35, 1120, 832, 421),
 }
 
 RATING = {
@@ -124,8 +121,8 @@ RATING = {
     "bar_left": 206,
     "bar_right_margin": 82,
     "value_width": 57,
-    "scale_top": 80,
-    "rows_top": 122,
+    "scale_top": 68,
+    "rows_top": 98,
 }
 
 
