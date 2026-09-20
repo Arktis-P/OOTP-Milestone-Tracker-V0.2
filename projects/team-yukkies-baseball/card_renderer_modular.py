@@ -162,10 +162,10 @@ class ModularCardRenderer:
 
     def _draw_front(self, painter: QPainter, player: Any) -> None:
         # Header: logo -> name/team -> OVR, matching a conventional baseball card.
-        header = QRectF(42, 38, 664, 126)
+        header = QRectF(30, 30, 690, 168)
         self.components.draw(painter, "panel_header", header)
 
-        logo_rect = QRectF(58, 52, 92, 92)
+        logo_rect = QRectF(44, 44, 160, 146)
         if not self._draw_image(
             painter,
             player.team_logo,
@@ -185,7 +185,7 @@ class ModularCardRenderer:
 
         self._text(
             painter,
-            QRectF(171, 48, 386, 48),
+            QRectF(224, 48, 330, 52),
             player.name,
             23,
             INK,
@@ -193,7 +193,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(171, 91, 386, 25),
+            QRectF(224, 96, 330, 28),
             player.team_name.upper(),
             9,
             NAVY,
@@ -201,18 +201,18 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(171, 117, 386, 24),
+            QRectF(224, 124, 330, 24),
             player.get("series"),
             7,
             MUTED,
             False,
         )
 
-        ovr_rect = QRectF(579, 43, 112, 112)
+        ovr_rect = QRectF(565, 41, 140, 145)
         self.components.draw(painter, "badge_ovr", ovr_rect)
         self._text(
             painter,
-            QRectF(590, 53, 90, 26),
+            QRectF(580, 54, 110, 28),
             "OVR",
             8,
             WHITE,
@@ -221,7 +221,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(587, 76, 96, 65),
+            QRectF(575, 78, 120, 80),
             str(player.number("overall")),
             29,
             WHITE,
@@ -230,8 +230,8 @@ class ModularCardRenderer:
         )
 
         # Player image is now the dominant visual area.
-        photo_frame = QRectF(42, 168, 664, 652)
-        photo_inner = QRectF(50, 176, 648, 636)
+        photo_frame = QRectF(30, 150, 690, 710)
+        photo_inner = QRectF(38, 158, 674, 694)
 
         clip = QPainterPath()
         clip.addRect(photo_inner)
@@ -242,7 +242,7 @@ class ModularCardRenderer:
             painter.fillRect(photo_inner, PLACEHOLDER)
             self._text(
                 painter,
-                QRectF(80, 428, 588, 48),
+                QRectF(80, 438, 590, 48),
                 "PLAYER IMAGE",
                 17,
                 MUTED,
@@ -251,7 +251,7 @@ class ModularCardRenderer:
             )
             self._text(
                 painter,
-                QRectF(80, 474, 588, 30),
+                QRectF(80, 484, 590, 30),
                 "우측 패널에서 이미지를 등록하세요",
                 9,
                 MUTED,
@@ -263,11 +263,11 @@ class ModularCardRenderer:
         self.components.draw(painter, "frame_image", photo_frame)
 
         # Position badge and uniform number sit over the photograph, like the reference.
-        pos_rect = QRectF(49, 185, 116, 116)
+        pos_rect = QRectF(39, 214, 122, 114)
         self.components.draw(painter, "badge_position", pos_rect)
         self._text(
             painter,
-            QRectF(58, 204, 98, 58),
+            QRectF(49, 228, 102, 56),
             player.position,
             26,
             WHITE,
@@ -277,7 +277,7 @@ class ModularCardRenderer:
 
         self._text(
             painter,
-            QRectF(169, 204, 100, 56),
+            QRectF(171, 224, 100, 52),
             f"#{player.get('uniform_number', '-')}",
             20,
             NAVY,
@@ -293,7 +293,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(169, 250, 215, 29),
+            QRectF(171, 268, 215, 28),
             profile,
             9,
             MUTED,
@@ -302,17 +302,17 @@ class ModularCardRenderer:
 
         # Footer stat strip.
         stats = self._front_stats(player)
-        start_x = 42
+        start_x = 30
         gap = 6
-        cell_w = (664 - gap * 5) / 6
+        cell_w = (690 - gap * 5) / 6
 
         for index, (label, value) in enumerate(stats):
             x = start_x + index * (cell_w + gap)
-            rect = QRectF(x, 838, cell_w, 112)
+            rect = QRectF(x, 870, cell_w, 106)
             self.components.draw(painter, "stat_cell", rect)
             self._text(
                 painter,
-                QRectF(x + 5, 848, cell_w - 10, 28),
+                QRectF(x + 5, 878, cell_w - 10, 26),
                 label,
                 8,
                 MUTED,
@@ -323,7 +323,7 @@ class ModularCardRenderer:
             suffix = " km/h" if label == "VEL" else ""
             self._text(
                 painter,
-                QRectF(x + 5, 878, cell_w - 10, 52),
+                QRectF(x + 5, 906, cell_w - 10, 48),
                 f"{value}{suffix}",
                 10 if label == "VEL" else 18,
                 NAVY,
@@ -334,11 +334,11 @@ class ModularCardRenderer:
         self.components.draw(
             painter,
             "divider",
-            QRectF(74, 974, 602, 4),
+            QRectF(72, 986, 606, 4),
         )
         self._text(
             painter,
-            QRectF(74, 980, 602, 26),
+            QRectF(72, 991, 606, 22),
             "TEAM YUKKIES",
             7,
             MUTED,
@@ -347,11 +347,13 @@ class ModularCardRenderer:
         )
 
     def _draw_back(self, painter: QPainter, player: Any) -> None:
-        # Conventional baseball-card header.
-        header = QRectF(42, 38, 664, 138)
+        # Reference card proportions:
+        # header ~16%, batter ratings ~36%, fielding ~22%, report ~17%.
+        # Pitcher uses a shorter rating block to make room for velocity + pitch mix.
+        header = QRectF(30, 30, 690, 170)
         self.components.draw(painter, "panel_header", header)
 
-        logo_rect = QRectF(58, 54, 92, 92)
+        logo_rect = QRectF(46, 47, 142, 136)
         if not self._draw_image(
             painter,
             player.team_logo,
@@ -370,7 +372,7 @@ class ModularCardRenderer:
 
         self._text(
             painter,
-            QRectF(171, 51, 406, 44),
+            QRectF(215, 49, 390, 46),
             player.name,
             22,
             INK,
@@ -378,7 +380,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(171, 91, 406, 24),
+            QRectF(215, 91, 390, 25),
             player.team_name.upper(),
             8,
             MUTED,
@@ -394,7 +396,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(171, 116, 430, 28),
+            QRectF(215, 119, 420, 31),
             f"{player.position} / {bats}-{throws}{arm_slot}",
             10,
             NAVY,
@@ -402,33 +404,11 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(606, 53, 72, 44),
+            QRectF(625, 48, 66, 50),
             f"#{player.get('uniform_number', '-')}",
-            19,
+            20,
             MUTED,
             True,
-            Qt.AlignRight | Qt.AlignVCenter,
-        )
-
-        # Ratings block: wide, dense, and chart-like.
-        rating_panel = QRectF(42, 190, 664, 356)
-        self.components.draw(painter, "panel_section", rating_panel)
-
-        self._text(
-            painter,
-            QRectF(62, 205, 310, 30),
-            "20–80 RATING BREAKDOWN",
-            11,
-            NAVY,
-            True,
-        )
-        self._text(
-            painter,
-            QRectF(482, 205, 198, 30),
-            "20   30   40   50   60   70   80",
-            7,
-            MUTED,
-            False,
             Qt.AlignRight | Qt.AlignVCenter,
         )
 
@@ -453,12 +433,38 @@ class ModularCardRenderer:
             ]
         )
 
-        start_y = 251
-        row_h = 37 if len(rows) == 7 else 42
+        if player.is_pitcher:
+            rating_panel = QRectF(30, 208, 690, 326)
+            start_y = 255
+            row_h = 43
+        else:
+            rating_panel = QRectF(30, 208, 690, 374)
+            start_y = 258
+            row_h = 41
+
+        self.components.draw(painter, "panel_section", rating_panel)
+        self._text(
+            painter,
+            QRectF(52, 222, 320, 32),
+            "20–80 RATING BREAKDOWN",
+            11,
+            NAVY,
+            True,
+        )
+        self._text(
+            painter,
+            QRectF(472, 224, 218, 28),
+            "20   30   40   50   60   70   80",
+            7,
+            MUTED,
+            False,
+            Qt.AlignRight | Qt.AlignVCenter,
+        )
+
         for index, (label, key) in enumerate(rows):
             self._draw_rating_row(
                 painter,
-                QRectF(62, start_y + index * row_h, 620, row_h - 4),
+                QRectF(52, start_y + index * row_h, 638, row_h - 5),
                 label,
                 player.number(key),
             )
@@ -477,7 +483,7 @@ class ModularCardRenderer:
     ) -> None:
         self._text(
             painter,
-            QRectF(rect.x(), rect.y(), 128, rect.height()),
+            QRectF(rect.x(), rect.y(), 136, rect.height()),
             label,
             8,
             INK,
@@ -485,9 +491,9 @@ class ModularCardRenderer:
         )
 
         track = QRectF(
-            rect.x() + 132,
+            rect.x() + 142,
             rect.y() + rect.height() / 2 - 6,
-            rect.width() - 180,
+            rect.width() - 194,
             12,
         )
         self.components.draw(painter, "bar_track", track)
@@ -517,13 +523,13 @@ class ModularCardRenderer:
         )
 
     def _draw_batter_lower(self, painter: QPainter, player: Any) -> None:
-        # Reference-like horizontal fielding section.
-        field_panel = QRectF(42, 560, 664, 250)
+        # Reference: fielding section is a wide horizontal band, roughly 22% of card height.
+        field_panel = QRectF(30, 590, 690, 232)
         self.components.draw(painter, "panel_section", field_panel)
 
         self._text(
             painter,
-            QRectF(62, 575, 280, 30),
+            QRectF(52, 603, 290, 31),
             "FIELDING POSITIONS",
             10,
             NAVY,
@@ -536,10 +542,10 @@ class ModularCardRenderer:
             if value > 0:
                 active_positions.append((pos, value))
 
-        list_y = 619
+        list_y = 642
         for index, (pos, value) in enumerate(active_positions[:4]):
             primary = pos == player.position
-            chip_rect = QRectF(62, list_y + index * 43, 58, 32)
+            chip_rect = QRectF(52, list_y + index * 40, 60, 31)
             self.components.draw(
                 painter,
                 "position_chip_primary" if primary else "position_chip",
@@ -556,7 +562,7 @@ class ModularCardRenderer:
             )
             self._text(
                 painter,
-                QRectF(132, list_y + index * 43, 122, 32),
+                QRectF(126, list_y + index * 40, 125, 31),
                 "Primary" if primary else "Secondary",
                 8,
                 MUTED,
@@ -564,7 +570,7 @@ class ModularCardRenderer:
             )
             self._text(
                 painter,
-                QRectF(258, list_y + index * 43, 40, 32),
+                QRectF(254, list_y + index * 40, 42, 31),
                 str(value),
                 9,
                 NAVY,
@@ -572,21 +578,22 @@ class ModularCardRenderer:
                 Qt.AlignRight | Qt.AlignVCenter,
             )
 
+        # Reference ratio: list ~40% width, field diagram ~50% width.
         self.components.draw(
             painter,
             "field_diamond",
-            QRectF(405, 602, 245, 190),
+            QRectF(353, 616, 330, 194),
         )
 
         positions = {
-            "C": (528, 771),
-            "1B": (611, 710),
-            "2B": (578, 651),
-            "3B": (445, 710),
-            "SS": (478, 651),
-            "LF": (424, 618),
-            "CF": (528, 598),
-            "RF": (632, 618),
+            "C": (518, 792),
+            "1B": (627, 731),
+            "2B": (590, 671),
+            "3B": (409, 731),
+            "SS": (446, 671),
+            "LF": (383, 637),
+            "CF": (518, 620),
+            "RF": (653, 637),
         }
 
         for pos, (cx, cy) in positions.items():
@@ -595,7 +602,7 @@ class ModularCardRenderer:
                 continue
 
             primary = pos == player.position
-            chip_rect = QRectF(cx - 29, cy - 19, 58, 38)
+            chip_rect = QRectF(cx - 29, cy - 18, 58, 36)
             self.components.draw(
                 painter,
                 "position_chip_primary" if primary else "position_chip",
@@ -611,13 +618,11 @@ class ModularCardRenderer:
                 Qt.AlignCenter,
             )
 
-        # Full-width scouting report below, as in the reference card.
-        report_panel = QRectF(42, 826, 664, 178)
+        report_panel = QRectF(30, 830, 690, 174)
         self.components.draw(painter, "panel_section", report_panel)
-
         self._text(
             painter,
-            QRectF(62, 840, 280, 30),
+            QRectF(52, 843, 300, 31),
             "SCOUTING REPORT",
             10,
             NAVY,
@@ -626,11 +631,11 @@ class ModularCardRenderer:
         self.components.draw(
             painter,
             "divider",
-            QRectF(62, 875, 620, 4),
+            QRectF(52, 878, 646, 4),
         )
         self._text(
             painter,
-            QRectF(62, 887, 620, 92),
+            QRectF(52, 889, 646, 91),
             player.get("scouting_report", "스카우팅 리포트가 없습니다."),
             9,
             INK,
@@ -639,12 +644,12 @@ class ModularCardRenderer:
         )
 
     def _draw_pitcher_lower(self, painter: QPainter, player: Any) -> None:
-        velocity = QRectF(42, 560, 664, 70)
+        # Reference pitcher back: rating block -> thin velocity banner -> pitch mix -> report.
+        velocity = QRectF(30, 542, 690, 68)
         self.components.draw(painter, "velocity_banner", velocity)
-
         self._text(
             painter,
-            QRectF(62, 571, 270, 44),
+            QRectF(52, 552, 280, 46),
             "FASTBALL VELOCITY",
             10,
             NAVY,
@@ -652,7 +657,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(386, 566, 292, 50),
+            QRectF(390, 548, 302, 50),
             f"{player.number('velocity_kmh')} km/h",
             20,
             WHITE,
@@ -660,12 +665,11 @@ class ModularCardRenderer:
             Qt.AlignRight | Qt.AlignVCenter,
         )
 
-        pitch_panel = QRectF(42, 644, 664, 210)
+        pitch_panel = QRectF(30, 618, 690, 206)
         self.components.draw(painter, "panel_section", pitch_panel)
-
         self._text(
             painter,
-            QRectF(62, 658, 260, 30),
+            QRectF(52, 630, 270, 30),
             "PITCH MIX",
             10,
             NAVY,
@@ -673,7 +677,7 @@ class ModularCardRenderer:
         )
         self._text(
             painter,
-            QRectF(540, 658, 142, 30),
+            QRectF(548, 630, 144, 30),
             "20–80 GRADE",
             7,
             MUTED,
@@ -705,20 +709,18 @@ class ModularCardRenderer:
         ]
 
         for index, (label, value) in enumerate(active[:5]):
-            y = 697 + index * 29
-
+            y = 666 + index * 29
             self._text(
                 painter,
-                QRectF(62, y, 190, 26),
+                QRectF(52, y, 190, 26),
                 label,
                 8,
                 INK,
                 True,
             )
 
-            track = QRectF(264, y + 7, 320, 12)
+            track = QRectF(248, y + 7, 344, 12)
             self.components.draw(painter, "bar_track", track)
-
             ratio = max(0.0, min(1.0, (value - 20) / 60))
             if ratio > 0:
                 painter.save()
@@ -735,7 +737,7 @@ class ModularCardRenderer:
 
             self._text(
                 painter,
-                QRectF(600, y, 72, 26),
+                QRectF(610, y, 78, 26),
                 str(value),
                 9,
                 NAVY,
@@ -743,12 +745,11 @@ class ModularCardRenderer:
                 Qt.AlignRight | Qt.AlignVCenter,
             )
 
-        report_panel = QRectF(42, 870, 664, 134)
+        report_panel = QRectF(30, 832, 690, 172)
         self.components.draw(painter, "panel_section", report_panel)
-
         self._text(
             painter,
-            QRectF(62, 882, 280, 28),
+            QRectF(52, 844, 300, 29),
             "SCOUTING REPORT",
             10,
             NAVY,
@@ -757,14 +758,15 @@ class ModularCardRenderer:
         self.components.draw(
             painter,
             "divider",
-            QRectF(62, 912, 620, 4),
+            QRectF(52, 877, 646, 4),
         )
         self._text(
             painter,
-            QRectF(62, 920, 620, 62),
+            QRectF(52, 888, 646, 91),
             player.get("scouting_report", "스카우팅 리포트가 없습니다."),
             8,
             INK,
             False,
             Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
         )
+
