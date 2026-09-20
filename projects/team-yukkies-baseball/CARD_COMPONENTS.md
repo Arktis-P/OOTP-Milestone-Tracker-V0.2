@@ -44,3 +44,46 @@
 - 카드 정보 계층은 장식보다 타이포그래피와 여백으로 표현
 
 현재 \`card_studio.py\`는 기존 내부 QPainter 카드 렌더러 대신 이 모듈형 SVG 렌더러를 사용한다.
+
+
+## Reference layout ratios
+
+현재 BASE 카드의 영역 비율은 사용자가 제공한 타자/투수 카드 레퍼런스를 기준으로 맞춘다.
+
+### Front
+
+카드 높이 1050 기준:
+
+- Header / identity: `y=30..198` — 약 16%
+- Player artwork: `y=150..860` — 약 68%, header 뒤로 48px 겹침
+- Position badge: artwork 상단 좌측 overlay
+- Summary stats: `y=870..976` — 약 10%
+- Footer: `y=986..1013` — 약 3%
+
+가로 방향은 `x=30..720`을 주 콘텐츠 폭으로 사용한다.
+
+Header 내부 비율:
+
+- Team logo: 약 23%
+- Player identity: 약 48%
+- OVR badge: 약 20%
+- 나머지는 간격/프레임
+
+### Back — Batter
+
+- Header: `y=30..200` — 약 16%
+- Rating breakdown: `y=208..582` — 약 36%
+- Fielding positions: `y=590..822` — 약 22%
+- Scouting report: `y=830..1004` — 약 17%
+
+Fielding 영역은 왼쪽 약 40%를 position list, 오른쪽 약 50%를 diamond diagram에 사용한다.
+
+### Back — Pitcher
+
+- Header: `y=30..200` — 약 16%
+- Rating breakdown: `y=208..534` — 약 31%
+- Velocity banner: `y=542..610` — 약 6.5%
+- Pitch mix: `y=618..824` — 약 20%
+- Scouting report: `y=832..1004` — 약 16%
+
+타자와 투수 뒷면은 같은 section height를 공유하지 않는다. 레퍼런스에서 투수 카드가 rating 영역을 줄이고 velocity/pitch mix에 공간을 할당하므로 별도 layout을 유지한다.
