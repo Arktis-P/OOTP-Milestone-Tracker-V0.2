@@ -161,7 +161,41 @@ class ModularCardRenderer:
         ]
 
     def _draw_front(self, painter: QPainter, player: Any) -> None:
-        # Header: logo -> name/team -> OVR, matching a conventional baseball card.
+        # Reference composition: the artwork is the dominant layer and extends behind
+        # the top identity banner. Header/OVR/logo are then composited above it.
+        photo_frame = QRectF(30, 150, 690, 710)
+        photo_inner = QRectF(38, 158, 674, 694)
+
+        clip = QPainterPath()
+        clip.addRect(photo_inner)
+        painter.save()
+        painter.setClipPath(clip)
+
+        if not self._draw_image(painter, player.player_image, photo_inner):
+            painter.fillRect(photo_inner, PLACEHOLDER)
+            self._text(
+                painter,
+                QRectF(80, 438, 590, 48),
+                "PLAYER IMAGE",
+                17,
+                MUTED,
+                True,
+                Qt.AlignCenter,
+            )
+            self._text(
+                painter,
+                QRectF(80, 484, 590, 30),
+                "우측 패널에서 이미지를 등록하세요",
+                9,
+                MUTED,
+                False,
+                Qt.AlignCenter,
+            )
+
+        painter.restore()
+        self.components.draw(painter, "frame_image", photo_frame)
+
+        # Identity header overlays the photograph, like the supplied baseball-card reference.
         header = QRectF(30, 30, 690, 168)
         self.components.draw(painter, "panel_header", header)
 
@@ -223,46 +257,13 @@ class ModularCardRenderer:
             painter,
             QRectF(575, 78, 120, 80),
             str(player.number("overall")),
-            29,
+            30,
             WHITE,
             True,
             Qt.AlignCenter,
         )
 
-        # Player image is now the dominant visual area.
-        photo_frame = QRectF(30, 150, 690, 710)
-        photo_inner = QRectF(38, 158, 674, 694)
-
-        clip = QPainterPath()
-        clip.addRect(photo_inner)
-        painter.save()
-        painter.setClipPath(clip)
-
-        if not self._draw_image(painter, player.player_image, photo_inner):
-            painter.fillRect(photo_inner, PLACEHOLDER)
-            self._text(
-                painter,
-                QRectF(80, 438, 590, 48),
-                "PLAYER IMAGE",
-                17,
-                MUTED,
-                True,
-                Qt.AlignCenter,
-            )
-            self._text(
-                painter,
-                QRectF(80, 484, 590, 30),
-                "우측 패널에서 이미지를 등록하세요",
-                9,
-                MUTED,
-                False,
-                Qt.AlignCenter,
-            )
-
-        painter.restore()
-        self.components.draw(painter, "frame_image", photo_frame)
-
-        # Position badge and uniform number sit over the photograph, like the reference.
+        # Position plate overlaps the upper-left of the artwork.
         pos_rect = QRectF(39, 214, 122, 114)
         self.components.draw(painter, "badge_position", pos_rect)
         self._text(
@@ -274,7 +275,6 @@ class ModularCardRenderer:
             True,
             Qt.AlignCenter,
         )
-
         self._text(
             painter,
             QRectF(171, 224, 100, 52),
@@ -300,7 +300,7 @@ class ModularCardRenderer:
             True,
         )
 
-        # Footer stat strip.
+        # Bottom summary strip: compact, nearly full card width.
         stats = self._front_stats(player)
         start_x = 30
         gap = 6
