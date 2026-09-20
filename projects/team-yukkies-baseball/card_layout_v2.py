@@ -23,43 +23,54 @@ PALETTE = {
 # The reference cards are 941 x 1672, so these values preserve their
 # visual hierarchy instead of depending on monitor DPI / point sizes.
 TYPOGRAPHY = {
-    "front_name": 70,
-    "front_name_min": 54,
-    "front_team": 38,
-    "ovr_label": 46,
-    "ovr_value": 126,
-    "position": 78,
-    "number": 74,
-    "handedness": 62,
-    "stat_label": 39,
-    "stat_value": 72,
-    "stat_value_velocity": 62,
-    "stat_unit": 24,
-    "footer": 25,
-    "back_name": 66,
-    "back_name_min": 50,
-    "back_team": 36,
-    "back_profile": 36,
-    "back_profile_min": 29,
-    "back_franchise": 30,
-    "back_number": 70,
-    "back_tagline": 27,
-    "section_title": 54,
-    "scale_note": 28,
-    "scale_tick": 27,
-    "rating_label": 40,
-    "rating_value": 43,
-    "position_chip": 34,
-    "position_chip_value": 26,
-    "field_role": 31,
-    "field_value": 38,
-    "scouting_body": 35,
+    # Front: keep the OVR dominant, but pull the rest back toward the
+    # proportions visible in the current 450x800 preview/reference pair.
+    "front_name": 60,
+    "front_name_min": 48,
+    "front_team": 30,
+    "ovr_label": 40,
+    "ovr_value": 122,
+    "position": 66,
+    "number": 66,
+    "handedness": 52,
+    "stat_label": 30,
+    "stat_value": 62,
+    "stat_value_velocity": 54,
+    "stat_unit": 22,
+    "footer": 22,
+
+    # Back header.
+    "back_name": 58,
+    "back_name_min": 46,
+    "back_team": 30,
+    "back_profile": 33,
+    "back_profile_min": 27,
+    "back_franchise": 28,
+    "back_number": 62,
+    "back_tagline": 25,
+
+    # Back data panels. The previous pass was too large and collided with
+    # the decorative top rails; these values restore the reference hierarchy.
+    "section_title": 42,
+    "scale_note": 24,
+    "scale_tick": 24,
+    "rating_label": 32,
+    "rating_value": 34,
+    "position_chip": 30,
+    "position_chip_value": 23,
+    "field_role": 28,
+    "field_value": 34,
+
+    # Scouting copy is intentionally smaller than the rating labels.
+    "scouting_body": 26,
+
+    # Pitcher-only data.
     "velocity_value": 84,
-    "velocity_unit": 45,
-    "pitch_label": 35,
-    "pitch_label_min": 27,
-    "pitch_value": 40,
-    "small_note": 22,
+    "velocity_unit": 42,
+    "pitch_label": 28,
+    "pitch_label_min": 23,
+    "pitch_value": 34,
+    "small_note": 20,
 }
 
 # Coordinates below are the reference composition mapped from 941 x 1672

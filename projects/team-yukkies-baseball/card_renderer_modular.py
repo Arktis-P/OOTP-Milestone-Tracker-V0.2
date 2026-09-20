@@ -130,7 +130,9 @@ class ModularCardRenderer:
         font = QFont("Bahnschrift" if condensed else "Malgun Gothic")
         font.setPixelSize(int(round(size)))
         font.setWeight(QFont.Bold if bold else QFont.Normal)
-        font.setStretch(76 if condensed else 100)
+        # Slightly relax the previous ultra-condensed setting. The reference
+        # uses a narrow sports-card face, but not to the point of crowding.
+        font.setStretch(82 if condensed else 100)
         font.setItalic(italic)
         return font
 
@@ -831,7 +833,7 @@ class ModularCardRenderer:
             INK,
             False,
             Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
-            condensed=True,
+            condensed=False,
         )
         self._text(
             painter,
