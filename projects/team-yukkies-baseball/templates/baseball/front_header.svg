@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 176">
+<path d="M10 1H500L520 18H650L659 27V149L650 158H520L500 175H10L1 166V10Z" fill="#F9FBFC" stroke="#153B61" stroke-width="3"/>
+<path d="M504 1H650L659 10V166L650 175H504L494 165V11Z" fill="#153B61"/>
+<path d="M514 10H642L650 18V158L642 166H514L503 155V21Z" fill="none" stroke="#DDE5EC" stroke-width="2"/>
+<path d="M1 10H54L1 63Z" fill="#2F7FF6"/>
+<path d="M205 145H480" stroke="#BFC9D2" stroke-width="2"/>
+</svg>

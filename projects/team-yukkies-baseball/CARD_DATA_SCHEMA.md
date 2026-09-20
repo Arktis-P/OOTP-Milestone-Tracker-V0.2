@@ -47,15 +47,19 @@
 - `stealing`: 스타트, 도루 성공 가능성 등 도루 능력.
 - `arm`: 야수의 기본 송구 능력.
 
-### 앞면 타자 6개 요약
+### BASE 카드 앞면 타자 7개 요약
+
+레퍼런스 카드의 한 줄 스탯 스트립에 맞춰 다음 7개만 표시한다.
 
 - CON = `contact`
 - POW = `power`
-- GAP = `gap`
 - EYE = `eye`
 - SPD = round((`baserunning` + `stealing`) / 2)
+- BSR = `baserunning`
 - FLD = 주 포지션에 대응하는 `def_*` 값
+- ARM = `arm`
 
+`gap`과 `stealing` 원본 값은 CSV와 OVR 계산에 유지하지만 BASE 카드 앞면에는 직접 표시하지 않는다.
 SPD는 순수 100m 달리기 속도가 아니라 **실전 주자 능력 요약값**으로 정의한다.
 
 ---
@@ -98,16 +102,16 @@ SPD는 순수 100m 달리기 속도가 아니라 **실전 주자 능력 요약�
 - `pitcher_fielding`: 투수 수비.
 - `velocity_kmh`: 속구 계열의 대표 평균 구속. 20–80이 아닌 실제 km/h.
 
-### 앞면 투수 6개 요약
+### BASE 카드 앞면 투수 6개 요약
 
 - STF = `stuff`
 - MOV = `movement`
 - CTL = `control`
 - CMD = `command`
 - STA = `stamina`
-- VEL = `velocity_kmh` + " km/h"
+- FLD = `pitcher_fielding`
 
-구속은 직관성을 위해 등급으로 변환하지 않는다.
+대표 구속 `velocity_kmh`는 앞면 스트립에 넣지 않고 뒷면의 전용 Fastball Velocity 배너에 크게 표시한다.
 
 ---
 
@@ -226,7 +230,7 @@ RP/CL OVR =
 ### 타자
 
 1. 선수 정보 요약.
-2. Contact / Power / Gap / Eye / Baserunning / Stealing / Arm의 20–80 막대.
+2. Contact / Power / Eye / Speed / Baserunning / Fielding / Arm의 20–80 막대.
 3. 야구장 다이아몬드 위에 값이 존재하는 `def_*` 위치만 표시.
 4. 각 포지션 마커에 수비 등급 표시.
 5. `scouting_report`.
