@@ -125,8 +125,8 @@ function renderFront(root, p) {
   statHost.replaceChildren();
 
   const stats = isPitcher
-    ? [p.stuff, p.movement, p.control, p.command, p.stamina, p.pitcher_fielding]
-    : [p.contact, p.power, p.gap, p.eye, p.baserunning, primaryDefense(p)];
+    ? [p.stuff, p.movement, p.control, p.command, p.stamina, p.fielding]
+    : [p.contact, p.power, p.gap_power, p.discipline, p.speed, p.fielding];
 
   stats.forEach(v => {
     const e = document.createElement("div");
@@ -175,10 +175,8 @@ function renderPitches(root, p) {
 
   PITCHES.forEach(([name,col,row,key]) => {
     const v = val(p[key]);
-    const primary = name === p.velocity_pitch && rated(v);
-
     const slot = document.createElement("div");
-    slot.className = `pitch-slot ${primary ? "is-primary" : rated(v) ? "is-rated" : "is-unrated"}`;
+    slot.className = `pitch-slot ${rated(v) ? "is-rated" : "is-unrated"}`;
     slot.dataset.col = col;
     slot.dataset.row = row;
     slot.innerHTML =
@@ -225,7 +223,7 @@ function renderBack(root, p) {
   if (isPitcher) {
     renderRatingBlock(root, [
       p.stuff, p.movement, p.control, p.command,
-      p.stamina, p.holding, p.pitchability, p.pitcher_fielding
+      p.stamina, p.holding, p.pitchability, p.fielding
     ]);
 
     root.querySelector(".pitch-list").hidden = false;
@@ -233,8 +231,8 @@ function renderBack(root, p) {
     renderPitches(root, p);
   } else {
     renderRatingBlock(root, [
-      p.contact, p.power, p.gap, p.eye,
-      p.baserunning, p.stealing, p.arm, primaryDefense(p)
+      p.contact, p.power, p.gap_power, p.discipline,
+      p.baserunning, p.stealing, p.arm, p.fielding
     ]);
 
     root.querySelector(".fielding-list").hidden = false;
@@ -315,6 +313,90 @@ function numberOrNull(v) {
   return Number.isFinite(n) ? n : null;
 }
 
+const POSITION_CODE = Object.freeze({
+  DH: "0", SP: "1", RP: "1", CL: "1", P: "1",
+  C: "2", "1B": "3", "2B": "4", "3B": "5", SS: "6",
+  LF: "7", CF: "8", RF: "9"
+});
+
+function clampRating(v) {
+  return Math.max(20, Math.min(80, Math.round(v)));
+}
+
+function recalcBatterDerived(p) {
+  const br = val(p.baserunning);
+  const st = val(p.stealing);
+  const arm = val(p.arm);
+  const primary = primaryDefense(p);
+
+  p.speed = br !== null && st !== null ? clampRating((br + st) / 2) : null;
+  p.fielding = arm !== null && primary !== null ? clampRating((arm + primary) / 2) : null;
+
+  const con = val(p.contact);
+  const pow = val(p.power);
+  const gap = val(p.gap_power);
+  const disc = val(p.discipline);
+
+  if ([con,pow,gap,disc,p.speed].some(v => v === null)) return;
+
+  const bat = con * 0.30 + pow * 0.30 + gap * 0.15 + disc * 0.25;
+  let ovr = null;
+
+  if (p.primary_position === "DH") {
+    ovr = bat * 0.95 + p.speed * 0.05;
+  } else if (p.fielding !== null) {
+    if (p.primary_position === "C") {
+      ovr = bat * 0.72 + p.fielding * 0.23 + p.speed * 0.05;
+    } else if (["1B","LF","RF"].includes(p.primary_position)) {
+      ovr = bat * 0.88 + p.fielding * 0.07 + p.speed * 0.05;
+    } else if (["2B","3B"].includes(p.primary_position)) {
+      ovr = bat * 0.85 + p.fielding * 0.10 + p.speed * 0.05;
+    } else if (["SS","CF"].includes(p.primary_position)) {
+      ovr = bat * 0.75 + p.fielding * 0.20 + p.speed * 0.05;
+    }
+  }
+
+  if (ovr !== null) p.overall = clampRating(ovr);
+}
+
+function recalcPitcherOverall(p) {
+  const stuff = val(p.stuff);
+  const movement = val(p.movement);
+  const control = val(p.control);
+  const command = val(p.command);
+  const stamina = val(p.stamina);
+  const fielding = val(p.fielding);
+
+  if ([stuff,movement,control,command,stamina,fielding].some(v => v === null)) return;
+
+  const relief = ["RP","CL"].includes(p.primary_position);
+  const ovr = relief
+    ? stuff*0.38 + movement*0.22 + control*0.18 + command*0.17 + stamina*0.02 + fielding*0.03
+    : stuff*0.30 + movement*0.20 + control*0.18 + command*0.17 + stamina*0.12 + fielding*0.03;
+
+  p.overall = clampRating(ovr);
+}
+
+function recalcSerial(p) {
+  const code = String(p.team_code || "").trim().toUpperCase();
+  const year = String(p.card_year ?? "").padStart(2, "0").slice(-2);
+  const grade = String(p.card_grade ?? "");
+  const theme = String(p.card_theme ?? "").padStart(2, "0").slice(-2);
+  const number = String(p.uniform_number ?? "").padStart(2, "0").slice(-2);
+  const position = POSITION_CODE[p.primary_position];
+
+  if (code.length === 2 && /^\d{2}$/.test(year) && /^\d$/.test(grade) &&
+      /^\d{2}$/.test(theme) && /^\d{2}$/.test(number) && position !== undefined) {
+    p.serial = `${code}${year}${grade}${theme}${number}${position}`;
+  }
+}
+
+function recalcDerivedFields(p) {
+  if (p.player_type === "BATTER") recalcBatterDerived(p);
+  else if (p.player_type === "PITCHER") recalcPitcherOverall(p);
+  recalcSerial(p);
+}
+
 function normalizeCSVRow(row) {
   const p = { ...row };
 
@@ -337,18 +419,20 @@ function normalizeCSVRow(row) {
   p.trait_3 = first(row, ["trait_3", "player_trait_3", "선수 특징 3", "선수특징3"]);
 
   [
-    "overall","uniform_number","contact","power","gap","eye","baserunning","stealing","arm",
+    "overall","uniform_number","card_year","card_grade","card_theme",
+    "contact","power","gap_power","discipline","speed","fielding","baserunning","stealing","arm",
     "def_c","def_1b","def_2b","def_3b","def_ss","def_lf","def_cf","def_rf",
     "stuff","movement","control","command","stamina","holding","pitchability",
-    "pitcher_fielding","velocity_kmh","pitch_four_seam","pitch_sinker","pitch_cutter",
-    "pitch_slider","pitch_sweeper","pitch_slurve","pitch_curveball","pitch_changeup",
-    "pitch_splitter","pitch_knuckleball"
+    "velocity_kmh","pitch_four_seam","pitch_sinker","pitch_cutter","pitch_slider",
+    "pitch_changeup","pitch_curveball","pitch_splitter","pitch_sweeper","pitch_slurve",
+    "pitch_knuckleball"
   ].forEach(key => {
     if (Object.prototype.hasOwnProperty.call(p, key)) {
       p[key] = numberOrNull(p[key]);
     }
   });
 
+  recalcDerivedFields(p);
   return p;
 }
 

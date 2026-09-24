@@ -130,32 +130,60 @@
 
 ## 5. 야수 핵심 능력치
 
-야수는 카드와 데이터 양쪽에서 직관적으로 사용할 수 있도록 다음 상세 능력치를 사용한다. 모든 등급은 20–80, 기본적으로 5 단위다.
+야수는 다음 원본 능력치와 계산 능력치를 사용한다. 원본 스카우팅 등급은 20–80, 기본적으로 5 단위다.
 
-### 5.1 Contact
+### 5.1 Contact (`contact`)
 공을 지속적으로 맞히고 안타성 타구를 만드는 능력.
 
-### 5.2 Power
+### 5.2 Power (`power`)
 홈런과 강한 장타를 생산하는 능력.
 
-### 5.3 Gap
+### 5.3 Gap Power (`gap_power`)
 외야 사이와 펜스까지 타구를 보내 2루타·3루타를 생산하는 능력. Power와 분리하여 평가한다.
 
-### 5.4 Eye
-볼/스트라이크 판단, 카운트별 접근, 나쁜 공을 참는 능력.
+### 5.4 Discipline (`discipline`)
+볼/스트라이크 판단, 카운트별 접근, 나쁜 공을 참는 능력. 기존 `eye` 명칭은 사용하지 않는다.
 
-### 5.5 Baserunning
+### 5.5 Baserunning (`baserunning`)
 타구 판단, 추가 진루, 베이스 위에서의 상황 판단을 포함한 주루 센스.
 
-### 5.6 Stealing
+### 5.6 Stealing (`stealing`)
 스타트, 투수 동작 읽기, 도루 성공 가능성을 포함한 도루 능력.
 
-### 5.7 Arm
+### 5.7 Arm (`arm`)
 야수의 송구 강도와 정확성을 종합한 기본 송구 능력.
 
-### 5.8 포지션별 수비
+### 5.8 Speed (`speed`) — 계산값
+순수 달리기 속도가 아니라 실전 주자 능력의 요약값이다.
 
-수비는 공통 Fielding 하나로 평가하지 않고 C / 1B / 2B / 3B / SS / LF / CF / RF 각각의 **종합 수비 능력**을 따로 평가한다.
+```text
+speed = round((baserunning + stealing) / 2)
+```
+
+`baserunning` 또는 `stealing`이 변경되면 반드시 다시 계산하여 CSV의 `speed`에 저장한다.
+
+### 5.9 Fielding (`fielding`) — 야수 계산값
+카드용 종합 수비 요약값이다. 기본 Arm과 주 포지션 수비 점수를 결합한다.
+
+```text
+fielding = round((arm + primary_position_fielding) / 2)
+```
+
+예를 들어 주 포지션이 3B라면 `primary_position_fielding = def_3b`이다.
+`arm`, `primary_position`, 또는 주 포지션의 `def_*` 값이 변경되면 반드시 다시 계산하여 CSV의 `fielding`에 저장한다.
+
+### 5.10 포지션별 수비
+
+수비는 C / 1B / 2B / 3B / SS / LF / CF / RF 각각의 종합 수비 능력을 별도로 평가한다.
+
+- `def_c`
+- `def_1b`
+- `def_2b`
+- `def_3b`
+- `def_ss`
+- `def_lf`
+- `def_cf`
+- `def_rf`
 
 각 포지션 등급에는 포구, 반응, 범위, 송구, 포지션 숙련도를 종합한다.
 
@@ -163,15 +191,18 @@
 - 실제로 소화 가능한 부포지션도 각각 별도 등급을 준다.
 - 소화하지 않는 포지션은 빈 값으로 둔다.
 
-카드 앞면의 FLD는 주 포지션의 수비 등급을 사용한다.
-
-카드 앞면의 SPD는 순수 달리기 도구가 아니라 다음의 **실전 주자 요약값**을 사용한다.
+카드 앞면 6개 요약값은 다음을 사용한다.
 
 ```text
-SPD = (Baserunning + Stealing) / 2
+CON = contact
+POW = power
+GAP = gap_power
+DISC = discipline
+SPD = speed
+FLD = fielding
 ```
 
-세부 데이터 정의와 현재 카드 표시 규칙은 `card-template-html/DATA_SCHEMA.md`를 기준으로 한다.
+세부 데이터 정의와 카드 표시 규칙은 `card-template-html/DATA_SCHEMA.md`를 따른다.
 
 ---
 
@@ -210,64 +241,194 @@ SPD = (Baserunning + Stealing) / 2
 
 ## 7. 투수 핵심 능력치
 
-투수는 다음 핵심 능력치와 개별 구종을 사용한다.
+투수는 다음 핵심 능력치와 개별 구종을 사용한다. 레이팅은 20–80, 기본적으로 5 단위다.
 
-### 7.1 Stuff
+### 7.1 Stuff (`stuff`)
 헛스윙과 불완전한 타격을 만들어내는 전반적인 타자 제압 능력.
 
-### 7.2 Movement
+### 7.2 Movement (`movement`)
 공의 움직임과 배럴 회피, 강한 타구 억제 능력.
 
-### 7.3 Control
+### 7.3 Control (`control`)
 볼넷을 억제하고 스트라이크를 안정적으로 던지는 능력.
 
-### 7.4 Command
+### 7.4 Command (`command`)
 원하는 코스와 높이에 공을 배치하는 능력.
 
-### 7.5 Stamina
+### 7.5 Stamina (`stamina`)
 경기에서 구위와 투구 동작을 얼마나 오래 유지하는지 평가한다.
 
-### 7.6 Pitcher Fielding
-번트·투수 앞 땅볼·베이스 커버 등 투수 자신의 수비 능력.
+### 7.6 Holding (`holding`)
+주자 견제, 투구 동작 관리, 도루 억제 능력을 평가한다.
 
-### 7.7 Velocity
+### 7.7 Pitchability (`pitchability`)
+구종 배합, 타자 상대 계획, 카운트 운영, 경기 중 조정 능력을 종합 평가한다.
 
-구속은 20–80으로 변환하지 않고 **속구 계열의 대표 평균 구속을 km/h로 기록**한다.
+### 7.8 Fielding (`fielding`)
+번트·투수 앞 땅볼·베이스 커버 등 투수 자신의 수비 능력. 투수는 이 값을 직접 평가하며 야수처럼 파생 계산하지 않는다.
+
+### 7.9 Velocity (`velocity_kmh`)
+
+20–80으로 변환하지 않고 **투수가 대표적으로 사용하는 속구 계열 구종의 평균 구속을 km/h로 기록**한다.
+
+`velocity_pitch` 같은 별도 대표 구종 필드는 사용하지 않는다.
 
 예:
 
 ```text
-Velocity: 153 km/h
+velocity_kmh = 153
 ```
 
-구속은 카드에서 실제 숫자로 보여주며 OVR 계산에 직접 중복 반영하지 않는다. 구속의 위력은 Stuff를 결정하는 근거 중 하나로 사용한다.
+구속은 OVR에 직접 중복 반영하지 않는다. 구속의 위력은 Stuff를 결정하는 근거 중 하나로 사용한다.
 
-### 7.8 개별 구종
+### 7.10 개별 구종
 
-MLB Statcast의 현행 구종 분류를 기준으로 실제 사용하는 구종만 20–80으로 평가한다.
+현재 공식 구종 레이팅은 다음 10개만 사용한다.
 
-- Four-seam Fastball
-- Sinker
-- Cutter
-- Slider
-- Sweeper
-- Slurve
-- Curveball
-- Knuckle Curve
-- Slow Curve
-- Changeup
-- Splitter
-- Forkball
-- Screwball
-- Knuckleball
+- Four-seam Fastball (`pitch_four_seam`)
+- Sinker (`pitch_sinker`)
+- Cutter (`pitch_cutter`)
+- Slider (`pitch_slider`)
+- Changeup (`pitch_changeup`)
+- Curveball (`pitch_curveball`)
+- Splitter (`pitch_splitter`)
+- Sweeper (`pitch_sweeper`)
+- Slurve (`pitch_slurve`)
+- Knuckleball (`pitch_knuckleball`)
 
-구종별 개별 구속은 별도로 기록하지 않는다. 각 구종 값은 그 구종의 종합 품질을 뜻한다.
-
-Pitchability, 위기 대응, 구종 배합 같은 요소는 별도 숫자로 늘리기보다 스카우팅 리포트에 반영한다.
+구종별 개별 구속은 저장하지 않는다. 각 구종 값은 그 구종의 종합 품질을 뜻하며, 사용하지 않는 구종은 빈 값으로 둔다.
 
 ---
 
-## 8. 신체·정신 특성의 야구적 번역 규칙
+## 8. 계산값 및 자동 재계산 규칙
+
+`speed`, 야수 `fielding`, `overall`, `serial`은 **계산값**이다. 사람이 독립적인 스카우팅 판단으로 임의 조정하지 않는다.
+
+선수 행의 원본 정보나 관련 레이팅이 수정될 때마다 해당 계산값을 다시 계산하여 `PLAYER_RATINGS.csv`에 저장한다. 카드 렌더러도 같은 계산식을 사용해 오래된 계산값이 표시되지 않도록 한다.
+
+### 8.1 Birthday 저장 형식
+
+생일은 연도 없이 `MM-DD` 형식으로 저장한다.
+
+```text
+09-14
+09-20
+```
+
+표시할 때 필요한 `SEP 14`, `September 14` 등의 형태는 렌더러에서 변환한다.
+
+### 8.2 Speed
+
+```text
+speed = round((baserunning + stealing) / 2)
+```
+
+### 8.3 야수 Fielding
+
+```text
+fielding = round((arm + primary_position_fielding) / 2)
+```
+
+투수의 `fielding`은 직접 평가값이므로 이 식을 사용하지 않는다.
+
+### 8.4 Overall — OVR v1
+
+OVR은 20–80 범위의 **1 단위 정수 계산값**이다. 최종 결과는 가장 가까운 정수로 반올림하고 20–80으로 제한한다.
+
+#### 타자
+
+```text
+BAT =
+  contact     × 0.30
++ power       × 0.30
++ gap_power   × 0.15
++ discipline  × 0.25
+```
+
+포지션별 OVR:
+
+| 주 포지션 | 계산 |
+|---|---|
+| DH | BAT × 0.95 + speed × 0.05 |
+| C | BAT × 0.72 + fielding × 0.23 + speed × 0.05 |
+| 1B / LF / RF | BAT × 0.88 + fielding × 0.07 + speed × 0.05 |
+| 2B / 3B | BAT × 0.85 + fielding × 0.10 + speed × 0.05 |
+| SS / CF | BAT × 0.75 + fielding × 0.20 + speed × 0.05 |
+
+#### 투수
+
+선발:
+
+```text
+SP OVR =
+  stuff      × 0.30
++ movement   × 0.20
++ control    × 0.18
++ command    × 0.17
++ stamina    × 0.12
++ fielding   × 0.03
+```
+
+불펜/마무리:
+
+```text
+RP/CL OVR =
+  stuff      × 0.38
++ movement   × 0.22
++ control    × 0.18
++ command    × 0.17
++ stamina    × 0.02
++ fielding   × 0.03
+```
+
+`holding`, `pitchability`, `velocity_kmh`, 개별 구종 레이팅은 OVR v1에 직접 중복 반영하지 않는다. 이 값들은 선수 프로필과 세부 능력을 설명하는 독립 레이팅이며, OVR 공식 버전을 변경할 때만 가중치 변경을 검토한다.
+
+### 8.5 Serial Number
+
+시리얼은 다음 정보를 이어 붙여 자동 계산한다.
+
+```text
+{TEAM}{YY}{GRADE}{THEME}{NUMBER}{POSITION}
+```
+
+필드:
+
+- `team_code`: 2자리 팀 코드. 팀 윳키즈 = `YK`
+- `card_year`: 발행 연도 뒤 2자리. 2026 = `26`
+- `card_grade`: 카드 등급 숫자 1자리. 현재 Common = `1`; 높은 등급일수록 더 높은 숫자를 사용한다.
+- `card_theme`: 카드 테마 번호. 시리얼에서는 2자리 zero-padding. Theme 1 = `01`
+- `uniform_number`: 등번호. 시리얼에서는 `00`~`99` 두 자리
+- `primary_position`: 아래 포지션 코드를 사용
+
+포지션 코드:
+
+| Code | Position |
+|---:|---|
+| 0 | DH |
+| 1 | P (SP/RP/CL) |
+| 2 | C |
+| 3 | 1B |
+| 4 | 2B |
+| 5 | 3B |
+| 6 | SS |
+| 7 | LF |
+| 8 | CF |
+| 9 | RF |
+
+예: 팀 윳키즈 / 2026 / Common(1) / Theme 01 / #32 / 3B
+
+```text
+YK + 26 + 1 + 01 + 32 + 5
+= YK26101325
+```
+
+기존 예시 `YK261101325`에 있던 정의되지 않은 1자리는 폐기한다.
+
+`team_code`, `card_year`, `card_grade`, `card_theme`, `uniform_number`, `primary_position` 중 하나라도 변경되면 `serial`을 다시 계산하여 저장한다.
+
+---
+
+## 9. 신체·정신 특성의 야구적 번역 규칙
 
 캐릭터 특성은 다음과 같은 방향으로 번역할 수 있다.
 
@@ -292,7 +453,7 @@ Pitchability, 위기 대응, 구종 배합 같은 요소는 별도 숫자로 늘
 
 ---
 
-## 9. 사용자 지정 선수 유형의 적용
+## 10. 사용자 지정 선수 유형의 적용
 
 사용자가 지정한 **선수 유형은 결과의 방향을 정하는 제약 조건**으로 사용한다.
 
@@ -316,7 +477,7 @@ Pitchability, 위기 대응, 구종 배합 같은 요소는 별도 숫자로 늘
 
 ---
 
-## 10. 포지션 추천 규칙
+## 11. 포지션 추천 규칙
 
 사용자가 지정한 포지션을 기본값으로 사용한다.
 
@@ -346,7 +507,7 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 
 ---
 
-## 11. 선수 전체 수준과 능력치 인플레이션 방지
+## 12. 선수 전체 수준과 능력치 인플레이션 방지
 
 캐릭터를 야구선수로 만드는 과정에서 가장 경계해야 할 것은 모든 선수가 스타가 되는 것이다.
 
@@ -372,7 +533,7 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 
 ---
 
-## 12. 능력치 결정 절차
+## 13. 능력치 결정 절차
 
 각 캐릭터는 아래 순서로 처리한다.
 
@@ -409,7 +570,7 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 
 ### Step 4. 야구 핵심 능력치로 변환
 
-각 특징이 Contact / Power / Gap / Eye / Baserunning / Stealing / Arm / 포지션별 수비 또는 투수 핵심 능력치 중 무엇과 연결되는지 판단한다.
+각 특징이 Contact / Power / Gap Power / Discipline / Speed / Fielding / Baserunning / Stealing / Arm / 포지션별 수비 또는 투수 핵심 능력치 중 무엇과 연결되는지 판단한다.
 
 ### Step 5. 사용자 지정 포지션/유형 반영
 
@@ -436,7 +597,7 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 
 ---
 
-## 13. 최종 출력 형식
+## 14. 최종 출력 형식
 
 캐릭터 1명을 분석할 때 기본적으로 다음 형식을 사용한다.
 
@@ -463,8 +624,10 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 |---|---:|---|
 | Contact |  |  |
 | Power |  |  |
-| Gap |  |  |
-| Eye |  |  |
+| Gap Power |  |  |
+| Discipline |  |  |
+| Speed |  | 계산값 |
+| Fielding |  | 계산값 |
 | Baserunning |  |  |
 | Stealing |  |  |
 | Arm |  |  |
@@ -493,6 +656,8 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 | Control |  |  |
 | Command |  |  |
 | Stamina |  |  |
+| Holding |  |  |
+| Pitchability |  |  |
 | Fielding |  |  |
 
 그 아래에 속구 계열 대표 평균 구속을 실제 km/h로 기록하고, 실제 사용하는 구종을 각각 20–80으로 기록한다.
@@ -520,7 +685,7 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 
 ---
 
-## 14. 금지 사항
+## 15. 금지 사항
 
 다음 방식으로 선수를 만들지 않는다.
 
@@ -535,7 +700,7 @@ AI는 다음 경우에만 대체 포지션을 적극적으로 추천한다.
 
 ---
 
-## 15. 기준의 목표
+## 16. 기준의 목표
 
 좋은 결과는 단순히 강한 선수가 아니다.
 
