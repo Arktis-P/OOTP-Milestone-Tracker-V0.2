@@ -1,4 +1,4 @@
-let PLAYERS = { ...(window.TEAM_YUKIES_PLAYERS || {}) };
+let PLAYERS = { ...(window.TEAM_YUKIES_PLAYERS || {}) };\nconst PLAYER_IMAGE_DATA = { ...(window.TEAM_YUKIES_PLAYER_IMAGES || {}) };
 
 const FIELDING_LIST = [
   ["C",0,0,"def_c"], ["1B",0,1,"def_1b"], ["2B",0,2,"def_2b"], ["3B",0,3,"def_3b"], ["SS",0,4,"def_ss"],
@@ -416,19 +416,37 @@ document.addEventListener("DOMContentLoaded", () => {
 const PLAYER_IMAGE_DEFAULT = Object.freeze({ x:0, y:0, width:900, scale:1 });
 const playerImageObjectUrls = new Map();
 
-function layoutKey(playerId){ return `team-yukies-image-layout:${playerId}`; }
+function layoutKey(playerId){ return `team-yukies-image-layout:${playerId}`; }\nfunction legacyLayoutKey(playerId){ return `team-yukkies-image-layout:${playerId}`; }
 function currentPlayerId(){ return document.querySelector("#player-select")?.value || ""; }
 function currentPlayer(){ return PLAYERS[currentPlayerId()] || null; }
 function playerImageEl(){ return document.querySelector("#front-player"); }
+
+function repositoryImageLayout(playerId){
+  const s = PLAYER_IMAGE_DATA[playerId] || PLAYER_IMAGE_DEFAULT;
+  return {
+    x:Number(s.x ?? 0),
+    y:Number(s.y ?? 0),
+    width:Math.max(1, Number(s.width ?? 900)),
+    scale:Math.max(.1, Number(s.scale ?? 1))
+  };
+}
 
 function getImageLayout(playerId){
   const p = PLAYERS[playerId] || {};
   let saved = null;
   try {
-    const raw = localStorage.getItem(layoutKey(playerId));
+    let raw = localStorage.getItem(layoutKey(playerId));
+    if (!raw) {
+      const legacy = localStorage.getItem(legacyLayoutKey(playerId));
+      if (legacy) {
+        raw = legacy;
+        localStorage.setItem(layoutKey(playerId), legacy);
+        localStorage.removeItem(legacyLayoutKey(playerId));
+      }
+    }
     saved = raw ? JSON.parse(raw) : null;
   } catch {}
-  const s = saved || p.player_image_layout || PLAYER_IMAGE_DEFAULT;
+  const s = saved || p.player_image_layout || repositoryImageLayout(playerId);
   return {
     x:Number(s.x ?? 0),
     y:Number(s.y ?? 0),
@@ -480,7 +498,7 @@ function renderEditedPlayerImage(){
   const img = playerImageEl();
   if (!p || !img) return;
 
-  const src = playerImageObjectUrls.get(p.player_id) || p.player_image || null;
+  const imageMeta = PLAYER_IMAGE_DATA[p.player_id] || {};\n  const src = playerImageObjectUrls.get(p.player_id) || p.player_image || imageMeta.image_src || null;
   const layout = getImageLayout(p.player_id);
   syncEditor(layout);
 
@@ -547,8 +565,9 @@ function initImageEditor(){
   document.querySelector("#img-reset").onclick = () => {
     const id = currentPlayerId();
     localStorage.removeItem(layoutKey(id));
-    if (PLAYERS[id]) PLAYERS[id].player_image_layout = {...PLAYER_IMAGE_DEFAULT};
-    applyImageLayout({...PLAYER_IMAGE_DEFAULT}, false);
+    const repoLayout = repositoryImageLayout(id);
+    if (PLAYERS[id]) PLAYERS[id].player_image_layout = {...repoLayout};
+    applyImageLayout(repoLayout, false);
   };
 
   document.querySelector("#img-clear").onclick = () => {
@@ -566,9 +585,15 @@ function initImageEditor(){
   document.querySelector("#img-copy-layout").onclick = async () => {
     const p = currentPlayer();
     if (!p) return;
+    const current = PLAYER_IMAGE_DATA[p.player_id] || {};
+    const layout = readEditor();
     const text = JSON.stringify({
       player_id:p.player_id,
-      player_image_layout:readEditor()
+      image_src:current.image_src || p.player_image || null,
+      x:layout.x,
+      y:layout.y,
+      width:layout.width,
+      scale:layout.scale
     }, null, 2);
     try {
       await navigator.clipboard.writeText(text);

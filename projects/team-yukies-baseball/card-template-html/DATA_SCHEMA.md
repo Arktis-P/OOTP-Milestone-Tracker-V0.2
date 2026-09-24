@@ -6,11 +6,11 @@
 
 ## 1. 기본 데이터
 
-기본 레이팅 원본은 프로젝트 루트의 `../PLAYER_RATINGS.csv`입니다.
+기본 레이팅 원본은 프로젝트 루트의 `../player_ratings.csv`입니다.
 
 템플릿 폴더에는 테스트/확장 예시가 있습니다.
 
-- `data/PLAYER_RATINGS.csv`
+- `data/player_ratings.csv`
 - `data/PLAYER_PROFILE_SCHEMA_SAMPLE.csv`
 - `data/PLAYER_RATINGS_EXTENDED_SAMPLE.csv`
 - `data/player-data.js`
@@ -165,15 +165,17 @@ front-background.png
 
 편집기는 선수별로 X / Y / Width / Scale을 조절할 수 있습니다.
 
-현재 브라우저 편집값은 `player_id`별 localStorage에 저장합니다.
+저장소의 영구 이미지 배치 원본은 `data/player_images.js`입니다. 브라우저 편집값은 `player_id`별 localStorage에 임시 오버라이드로 저장합니다.
 
-향후 CSV 영구 저장용 권장 필드:
+이미지 데이터 필드:
 
-- `player_image`
-- `player_image_x`
-- `player_image_y`
-- `player_image_width`
-- `player_image_scale`
+- `image_src`
+- `x`
+- `y`
+- `width`
+- `scale`
+
+세부 규칙은 `PLAYER_IMAGE_DATA.md`를 따릅니다.
 
 ## 8. 현재 템플릿 소스 오브 트루스
 

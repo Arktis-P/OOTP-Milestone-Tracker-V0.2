@@ -1,5 +1,13 @@
 # TEAM YUKIES Card Template v7
 
+## 데이터 원본
+
+현재 카드 템플릿에서 사용하는 저장소 데이터는 다음 두 파일을 기준으로 합니다.
+
+- `data/player_ratings.csv` — 선수 레이팅/프로필 CSV
+- `data/player_images.js` — 선수별 이미지 경로와 앞면 배치값
+- 상세 이미지 데이터 규칙: `PLAYER_IMAGE_DATA.md`
+
 ## 선수 이미지 위치
 
 선수 투명 PNG는 다음 레이어에 들어갑니다.
@@ -24,7 +32,7 @@
 
 카드 좌표계는 900×1260입니다.
 
-상단 Player Image에서:
+상단 Player Image에서 다음을 지원합니다.
 
 - 이미지 파일 선택
 - 카드 위로 이미지 드래그앤드롭
@@ -37,8 +45,6 @@
 - 이미지 제거
 - 현재 배치 JSON 복사
 
-를 지원합니다.
-
 기본값:
 
 ```text
@@ -48,31 +54,19 @@ Width = 900
 Scale = 1.0
 ```
 
-배치값은 `player_id`별로 브라우저 localStorage에 저장됩니다.
-따라서 선수마다 다른 위치와 크기를 유지할 수 있습니다.
+브라우저에서 조절한 값은 `player_id`별 localStorage에 임시 저장됩니다.
+저장소에서 공유할 확정값은 `data/player_images.js`에 기록합니다.
 
 예:
 
-```json
-{
-  "player_id": "himekawa_yuki",
-  "player_image_layout": {
-    "x": -18,
-    "y": 36,
-    "width": 945,
-    "scale": 1
-  }
+```js
+himekawa_yuki: {
+  image_src: "./assets/players/himekawa_yuki.png",
+  x: -18,
+  y: 36,
+  width: 945,
+  scale: 1
 }
 ```
 
-## 향후 CSV 확장용 컬럼
-
-```text
-player_image
-player_image_x
-player_image_y
-player_image_width
-player_image_scale
-```
-
-를 추가하면 최종 배치를 CSV 데이터로 옮길 수 있습니다.
+기존 오타 키 `team-yukkies-image-layout:*`가 남아 있으면 렌더러가 새 `team-yukies-image-layout:*` 키로 자동 이전합니다.
