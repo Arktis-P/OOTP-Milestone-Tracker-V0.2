@@ -1,4 +1,5 @@
-let PLAYERS = { ...(window.TEAM_YUKIES_PLAYERS || {}) };
+let PLAYERS = {};
+const DEFAULT_CSV_PATH = "../PLAYER_RATINGS.csv";
 const PLAYER_IMAGE_DATA = { ...(window.TEAM_YUKIES_PLAYER_IMAGES || {}) };
 
 const FIELDING_LIST = [
@@ -371,32 +372,43 @@ function rebuildPlayerSelect(preferredId = null) {
   else if (select.options.length) select.selectedIndex = 0;
 }
 
-async function loadCSVFile(file) {
-  const text = await file.text();
-  const rows = parseCSV(text);
+function installPlayers(rows, sourceLabel, preferredId = null) {
   const normalized = rows.map(normalizeCSVRow);
+  PLAYERS = {};
 
   normalized.forEach(p => {
     if (!p.player_id) return;
-    PLAYERS[p.player_id] = {
-      ...(PLAYERS[p.player_id] || {}),
-      ...p
-    };
+    PLAYERS[p.player_id] = p;
   });
 
-  rebuildPlayerSelect(normalized[0]?.player_id);
-  renderPlayer(document.querySelector("#player-select").value);
+  rebuildPlayerSelect(preferredId || normalized[0]?.player_id || null);
+
+  const selected = document.querySelector("#player-select").value;
+  if (selected) renderPlayer(selected);
 
   document.querySelector("#csv-status").textContent =
-    `${file.name}: ${normalized.length} player(s) loaded`;
+    `${sourceLabel}: ${normalized.length} player(s) loaded`;
+
+  return normalized;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  rebuildPlayerSelect("himekawa_yuki");
+async function loadCSVFile(file) {
+  const text = await file.text();
+  return installPlayers(parseCSV(text), file.name);
+}
 
+async function loadDefaultCSV() {
+  const response = await fetch(DEFAULT_CSV_PATH, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  }
+
+  const text = await response.text();
+  return installPlayers(parseCSV(text), DEFAULT_CSV_PATH, "himekawa_yuki");
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
   const select = document.querySelector("#player-select");
-  renderPlayer(select.value);
-
   select.addEventListener("change", () => renderPlayer(select.value));
 
   document.querySelector("#csv-input").addEventListener("change", async event => {
@@ -411,6 +423,14 @@ document.addEventListener("DOMContentLoaded", () => {
         `CSV load failed: ${error.message}`;
     }
   });
+
+  try {
+    await loadDefaultCSV();
+  } catch (error) {
+    console.error(error);
+    document.querySelector("#csv-status").textContent =
+      `../PLAYER_RATINGS.csv auto-load failed: ${error.message}. Open through a local HTTP server or choose the CSV manually.`;
+  }
 });
 
 /* v7 player image editor */

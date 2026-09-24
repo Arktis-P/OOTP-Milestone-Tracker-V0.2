@@ -2,71 +2,40 @@
 
 ## 데이터 원본
 
-현재 카드 템플릿에서 사용하는 저장소 데이터는 다음 두 파일을 기준으로 합니다.
+선수 레이팅/프로필의 소스 오브 트루스는 프로젝트 루트의 다음 파일 하나입니다.
 
-- `data/player_ratings.csv` — 선수 레이팅/프로필 CSV
-- `data/player_images.js` — 선수별 이미지 경로와 앞면 배치값
-- 상세 이미지 데이터 규칙: `PLAYER_IMAGE_DATA.md`
+- `../PLAYER_RATINGS.csv`
 
-## 선수 이미지 위치
+`index.html`은 시작 시 이 CSV를 자동 로드합니다.
+브라우저 보안 정책상 `file://`로 직접 열면 상대 경로 CSV의 자동 fetch가 차단될 수 있으므로, 자동 로드는 로컬 HTTP 서버(예: VS Code Live Server) 실행을 기준으로 합니다. 상단 CSV 파일 선택은 수동 대체 경로로 유지합니다.
 
-선수 투명 PNG는 다음 레이어에 들어갑니다.
+다음 파일들은 더 이상 선수 레이팅 원본으로 사용하지 않습니다.
 
-```text
-1. 앞면 경기장 배경
-2. 선수 PNG
-3. 타자/투수 앞면 overlay
-4. 이름/OVR/번호/능력치 텍스트
-```
+- `data/player_ratings.csv` — 제거
+- `data/player-data.js` — 제거
 
-따라서 선수는 경기장 위에 있지만 카드 프레임과 이름판 아래에 있습니다.
+## 이미지 데이터
 
-## 원본 PNG 권장
+선수 투명 PNG의 파일 경로와 앞면 배치값은 레이팅 CSV와 분리합니다.
 
-- 투명 PNG
-- 세로 1200px 이상 권장
-- 캐릭터 주위 투명 여백은 가능하면 적게
-- 원본이 900×1260일 필요는 없음
+- `data/player_images.js`
+- `PLAYER_IMAGE_DATA.md`
 
-## 위치 조절
-
-카드 좌표계는 900×1260입니다.
-
-상단 Player Image에서 다음을 지원합니다.
-
-- 이미지 파일 선택
-- 카드 위로 이미지 드래그앤드롭
-- 선수 이미지를 마우스로 직접 드래그
-- X / Y 숫자 입력
-- Width 입력
-- Scale 입력
-- 방향 버튼으로 1px씩 이동
-- Reset
-- 이미지 제거
-- 현재 배치 JSON 복사
-
-기본값:
+레이어 순서:
 
 ```text
-X = 0
-Y = 0
-Width = 900
-Scale = 1.0
+1. front-background.png
+2. 선수 투명 PNG
+3. front-batter-overlay.png / front-pitcher-overlay.png
+4. 이름 / OVR / 번호 / 능력치 텍스트
 ```
 
-브라우저에서 조절한 값은 `player_id`별 localStorage에 임시 저장됩니다.
-저장소에서 공유할 확정값은 `data/player_images.js`에 기록합니다.
+카드 좌표계는 900×1260이며, 편집기에서 이미지 선택/드래그앤드롭, 직접 드래그, X/Y/Width/Scale 조절, 1px 이동, Reset, 제거, 배치 JSON 복사를 지원합니다.
 
-예:
+## 폰트
 
-```js
-himekawa_yuki: {
-  image_src: "./assets/players/himekawa_yuki.png",
-  x: -18,
-  y: 36,
-  width: 945,
-  scale: 1
-}
-```
+CSS는 저장소에 올라온 실제 파일명을 직접 참조합니다.
 
-기존 오타 키 `team-yukkies-image-layout:*`가 남아 있으면 렌더러가 새 `team-yukies-image-layout:*` 키로 자동 이전합니다.
+- `fonts/esamanru Light.ttf` — Light
+- `fonts/esamanru Medium.ttf` — Medium
+- `fonts/esamanru Bold.ttf` — Bold

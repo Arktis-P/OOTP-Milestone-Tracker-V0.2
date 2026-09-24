@@ -5,9 +5,18 @@
 }
 @font-face {
   font-family:"Esamanru";
-  src:url("./fonts/esamanru.woff2") format("woff2"),
-      url("./fonts/esamanru.ttf") format("truetype");
-  font-weight:100 900; font-style:normal; font-display:block;
+  src:url("./fonts/esamanru Light.ttf") format("truetype");
+  font-weight:300; font-style:normal; font-display:block;
+}
+@font-face {
+  font-family:"Esamanru";
+  src:url("./fonts/esamanru Medium.ttf") format("truetype");
+  font-weight:400 600; font-style:normal; font-display:block;
+}
+@font-face {
+  font-family:"Esamanru";
+  src:url("./fonts/esamanru Bold.ttf") format("truetype");
+  font-weight:700; font-style:normal; font-display:block;
 }
 *{box-sizing:border-box}
 body{margin:0;background:#ececec;font-family:"Esamanru",sans-serif}

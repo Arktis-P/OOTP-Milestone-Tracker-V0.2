@@ -1,6 +1,6 @@
 /* Repository source of truth for player image asset paths and front-card placement.
    Coordinate space: 900 x 1260.
-   Keep one entry per player_id from player_ratings.csv.
+   Keep one entry per player_id from ../PLAYER_RATINGS.csv.
 */
 window.TEAM_YUKIES_PLAYER_IMAGES = {
   himekawa_yuki: {

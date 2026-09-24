@@ -1,51 +1,48 @@
 # TEAM YUKIES Card Template — Current Data Schema
 
-이 문서는 `card-template-html/`의 현재 HTML/CSS/JS 구현을 기준으로 한 데이터 규칙입니다.
+현재 HTML/CSS/JS 카드 템플릿의 선수 데이터 원본은 **`../PLAYER_RATINGS.csv` 하나**입니다.
 
-과거 `CARD_DATA_SCHEMA.md`는 `archive/legacy-card-template/docs/`로 이동했으며 현재 기준으로 사용하지 않습니다.
+## 1. 로딩 규칙
 
-## 1. 기본 데이터
-
-기본 레이팅 원본은 프로젝트 루트의 `../player_ratings.csv`입니다.
-
-템플릿 폴더에는 테스트/확장 예시가 있습니다.
-
-- `data/player_ratings.csv`
-- `data/PLAYER_PROFILE_SCHEMA_SAMPLE.csv`
-- `data/PLAYER_RATINGS_EXTENDED_SAMPLE.csv`
-- `data/player-data.js`
+- `index.html` → `team-yukies-card.js`
+- 시작 시 `../PLAYER_RATINGS.csv` 자동 로드
+- `card-template-html/data/`에는 별도 레이팅 CSV를 두지 않음
+- `file://` 직접 실행은 브라우저 정책으로 CSV fetch가 막힐 수 있으므로 로컬 HTTP 서버 실행을 기준으로 함
+- 상단 CSV 파일 선택은 임시/수동 데이터 확인용
 
 ## 2. 공통 카드 필드
 
-현재 렌더러에서 사용하는 주요 필드:
-
 - `player_id`
+- `character_name`
 - `display_first_name`
 - `display_last_name`
-- `player_type`: `BATTER` / `PITCHER`
+- `series`
+- `team_id`
+- `team_name`
+- `card_type`
 - `overall`
 - `uniform_number`
+- `player_type`: `BATTER` / `PITCHER`
 - `primary_position`
 - `scouting_report`
 - `serial`
-
-기존 CSV의 `character_name`은 선수 식별/표시 보조 정보로 유지할 수 있지만, 카드의 영문 이름을 정확히 표시하려면 `display_first_name`, `display_last_name`을 별도로 두는 것을 권장합니다.
+- `status`
 
 ## 3. 신상 정보
 
-뒷면 이름/팀명 아래 3줄은 다음 원본 필드에서 자동 생성합니다.
+뒷면 상단 프로필 3줄에 다음 필드를 사용합니다.
 
-- `height_cm` — 키
-- `weight_kg` — 몸무게
-- `bats` — 타격 손
-- `throws` — 투구 손
-- `birthday` — 생일
-- `birth_place` — 태어난 곳
+- `height_cm`
+- `weight_kg`
+- `bats`
+- `throws`
+- `birthday`
+- `birth_place`
 - `trait_1`
 - `trait_2`
 - `trait_3`
 
-출력 형식:
+출력 구조:
 
 ```text
 {height_cm}cm | {weight_kg}kg | Bats: {bats} | Throws: {throws}
@@ -53,19 +50,7 @@
 {trait_1} | {trait_2} | {trait_3}
 ```
 
-CSV 로더는 한국어 별칭도 인식합니다.
-
-- 키
-- 몸무게
-- 타격 손
-- 투구 손
-- 생일
-- 태어난 곳
-- 선수 특징 1 / 2 / 3
-
 ## 4. 타자 레이팅
-
-상세 필드:
 
 - `contact`
 - `power`
@@ -83,7 +68,7 @@ CSV 로더는 한국어 별칭도 인식합니다.
 - `def_cf`
 - `def_rf`
 
-현재 앞면 6칸은 다음 순서로 렌더링합니다.
+앞면 6칸:
 
 ```text
 CON = contact
@@ -94,18 +79,7 @@ SPD = baserunning
 FLD = primary_position에 대응하는 def_* 값
 ```
 
-뒷면 Fielding Positions 규칙:
-
-- 레이팅 없는 포지션: 회색 비활성
-- 레이팅 있는 포지션: 남색
-- 주 포지션: 주황색 강조
-- 다이아몬드 그래픽: 실제 레이팅이 있는 포지션만 생성
-- 주 포지션 노드: 주황색 배경 + 흰색 텍스트
-- 그 외 레이팅 노드: 회색 배경 + 남색 텍스트
-
 ## 5. 투수 레이팅
-
-상세 필드:
 
 - `stuff`
 - `movement`
@@ -116,8 +90,9 @@ FLD = primary_position에 대응하는 def_* 값
 - `pitchability`
 - `pitcher_fielding`
 - `velocity_kmh`
+- `velocity_pitch`
 
-현재 앞면 6칸은 다음 순서로 렌더링합니다.
+앞면 6칸:
 
 ```text
 STF = stuff
@@ -128,46 +103,32 @@ STA = stamina
 FLD = pitcher_fielding
 ```
 
-현재 기본 `PLAYER_RATINGS.csv`에는 `holding`, `pitchability`가 없으므로 해당 값은 입력 전까지 `-`로 표시될 수 있습니다.
+뒷면은 위 8개 레이팅 중 `velocity_kmh`와 `velocity_pitch`를 제외한 8개 항목을 사용합니다. 값이 비어 있으면 `-`로 표시합니다.
 
 ## 6. Pitch Arsenal
 
-현재 렌더러에서 사용하는 주요 구종:
+CSV에는 다음 구종 컬럼을 유지합니다.
 
 - `pitch_four_seam`
 - `pitch_sinker`
 - `pitch_cutter`
 - `pitch_slider`
-- `pitch_changeup`
-- `pitch_curveball`
-- `pitch_splitter`
 - `pitch_sweeper`
 - `pitch_slurve`
+- `pitch_curveball`
+- `pitch_knuckle_curve`
+- `pitch_slow_curve`
+- `pitch_changeup`
+- `pitch_splitter`
+- `pitch_forkball`
+- `pitch_screwball`
 - `pitch_knuckleball`
 
-표시 규칙:
+현재 카드 Pitch Arsenal 영역은 주요 10종을 표시하며, `velocity_pitch`와 일치하는 표시 구종을 강조합니다.
 
-- 값 없음: 회색 비활성
-- 값 있음: 남색
-- 대표 구속에 사용하는 속구 계열 1종(`velocity_pitch`): 주황색
-- `velocity_kmh`: 우측 Velocity 원형 영역에 표시
+## 7. 선수 이미지
 
-## 7. 선수 투명 PNG
-
-앞면 합성 순서:
-
-```text
-front-background.png
-→ 선수 투명 PNG
-→ front-batter-overlay.png / front-pitcher-overlay.png
-→ 동적 텍스트
-```
-
-편집기는 선수별로 X / Y / Width / Scale을 조절할 수 있습니다.
-
-저장소의 영구 이미지 배치 원본은 `data/player_images.js`입니다. 브라우저 편집값은 `player_id`별 localStorage에 임시 오버라이드로 저장합니다.
-
-이미지 데이터 필드:
+이미지 파일 경로와 배치는 `PLAYER_RATINGS.csv`가 아니라 `data/player_images.js`에서 관리합니다.
 
 - `image_src`
 - `x`
@@ -177,14 +138,19 @@ front-background.png
 
 세부 규칙은 `PLAYER_IMAGE_DATA.md`를 따릅니다.
 
-## 8. 현재 템플릿 소스 오브 트루스
+## 8. 현재 소스 오브 트루스
 
-카드 레이아웃/렌더링 수정은 다음 파일만 기준으로 진행합니다.
+레이팅/프로필:
+- `../PLAYER_RATINGS.csv`
 
+이미지 경로/배치:
+- `data/player_images.js`
+
+레이아웃/렌더링:
 - `index.html`
 - `team-yukies-card.css`
 - `team-yukies-card.js`
-- `data/`
 - `assets/`
+- `fonts/`
 
 과거 `templates/`, Python renderer/studio, V2 spec 문서는 Archive이며 신규 구현에 사용하지 않습니다.
