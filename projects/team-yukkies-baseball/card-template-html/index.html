@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TEAM YUKIES Card Preview v7</title>
+<link rel="stylesheet" href="./team-yukies-card.css">
+</head>
+<body>
+<div class="toolbar">
+  <div class="toolbar__row">
+    <strong>TEAM YUKIES TEMPLATE v7</strong>
+    <label>Player: <select id="player-select"></select></label>
+    <label>CSV: <input id="csv-input" type="file" accept=".csv,text/csv"></label>
+    <span id="csv-status">built-in sample data</span>
+  </div>
+
+  <div class="toolbar__row image-editor">
+    <strong>Player Image</strong>
+    <label>PNG 선택 <input id="player-image-input" type="file" accept="image/png,image/webp,image/jpeg"></label>
+    <span class="image-editor__hint">또는 앞면 카드 위로 이미지 드래그앤드롭</span>
+
+    <label>X <input id="img-x" type="number" step="1" value="0"></label>
+    <label>Y <input id="img-y" type="number" step="1" value="0"></label>
+    <label>Width <input id="img-width" type="number" min="1" step="1" value="900"></label>
+    <label>Scale <input id="img-scale" type="number" min="0.1" max="4" step="0.05" value="1"></label>
+
+    <button id="nudge-left" type="button">←</button>
+    <button id="nudge-up" type="button">↑</button>
+    <button id="nudge-down" type="button">↓</button>
+    <button id="nudge-right" type="button">→</button>
+    <button id="img-reset" type="button">Reset</button>
+    <button id="img-clear" type="button">이미지 제거</button>
+    <button id="img-copy-layout" type="button">배치 JSON 복사</button>
+    <span id="image-status"></span>
+  </div>
+</div>
+
+<div class="stage">
+  <section class="card card--front-editor" id="front-card">
+    <img class="card__layer card__background" id="front-background"
+         src="./assets/front-background.png" alt="">
+    <img class="card__player" id="front-player" alt="" draggable="false" hidden>
+    <img class="card__layer card__overlay" id="front-batter-overlay"
+         src="./assets/front-batter-overlay.png" alt="">
+    <img class="card__layer card__overlay" id="front-pitcher-overlay"
+         src="./assets/front-pitcher-overlay.png" alt="" hidden>
+
+    <div class="card__drop-hint">PLAYER IMAGE DROP</div>
+
+    <div class="card__data">
+      <div class="t front__ovr"></div>
+      <div class="t front__position"></div>
+      <div class="t front__number"></div>
+      <div class="t front__first"></div>
+      <div class="t front__last"></div>
+      <div class="front__stats"></div>
+      <div class="t front__serial"></div>
+    </div>
+  </section>
+
+  <section class="card" id="back-card">
+    <img class="card__layer card__overlay" id="back-batter-overlay"
+         src="./assets/back-batter-overlay.png" alt="">
+    <img class="card__layer card__overlay" id="back-pitcher-overlay"
+         src="./assets/back-pitcher-overlay.png" alt="" hidden>
+
+    <div class="card__data">
+      <div class="t back__first"></div>
+      <div class="t back__last"></div>
+      <div class="t back__position"></div>
+      <div class="t back__number"></div>
+
+      <div class="back__profile-block" id="back-profile">
+        <div class="back__profile-line"></div>
+        <div class="back__profile-line"></div>
+        <div class="back__profile-line"></div>
+      </div>
+
+      <div class="rating-values"></div>
+      <div class="rating-bars"></div>
+      <div class="fielding-list"></div>
+      <div class="fielding-diamond"></div>
+      <div class="pitch-list"></div>
+      <div class="t velocity"></div>
+      <div class="t back__report"></div>
+      <div class="t back__serial"></div>
+    </div>
+  </section>
+</div>
+
+<script src="./data/player-data.js"></script>
+<script src="./team-yukies-card.js"></script>
+</body>
+</html>

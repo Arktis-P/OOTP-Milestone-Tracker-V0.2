@@ -1,0 +1,201 @@
+/* TEAM YUKIES v3 — 900×1260 fixed design coordinates */
+:root {
+  --orange:#ED8B00; --navy:#202A43; --navy-dark:#102A43;
+  --ink:#141B2D; --white:#F9F9F9; --gray:#CCCCCC;
+}
+@font-face {
+  font-family:"Esamanru";
+  src:url("./fonts/esamanru.woff2") format("woff2"),
+      url("./fonts/esamanru.ttf") format("truetype");
+  font-weight:100 900; font-style:normal; font-display:block;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#ececec;font-family:"Esamanru",sans-serif}
+.toolbar{position:sticky;top:0;z-index:1000;padding:10px;background:#fff;border-bottom:1px solid #ddd}
+.stage{display:flex;gap:24px;align-items:flex-start;padding:24px;flex-wrap:wrap}
+.card{position:relative;width:900px;height:1260px;overflow:hidden;border-radius:32px;font-family:"Esamanru",sans-serif;isolation:isolate;background:var(--orange)}
+.card__layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;user-select:none}
+.card__background{z-index:0;object-fit:fill}
+.card__player{z-index:10;left:var(--player-x,0);top:var(--player-y,0);width:var(--player-w,900px);height:var(--player-h,1100px);object-fit:contain;object-position:center bottom}
+.card__overlay{z-index:20;object-fit:fill}
+.card__data{position:absolute;inset:0;z-index:30;pointer-events:none}
+.t{position:absolute;margin:0;line-height:1;white-space:nowrap}
+
+/* front */
+.front__first{left:57px;top:849px;max-width:390px;color:var(--white);font-size:64px;font-weight:700;line-height:75px;letter-spacing:-.05em}
+.front__last{left:53px;top:911px;max-width:610px;color:var(--white);font-size:96px;font-weight:700;line-height:112px;letter-spacing:-.05em}
+.front__ovr{left:668px;top:59px;width:192px;height:135px;display:grid;place-items:center;color:var(--ink);font-size:116px;font-weight:700;line-height:135px}
+.front__position{left:704px;top:764px;width:160px;height:75px;display:grid;place-items:center;color:var(--white);font-size:64px;font-weight:700}
+.front__number{left:709px;top:908px;width:150px;height:112px;display:grid;place-items:center;color:var(--ink);font-size:96px;font-weight:700}
+.front__serial{left:176px;top:1224px;color:var(--ink);font-size:14px;font-weight:300}
+.front__stats{position:absolute;left:18px;top:1118px;width:864px;height:84px;display:grid;grid-template-columns:repeat(6,144px)}
+.front__stat{display:grid;place-items:center;color:var(--white);font-size:72px;font-weight:700;line-height:84px}
+
+/* back header */
+.back__first{left:316px;top:61px;max-width:420px;color:var(--white);font-size:38px;font-weight:700;line-height:44px;letter-spacing:-.05em}
+.back__last{left:316px;top:99px;max-width:430px;color:var(--white);font-size:64px;font-weight:700;line-height:75px;letter-spacing:-.05em}
+.back__position{left:758px;top:61px;width:100px;height:50px;display:grid;place-items:center;color:var(--white);font-size:36px;font-weight:700}
+.back__number{left:732px;top:145px;width:136px;height:75px;display:grid;place-items:center;color:var(--ink);font-size:64px;font-weight:700}
+.back__report{left:44px;top:1060px;width:828px;max-height:128px;overflow:hidden;color:var(--ink);font-size:20px;font-weight:300;line-height:1.35;white-space:normal}
+.back__serial{left:176px;top:1224px;color:var(--ink);font-size:14px;font-weight:300}
+
+/* ratings */
+.rating-values{position:absolute;left:308px;top:374px;width:50px;display:grid;grid-template-rows:repeat(8,38px)}
+.rating-value{display:grid;place-items:center;color:var(--ink);font-size:32px;font-weight:700;line-height:37px}
+.rating-bars{position:absolute;left:374px;top:376px;width:480px;display:grid;grid-template-rows:repeat(8,32px);row-gap:6px}
+.rating-bar{position:relative;width:480px;height:32px;overflow:hidden;background:var(--gray)}
+.rating-fill{position:absolute;inset:0 auto 0 0;width:var(--pct,0%);background:var(--orange)}
+
+/* batter fielding list */
+.fielding-list{position:absolute;left:56px;top:746px;width:293px;height:222px}
+.fielding-slot{position:absolute;width:130px;height:38px;display:grid;grid-template-columns:72px 58px;align-items:center}
+.fielding-slot[data-col="0"]{left:0}.fielding-slot[data-col="1"]{left:163px}
+.fielding-slot[data-row="0"]{top:0}.fielding-slot[data-row="1"]{top:46px}.fielding-slot[data-row="2"]{top:92px}.fielding-slot[data-row="3"]{top:138px}.fielding-slot[data-row="4"]{top:184px}
+.fielding-label{height:38px;display:grid;place-items:center start;padding-left:8px;color:var(--white);background:var(--gray);font-size:32px;font-weight:700}
+.fielding-value{height:38px;display:grid;place-items:center;color:var(--ink);font-size:32px;font-weight:700}
+.fielding-slot.is-rated .fielding-label{background:var(--navy)}
+.fielding-slot.is-primary .fielding-label{background:var(--orange);color:var(--ink)}
+.fielding-slot.is-primary .fielding-value{color:var(--orange)}
+
+.fielding-node{position:absolute;width:72px;height:72px;border:4px solid var(--navy-dark);border-radius:50%;display:grid;place-content:center;background:var(--gray);color:var(--ink);text-align:center;font-weight:700}
+.fielding-node div{font-size:24px;line-height:24px}
+.fielding-node.is-primary{background:var(--orange);color:var(--white)}
+.fn-lf{left:469px;top:790px}.fn-cf{left:610px;top:749px}.fn-rf{left:754px;top:790px}.fn-ss{left:556px;top:801px}.fn-2b{left:664px;top:801px}.fn-3b{left:521px;top:868px}.fn-1b{left:715px;top:868px}.fn-c{left:610px;top:916px}
+
+/* pitcher arsenal */
+.pitch-list{position:absolute;left:56px;top:750px;width:612px;height:214px}
+.pitch-slot{position:absolute;width:298px;height:38px;display:grid;grid-template-columns:240px 58px;align-items:center}
+.pitch-slot[data-col="0"]{left:0}.pitch-slot[data-col="1"]{left:314px}
+.pitch-slot[data-row="0"]{top:0}.pitch-slot[data-row="1"]{top:44px}.pitch-slot[data-row="2"]{top:88px}.pitch-slot[data-row="3"]{top:132px}.pitch-slot[data-row="4"]{top:176px}
+.pitch-label{height:38px;display:grid;place-items:center start;padding-left:8px;color:var(--white);background:var(--gray);font-size:32px;font-weight:700}
+.pitch-value{height:38px;display:grid;place-items:center;color:var(--ink);font-size:32px;font-weight:700}
+.pitch-slot.is-rated .pitch-label{background:var(--navy)}
+.pitch-slot.is-primary .pitch-label{background:var(--orange);color:var(--ink)}
+.velocity{left:717px;top:822px;width:126px;height:75px;display:grid;place-items:center;color:var(--white);font-size:64px;font-weight:700}
+
+/* visible asset errors */
+.asset-error{position:absolute;z-index:999;left:20px;right:20px;top:20px;padding:12px;background:#fff;color:#b00020;border:2px solid #b00020;font:16px/1.35 sans-serif;white-space:normal}
+
+/* v5 state safety: author display:grid rules must never override HTML hidden. */
+[hidden] {
+  display: none !important;
+}
+
+/* Keep all raster overlays fully visible when active. */
+.card__overlay {
+  opacity: 1 !important;
+  visibility: visible;
+}
+
+/* diagnostics */
+.asset-error {
+  position: absolute;
+  z-index: 999;
+  left: 20px;
+  right: 20px;
+  top: 20px;
+  padding: 10px 12px;
+  background: #fff;
+  color: #b00020;
+  border: 2px solid #b00020;
+  font: 16px/1.35 sans-serif;
+}
+
+
+/* =========================================================
+   v6 — back profile block
+   Figma 900×1260 reference:
+   x=316, first baseline area starts near y=215.
+   ========================================================= */
+
+[hidden] {
+  display: none !important;
+}
+
+.card__data {
+  z-index: 40;
+}
+
+.back__profile-block {
+  position: absolute;
+  z-index: 100;
+  left: 316px;
+  top: 214px;
+  width: 552px;
+  height: 75px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  color: #F9F9F9 !important;
+  font-family: "Esamanru", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 25px;
+
+  pointer-events: none;
+}
+
+.back__profile-line {
+  display: block;
+  width: 100%;
+  height: 25px;
+  margin: 0;
+  padding: 0;
+
+  color: #F9F9F9 !important;
+  font: inherit;
+  line-height: 25px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+
+/* v7 player-image editor */
+.toolbar {
+  position: sticky; top: 0; z-index: 2000;
+  padding: 8px 12px; background: #fff; border-bottom: 1px solid #ddd;
+  font-family: sans-serif;
+}
+.toolbar__row { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; }
+.toolbar__row + .toolbar__row { margin-top:8px; }
+.toolbar label { display:inline-flex; align-items:center; gap:5px; }
+.toolbar input[type="number"] { width:72px; }
+.toolbar button { min-width:34px; min-height:28px; }
+.image-editor__hint, #image-status { color:#555; font-size:12px; }
+
+.card__player {
+  position:absolute;
+  z-index:10;
+  left:var(--player-x, 0px);
+  top:var(--player-y, 0px);
+  width:var(--player-width, 900px);
+  height:auto;
+  max-width:none;
+  max-height:none;
+  transform-origin:top left;
+  user-select:none;
+  -webkit-user-drag:none;
+  cursor:grab;
+  pointer-events:auto;
+}
+.card__player.is-dragging { cursor:grabbing; }
+.card__overlay { z-index:20; pointer-events:none; }
+.card__data { z-index:30; pointer-events:none; }
+
+.card__drop-hint {
+  position:absolute; z-index:15; left:50%; top:48%;
+  transform:translate(-50%,-50%);
+  display:none;
+  padding:14px 18px;
+  border:2px dashed rgba(255,255,255,.9);
+  border-radius:10px;
+  background:rgba(20,27,45,.72);
+  color:#fff;
+  font:700 18px/1 sans-serif;
+  pointer-events:none;
+}
+.card--front-editor.is-dragover .card__drop-hint { display:block; }
+.card--front-editor.is-dragover { outline:4px solid #ED8B00; outline-offset:-4px; }

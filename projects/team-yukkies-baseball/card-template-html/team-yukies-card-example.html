@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TEAM YUKIES Card Template</title>
+  <link rel="stylesheet" href="./team-yukies-card.css" />
+</head>
+<body>
+
+<section class="card card--front card--batter" id="front-card">
+  <img class="card__layer card__background" src="./assets/front-background.png" alt="" />
+  <img class="card__layer card__player" id="front-player" src="./assets/player.png" alt="" />
+  <img class="card__layer card__overlay" id="front-overlay" src="./assets/front-batter-overlay.png" alt="" />
+  <div class="card__data">
+    <div class="card__text front__ovr" data-bind="ovr">60</div>
+    <div class="card__text front__position" data-bind="position">3B</div>
+    <div class="card__text front__number" data-bind="number">32</div>
+    <div class="card__text front__first-name" data-bind="firstName">YUKI</div>
+    <div class="card__text front__last-name" data-bind="lastName">HIMEKAWA</div>
+    <div class="front__stats" id="front-stats"></div>
+    <div class="card__text front__serial" data-bind="serial">YK261101325</div>
+  </div>
+</section>
+
+<section class="card card--back card--batter" id="batter-back-card">
+  <img class="card__layer card__overlay" src="./assets/back-batter-overlay.png" alt="" />
+  <div class="card__data">
+    <div class="card__text back__first-name" data-bind="firstName">YUKI</div>
+    <div class="card__text back__last-name" data-bind="lastName">HIMEKAWA</div>
+    <div class="card__text back__position" data-bind="position">3B</div>
+    <div class="card__text back__number" data-bind="number">32</div>
+    <div class="card__text back__profile back__profile--1" data-bind="profile1"></div>
+    <div class="card__text back__profile back__profile--2" data-bind="profile2"></div>
+    <div class="card__text back__profile back__profile--3" data-bind="profile3"></div>
+    <div class="back__rating-values" id="batter-rating-values"></div>
+    <div class="back__rating-bars" id="batter-rating-bars"></div>
+    <div class="fielding-list" id="fielding-list"></div>
+    <div class="fielding-diamond" id="fielding-diamond"></div>
+    <div class="card__text back__report" data-bind="report"></div>
+    <div class="card__text back__serial" data-bind="serial"></div>
+  </div>
+</section>
+
+<section class="card card--back card--pitcher" id="pitcher-back-card">
+  <img class="card__layer card__overlay" src="./assets/back-pitcher-overlay.png" alt="" />
+  <div class="card__data">
+    <div class="card__text back__first-name" data-bind="firstName">SUBARU</div>
+    <div class="card__text back__last-name" data-bind="lastName">NAGAYOSHI</div>
+    <div class="card__text back__position" data-bind="position">SP</div>
+    <div class="card__text back__number" data-bind="number">47</div>
+    <div class="card__text back__profile back__profile--1" data-bind="profile1"></div>
+    <div class="card__text back__profile back__profile--2" data-bind="profile2"></div>
+    <div class="card__text back__profile back__profile--3" data-bind="profile3"></div>
+    <div class="back__rating-values" id="pitcher-rating-values"></div>
+    <div class="back__rating-bars" id="pitcher-rating-bars"></div>
+    <div class="pitch-list" id="pitch-list"></div>
+    <div class="card__text pitcher__velocity" data-bind="velocity">150</div>
+    <div class="card__text back__report" data-bind="report"></div>
+    <div class="card__text back__serial" data-bind="serial"></div>
+  </div>
+</section>
+
+<script src="./team-yukies-card.js"></script>
+</body>
+</html>
