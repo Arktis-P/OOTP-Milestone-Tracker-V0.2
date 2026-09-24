@@ -319,8 +319,48 @@ const POSITION_CODE = Object.freeze({
   LF: "7", CF: "8", RF: "9"
 });
 
+const FIELDING_WEIGHTS = Object.freeze({
+  C:  [0.60, 0.40],
+  "1B":[0.90, 0.10],
+  "2B":[0.80, 0.20],
+  "3B":[0.65, 0.35],
+  SS:  [0.70, 0.30],
+  LF:  [0.85, 0.15],
+  CF:  [0.85, 0.15],
+  RF:  [0.65, 0.35]
+});
+
+const BATTER_OVR_WEIGHTS = Object.freeze({
+  C:  {contact:.16,power:.16,gap_power:.08,discipline:.15,baserunning:.04,stealing:.02,arm:.14,fielding:.25},
+  "1B":{contact:.18,power:.26,gap_power:.12,discipline:.19,baserunning:.06,stealing:.02,arm:.04,fielding:.13},
+  "2B":{contact:.20,power:.14,gap_power:.10,discipline:.18,baserunning:.09,stealing:.05,arm:.07,fielding:.17},
+  "3B":{contact:.20,power:.25,gap_power:.12,discipline:.18,baserunning:.03,stealing:.02,arm:.08,fielding:.12},
+  SS:  {contact:.18,power:.12,gap_power:.08,discipline:.16,baserunning:.08,stealing:.05,arm:.10,fielding:.23},
+  LF:  {contact:.18,power:.25,gap_power:.12,discipline:.19,baserunning:.07,stealing:.03,arm:.05,fielding:.11},
+  CF:  {contact:.18,power:.14,gap_power:.10,discipline:.16,baserunning:.10,stealing:.06,arm:.07,fielding:.19},
+  RF:  {contact:.18,power:.24,gap_power:.12,discipline:.18,baserunning:.05,stealing:.02,arm:.10,fielding:.11},
+  DH:  {contact:.22,power:.28,gap_power:.14,discipline:.22,baserunning:.08,stealing:.06,arm:0,fielding:0}
+});
+
+const PITCHER_OVR_WEIGHTS = Object.freeze({
+  SP: {stuff:.20,movement:.15,control:.14,command:.16,stamina:.15,holding:.05,pitchability:.10,fielding:.05},
+  RP: {stuff:.27,movement:.17,control:.14,command:.17,stamina:.05,holding:.05,pitchability:.10,fielding:.05},
+  CL: {stuff:.27,movement:.17,control:.14,command:.17,stamina:.05,holding:.05,pitchability:.10,fielding:.05}
+});
+
 function clampRating(v) {
   return Math.max(20, Math.min(80, Math.round(v)));
+}
+
+function weightedRating(p, weights) {
+  let total = 0;
+  for (const [key, weight] of Object.entries(weights)) {
+    if (weight === 0) continue;
+    const value = val(p[key]);
+    if (value === null) return null;
+    total += value * weight;
+  }
+  return clampRating(total);
 }
 
 function recalcBatterDerived(p) {
@@ -329,71 +369,56 @@ function recalcBatterDerived(p) {
   const arm = val(p.arm);
   const primary = primaryDefense(p);
 
-  p.speed = br !== null && st !== null ? clampRating((br + st) / 2) : null;
-  p.fielding = arm !== null && primary !== null ? clampRating((arm + primary) / 2) : null;
-
-  const con = val(p.contact);
-  const pow = val(p.power);
-  const gap = val(p.gap_power);
-  const disc = val(p.discipline);
-
-  if ([con,pow,gap,disc,p.speed].some(v => v === null)) return;
-
-  const bat = con * 0.30 + pow * 0.30 + gap * 0.15 + disc * 0.25;
-  let ovr = null;
+  p.speed = br !== null && st !== null
+    ? clampRating(br * 0.60 + st * 0.40)
+    : null;
 
   if (p.primary_position === "DH") {
-    ovr = bat * 0.95 + p.speed * 0.05;
-  } else if (p.fielding !== null) {
-    if (p.primary_position === "C") {
-      ovr = bat * 0.72 + p.fielding * 0.23 + p.speed * 0.05;
-    } else if (["1B","LF","RF"].includes(p.primary_position)) {
-      ovr = bat * 0.88 + p.fielding * 0.07 + p.speed * 0.05;
-    } else if (["2B","3B"].includes(p.primary_position)) {
-      ovr = bat * 0.85 + p.fielding * 0.10 + p.speed * 0.05;
-    } else if (["SS","CF"].includes(p.primary_position)) {
-      ovr = bat * 0.75 + p.fielding * 0.20 + p.speed * 0.05;
-    }
+    p.fielding = null;
+  } else {
+    const fieldWeights = FIELDING_WEIGHTS[p.primary_position];
+    p.fielding = fieldWeights && arm !== null && primary !== null
+      ? clampRating(primary * fieldWeights[0] + arm * fieldWeights[1])
+      : null;
   }
 
-  if (ovr !== null) p.overall = clampRating(ovr);
+  const weights = BATTER_OVR_WEIGHTS[p.primary_position];
+  p.overall = weights ? weightedRating(p, weights) : null;
 }
 
 function recalcPitcherOverall(p) {
-  const stuff = val(p.stuff);
-  const movement = val(p.movement);
-  const control = val(p.control);
-  const command = val(p.command);
-  const stamina = val(p.stamina);
-  const fielding = val(p.fielding);
+  const role = PITCHER_OVR_WEIGHTS[p.primary_position] ? p.primary_position : "SP";
+  p.overall = weightedRating(p, PITCHER_OVR_WEIGHTS[role]);
+}
 
-  if ([stuff,movement,control,command,stamina,fielding].some(v => v === null)) return;
-
-  const relief = ["RP","CL"].includes(p.primary_position);
-  const ovr = relief
-    ? stuff*0.38 + movement*0.22 + control*0.18 + command*0.17 + stamina*0.02 + fielding*0.03
-    : stuff*0.30 + movement*0.20 + control*0.18 + command*0.17 + stamina*0.12 + fielding*0.03;
-
-  p.overall = clampRating(ovr);
+function serialInteger(value, min, max, width) {
+  const n = Number(value);
+  if (!Number.isInteger(n) || n < min || n > max) return null;
+  return String(n).padStart(width, "0");
 }
 
 function recalcSerial(p) {
+  p.serial = "";
+
   const code = String(p.team_code || "").trim().toUpperCase();
-  const year = String(p.card_year ?? "").padStart(2, "0").slice(-2);
-  const grade = String(p.card_grade ?? "");
-  const theme = String(p.card_theme ?? "").padStart(2, "0").slice(-2);
-  const number = String(p.uniform_number ?? "").padStart(2, "0").slice(-2);
+  const year = serialInteger(p.card_year, 0, 99, 2);
+  const grade = serialInteger(p.card_grade, 0, 9, 1);
+  const theme = serialInteger(p.card_theme, 0, 9, 1);
+  const themeIndex = serialInteger(p.theme_index, 1, 99, 2);
+  const number = serialInteger(p.uniform_number, 0, 99, 2);
   const position = POSITION_CODE[p.primary_position];
 
-  if (code.length === 2 && /^\d{2}$/.test(year) && /^\d$/.test(grade) &&
-      /^\d{2}$/.test(theme) && /^\d{2}$/.test(number) && position !== undefined) {
-    p.serial = `${code}${year}${grade}${theme}${number}${position}`;
+  if (/^[A-Z0-9]{2}$/.test(code) && year && grade && theme &&
+      themeIndex && number && position !== undefined) {
+    p.serial = `${code}${year}${grade}${theme}${themeIndex}${number}${position}`;
   }
 }
 
 function recalcDerivedFields(p) {
   if (p.player_type === "BATTER") recalcBatterDerived(p);
   else if (p.player_type === "PITCHER") recalcPitcherOverall(p);
+  else p.overall = null;
+
   recalcSerial(p);
 }
 
@@ -419,7 +444,7 @@ function normalizeCSVRow(row) {
   p.trait_3 = first(row, ["trait_3", "player_trait_3", "선수 특징 3", "선수특징3"]);
 
   [
-    "overall","uniform_number","card_year","card_grade","card_theme",
+    "overall","uniform_number","card_year","card_grade","card_theme","theme_index",
     "contact","power","gap_power","discipline","speed","fielding","baserunning","stealing","arm",
     "def_c","def_1b","def_2b","def_3b","def_ss","def_lf","def_cf","def_rf",
     "stuff","movement","control","command","stamina","holding","pitchability",
