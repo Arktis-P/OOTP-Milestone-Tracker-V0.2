@@ -250,6 +250,165 @@ function renderPlayer(playerId) {
 }
 
 /* ---------------------------------------------------------
+   v8 preview UI / export
+   --------------------------------------------------------- */
+
+function playerDisplayName(p) {
+  return [p.display_first_name, p.display_last_name].filter(Boolean).join(" ")
+    || p.character_name
+    || p.player_id;
+}
+
+function renderPlayerList() {
+  const host = document.querySelector("#player-list");
+  const count = document.querySelector("#player-count");
+  if (!host) return;
+
+  const activeId = document.querySelector("#player-select")?.value || "";
+  host.replaceChildren();
+
+  const players = Object.values(PLAYERS);
+  if (count) count.textContent = String(players.length);
+
+  players.forEach(p => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "player-list__item" + (p.player_id === activeId ? " is-active" : "");
+    button.dataset.playerId = p.player_id;
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", p.player_id === activeId ? "true" : "false");
+
+    const name = document.createElement("span");
+    name.className = "player-list__name";
+    name.textContent = playerDisplayName(p);
+
+    const meta = document.createElement("span");
+    meta.className = "player-list__meta";
+    meta.textContent = [p.primary_position, p.uniform_number != null ? `#${p.uniform_number}` : null, p.serial]
+      .filter(Boolean).join(" · ");
+
+    button.append(name, meta);
+    button.addEventListener("click", () => selectPlayer(p.player_id));
+    host.appendChild(button);
+  });
+}
+
+function selectPlayer(playerId) {
+  if (!PLAYERS[playerId]) return;
+  const select = document.querySelector("#player-select");
+  select.value = playerId;
+  renderPlayer(playerId);
+  renderPlayerList();
+}
+
+function setPreviewScale(percent) {
+  const value = Math.max(35, Math.min(100, Number(percent) || 55));
+  document.documentElement.style.setProperty("--preview-scale", String(value / 100));
+  const output = document.querySelector("#preview-scale-value");
+  if (output) output.value = `${value}%`;
+  try { localStorage.setItem("team-yukies-preview-scale", String(value)); } catch {}
+}
+
+function initPreviewScale() {
+  const input = document.querySelector("#preview-scale");
+  if (!input) return;
+
+  let value = Number(input.value || 55);
+  try {
+    const saved = Number(localStorage.getItem("team-yukies-preview-scale"));
+    if (Number.isFinite(saved) && saved >= 35 && saved <= 100) value = saved;
+  } catch {}
+
+  input.value = String(value);
+  setPreviewScale(value);
+  input.addEventListener("input", () => setPreviewScale(input.value));
+}
+
+function setExportStatus(message) {
+  const el = document.querySelector("#export-status");
+  if (el) el.textContent = message || "";
+}
+
+async function waitForCardAssets(card) {
+  if (document.fonts?.ready) await document.fonts.ready;
+
+  const images = [...card.querySelectorAll("img")].filter(img => !img.hidden && img.src);
+  await Promise.all(images.map(img => {
+    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+    return new Promise(resolve => {
+      img.addEventListener("load", resolve, { once:true });
+      img.addEventListener("error", resolve, { once:true });
+    });
+  }));
+}
+
+function triggerDownload(dataUrl, filename) {
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+async function exportCard(card, filename) {
+  if (!window.htmlToImage?.toPng) {
+    throw new Error("PNG export library failed to load");
+  }
+
+  await waitForCardAssets(card);
+
+  const dataUrl = await window.htmlToImage.toPng(card, {
+    cacheBust: true,
+    pixelRatio: 1,
+    width: 900,
+    height: 1260,
+    canvasWidth: 900,
+    canvasHeight: 1260,
+    backgroundColor: null,
+    style: {
+      margin: "0",
+      transform: "none"
+    }
+  });
+
+  triggerDownload(dataUrl, filename);
+}
+
+async function exportCurrentCards() {
+  const player = currentPlayer();
+  if (!player) throw new Error("No player selected");
+  if (!player.serial) throw new Error("Selected player has no serial number");
+
+  const button = document.querySelector("#save-cards");
+  if (button) button.disabled = true;
+  setExportStatus("PNG 생성 중…");
+
+  try {
+    await exportCard(document.querySelector("#front-card"), `${player.serial}_front.png`);
+    await new Promise(resolve => setTimeout(resolve, 150));
+    await exportCard(document.querySelector("#back-card"), `${player.serial}_back.png`);
+    setExportStatus("앞/뒤 저장 완료");
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+function initExportControls() {
+  const button = document.querySelector("#save-cards");
+  if (!button) return;
+
+  button.addEventListener("click", async () => {
+    try {
+      await exportCurrentCards();
+    } catch (error) {
+      console.error(error);
+      setExportStatus(`저장 실패: ${error.message}`);
+    }
+  });
+}
+
+/* ---------------------------------------------------------
    CSV
    --------------------------------------------------------- */
 
@@ -479,6 +638,8 @@ function rebuildPlayerSelect(preferredId = null) {
 
   if (previous && PLAYERS[previous]) select.value = previous;
   else if (select.options.length) select.selectedIndex = 0;
+
+  renderPlayerList();
 }
 
 function installPlayers(rows, sourceLabel, preferredId = null) {
@@ -518,7 +679,13 @@ async function loadDefaultCSV() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   const select = document.querySelector("#player-select");
-  select.addEventListener("change", () => renderPlayer(select.value));
+  select.addEventListener("change", () => {
+    renderPlayer(select.value);
+    renderPlayerList();
+  });
+
+  initPreviewScale();
+  initExportControls();
 
   document.querySelector("#csv-input").addEventListener("change", async event => {
     const file = event.target.files?.[0];

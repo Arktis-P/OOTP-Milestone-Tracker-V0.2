@@ -7,11 +7,19 @@
 </head>
 <body>
 <div class="toolbar">
-  <div class="toolbar__row">
-    <strong>TEAM YUKIES TEMPLATE v7</strong>
-    <label>Player: <select id="player-select"></select></label>
+  <div class="toolbar__row toolbar__row--main">
+    <strong>TEAM YUKIES TEMPLATE v8</strong>
+    <select id="player-select" hidden aria-hidden="true"></select>
     <label>CSV: <input id="csv-input" type="file" accept=".csv,text/csv"></label>
     <span id="csv-status">loading ../PLAYER_RATINGS.csv…</span>
+    <span class="toolbar__spacer"></span>
+    <label class="preview-scale-control">
+      Preview
+      <input id="preview-scale" type="range" min="35" max="100" step="5" value="55">
+      <output id="preview-scale-value">55%</output>
+    </label>
+    <button id="save-cards" type="button" class="toolbar__primary">앞/뒤 PNG 저장</button>
+    <span id="export-status" class="toolbar__status"></span>
   </div>
 
   <div class="toolbar__row image-editor">
@@ -35,7 +43,18 @@
   </div>
 </div>
 
-<div class="stage">
+<div class="workspace">
+  <aside class="player-sidebar">
+    <div class="player-sidebar__header">
+      <strong>PLAYERS</strong>
+      <span id="player-count"></span>
+    </div>
+    <div id="player-list" class="player-list" role="listbox" aria-label="Player list"></div>
+  </aside>
+
+  <main class="preview-area">
+    <div class="preview-scroll">
+      <div class="stage" id="card-stage">
   <section class="card card--front-editor" id="front-card">
     <img class="card__layer card__background" id="front-background"
          src="./assets/front-background.png" alt="">
@@ -86,8 +105,12 @@
       <div class="t back__serial"></div>
     </div>
   </section>
+      </div>
+    </div>
+  </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
 <script src="./data/player_images.js"></script>
 <script src="./team-yukies-card.js"></script>
 </body>
