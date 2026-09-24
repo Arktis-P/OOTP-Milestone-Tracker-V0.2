@@ -6,42 +6,82 @@
 <link rel="stylesheet" href="./team-yukies-card.css">
 </head>
 <body>
-<div class="toolbar">
+<header class="toolbar">
   <div class="toolbar__row toolbar__row--main">
-    <strong>TEAM YUKIES TEMPLATE v8</strong>
+    <div class="toolbar__brand">
+      <span class="toolbar__brand-mark">YK</span>
+      <div class="toolbar__brand-copy">
+        <strong>TEAM YUKIES</strong>
+        <span>CARD STUDIO</span>
+      </div>
+    </div>
+
     <select id="player-select" hidden aria-hidden="true"></select>
-    <label>CSV: <input id="csv-input" type="file" accept=".csv,text/csv"></label>
-    <span id="csv-status">loading ../PLAYER_RATINGS.csv…</span>
-    <span class="toolbar__spacer"></span>
-    <label class="preview-scale-control">
-      Preview
-      <input id="preview-scale" type="range" min="35" max="100" step="5" value="55">
-      <output id="preview-scale-value">55%</output>
-    </label>
-    <button id="save-cards" type="button" class="toolbar__primary">앞/뒤 PNG 저장</button>
-    <span id="export-status" class="toolbar__status"></span>
+
+    <div class="toolbar__group toolbar__group--data">
+      <span class="toolbar__group-label">DATA</span>
+      <label class="toolbar__file-button">
+        CSV
+        <input id="csv-input" type="file" accept=".csv,text/csv">
+      </label>
+      <span id="csv-status" class="toolbar__status toolbar__status--wide">loading ../PLAYER_RATINGS.csv…</span>
+    </div>
+
+    <div class="toolbar__group">
+      <span class="toolbar__group-label">VIEW</span>
+      <label class="preview-scale-control">
+        <input id="preview-scale" type="range" min="35" max="100" step="5" value="55">
+        <output id="preview-scale-value">55%</output>
+      </label>
+    </div>
+
+    <div class="toolbar__group toolbar__group--export">
+      <span class="toolbar__group-label">EXPORT</span>
+      <button id="save-cards" type="button" class="toolbar__primary">앞/뒤 PNG</button>
+      <span id="export-status" class="toolbar__status"></span>
+    </div>
   </div>
 
-  <div class="toolbar__row image-editor">
-    <strong>Player Image</strong>
-    <label>PNG 선택 <input id="player-image-input" type="file" accept="image/png,image/webp,image/jpeg"></label>
-    <span class="image-editor__hint">또는 앞면 카드 위로 이미지 드래그앤드롭</span>
+  <div class="toolbar__row toolbar__row--image image-editor">
+    <div class="toolbar__section-title">PLAYER IMAGE</div>
 
-    <label>X <input id="img-x" type="number" step="1" value="0"></label>
-    <label>Y <input id="img-y" type="number" step="1" value="0"></label>
-    <label>Width <input id="img-width" type="number" min="1" step="1" value="900"></label>
-    <label>Scale <input id="img-scale" type="number" min="0.1" max="4" step="0.05" value="1"></label>
+    <div class="toolbar__group">
+      <span class="toolbar__group-label">SOURCE</span>
+      <label class="toolbar__file-button">
+        이미지 선택
+        <input id="player-image-input" type="file" accept="image/png,image/webp,image/jpeg">
+      </label>
+      <span id="image-status" class="toolbar__status"></span>
+    </div>
 
-    <button id="nudge-left" type="button">←</button>
-    <button id="nudge-up" type="button">↑</button>
-    <button id="nudge-down" type="button">↓</button>
-    <button id="nudge-right" type="button">→</button>
-    <button id="img-reset" type="button">Reset</button>
-    <button id="img-clear" type="button">이미지 제거</button>
-    <button id="img-copy-layout" type="button">배치 JSON 복사</button>
-    <span id="image-status"></span>
+    <div class="toolbar__group toolbar__group--position">
+      <span class="toolbar__group-label">POSITION</span>
+      <label class="compact-field"><span>X</span><input id="img-x" type="number" step="1" value="0"></label>
+      <label class="compact-field"><span>Y</span><input id="img-y" type="number" step="1" value="0"></label>
+      <label class="compact-field"><span>W</span><input id="img-width" type="number" min="1" step="1" value="900"></label>
+      <label class="compact-field"><span>S</span><input id="img-scale" type="number" min="0.1" max="4" step="0.05" value="1"></label>
+    </div>
+
+    <div class="toolbar__group toolbar__group--nudge">
+      <span class="toolbar__group-label">NUDGE</span>
+      <div class="nudge-pad">
+        <button id="nudge-left" type="button" title="왼쪽 1px">←</button>
+        <button id="nudge-up" type="button" title="위 1px">↑</button>
+        <button id="nudge-down" type="button" title="아래 1px">↓</button>
+        <button id="nudge-right" type="button" title="오른쪽 1px">→</button>
+      </div>
+    </div>
+
+    <div class="toolbar__group toolbar__group--actions">
+      <span class="toolbar__group-label">ACTIONS</span>
+      <button id="img-reset" type="button">Reset</button>
+      <button id="img-clear" type="button">Remove</button>
+      <button id="img-copy-layout" type="button">Copy JSON</button>
+    </div>
+
+    <span class="image-editor__hint">앞면 카드에 이미지 드래그앤드롭 가능</span>
   </div>
-</div>
+</header>
 
 <div class="workspace">
   <aside class="player-sidebar">
