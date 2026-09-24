@@ -16,6 +16,40 @@
 - `data/player_ratings.csv` — 제거
 - `data/player-data.js` — 제거
 
+## 프리뷰 실행
+
+현재 실제 카드 확인용 엔트리 포인트는 **`index.html`** 입니다.
+
+`team-yukies-card-example.html`은 과거 정적 예제 파일이었으며, 현재는 `index.html`로 이동시키는 호환용 진입점만 유지합니다.
+
+### Windows 권장
+
+프로젝트 루트의 다음 파일을 더블클릭합니다.
+
+```text
+projects/team-yukies-baseball/open-card-preview.bat
+```
+
+실행하면 로컬 HTTP 서버를 열고 브라우저에서 다음 주소를 자동으로 엽니다.
+
+```text
+http://127.0.0.1:8765/card-template-html/
+```
+
+서버 창을 닫으면 프리뷰 서버도 종료됩니다.
+
+### 수동 실행
+
+`projects/team-yukies-baseball` 폴더에서:
+
+```bat
+py -m http.server 8765 --bind 127.0.0.1
+```
+
+그 뒤 브라우저에서 `http://127.0.0.1:8765/card-template-html/`을 엽니다.
+
+`index.html`을 파일 탐색기에서 직접 더블클릭하는 방식(`file://`)은 브라우저 보안 정책 때문에 `../PLAYER_RATINGS.csv` 자동 로드가 막힐 수 있으므로 권장하지 않습니다.
+
 ## 이미지 데이터
 
 선수 투명 PNG의 파일 경로와 앞면 배치값은 레이팅 CSV와 분리합니다.
