@@ -171,7 +171,7 @@
 SPD = (Baserunning + Stealing) / 2
 ```
 
-세부 데이터 정의와 카드 표시 규칙은 `CARD_DATA_SCHEMA.md`를 기준으로 한다.
+세부 데이터 정의와 현재 카드 표시 규칙은 `card-template-html/DATA_SCHEMA.md`를 기준으로 한다.
 
 ---
 
