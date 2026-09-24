@@ -1,4 +1,5 @@
-let PLAYERS = { ...(window.TEAM_YUKIES_PLAYERS || {}) };\nconst PLAYER_IMAGE_DATA = { ...(window.TEAM_YUKIES_PLAYER_IMAGES || {}) };
+let PLAYERS = { ...(window.TEAM_YUKIES_PLAYERS || {}) };
+const PLAYER_IMAGE_DATA = { ...(window.TEAM_YUKIES_PLAYER_IMAGES || {}) };
 
 const FIELDING_LIST = [
   ["C",0,0,"def_c"], ["1B",0,1,"def_1b"], ["2B",0,2,"def_2b"], ["3B",0,3,"def_3b"], ["SS",0,4,"def_ss"],
@@ -416,7 +417,8 @@ document.addEventListener("DOMContentLoaded", () => {
 const PLAYER_IMAGE_DEFAULT = Object.freeze({ x:0, y:0, width:900, scale:1 });
 const playerImageObjectUrls = new Map();
 
-function layoutKey(playerId){ return `team-yukies-image-layout:${playerId}`; }\nfunction legacyLayoutKey(playerId){ return `team-yukkies-image-layout:${playerId}`; }
+function layoutKey(playerId){ return `team-yukies-image-layout:${playerId}`; }
+function legacyLayoutKey(playerId){ return `team-yukkies-image-layout:${playerId}`; }
 function currentPlayerId(){ return document.querySelector("#player-select")?.value || ""; }
 function currentPlayer(){ return PLAYERS[currentPlayerId()] || null; }
 function playerImageEl(){ return document.querySelector("#front-player"); }
@@ -498,7 +500,8 @@ function renderEditedPlayerImage(){
   const img = playerImageEl();
   if (!p || !img) return;
 
-  const imageMeta = PLAYER_IMAGE_DATA[p.player_id] || {};\n  const src = playerImageObjectUrls.get(p.player_id) || p.player_image || imageMeta.image_src || null;
+  const imageMeta = PLAYER_IMAGE_DATA[p.player_id] || {};
+  const src = playerImageObjectUrls.get(p.player_id) || p.player_image || imageMeta.image_src || null;
   const layout = getImageLayout(p.player_id);
   syncEditor(layout);
 
