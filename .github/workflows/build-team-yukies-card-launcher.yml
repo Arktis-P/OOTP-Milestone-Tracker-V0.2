@@ -6,6 +6,7 @@ on:
       - gpt/card-yukies
     paths:
       - "projects/team-yukies-baseball/launcher/**"
+      - "projects/team-yukies-baseball/card-template-html/assets/app-icon.png"
       - "projects/team-yukies-baseball/card-template-html/assets/app-icon.ico"
       - "projects/team-yukies-baseball/open-card-preview.bat"
       - ".github/workflows/build-team-yukies-card-launcher.yml"
@@ -24,6 +25,17 @@ jobs:
           ref: gpt/card-yukies
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build Windows icon
+        shell: powershell
+        run: |
+          python -m pip install --disable-pip-version-check pillow
+          python .\projects\team-yukies-baseball\launcher\make-icon.py
+
       - name: Build Windows launcher
         shell: powershell
         run: .\projects\team-yukies-baseball\launcher\build-launcher.ps1
@@ -33,10 +45,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "projects/team-yukies-baseball/card-template-html/assets/app-icon.ico"
           git add -- "projects/team-yukies-baseball/TEAM-YUKIES-Card-Preview.exe"
           if (git diff --cached --quiet) {
-            Write-Host "Launcher executable is already up to date."
+            Write-Host "Launcher executable and Windows icon are already up to date."
             exit 0
           }
-          git commit -m "build(card-preview): refresh Windows launcher"
+          git commit -m "build(card-preview): refresh Windows launcher assets"
           git push origin HEAD:gpt/card-yukies
