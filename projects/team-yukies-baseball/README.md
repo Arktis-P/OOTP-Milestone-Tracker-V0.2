@@ -30,3 +30,15 @@
 `archive/legacy-card-template/`
 
 에 보관하며 현재 기준으로 사용하지 않는다.
+
+## Windows 실행파일
+
+Windows에서는 프로젝트 폴더의 `TEAM-YUKIES-Card-Preview.exe`를 실행하면 기존 `open-card-preview.bat`를 통해 로컬 카드 프리뷰 서버가 시작됩니다.
+
+- 실행파일: `TEAM-YUKIES-Card-Preview.exe`
+- 아이콘 원본: `card-template-html/assets/app-icon.png`
+- Windows 아이콘: `card-template-html/assets/app-icon.ico`
+- 런처 소스/빌드: `launcher/`
+- 배치 파일은 호환용/수동 실행 경로로 유지합니다.
+
+아이콘 또는 런처 소스를 바꾸면 GitHub Actions가 Windows 런처를 다시 빌드해 같은 브랜치에 반영합니다.

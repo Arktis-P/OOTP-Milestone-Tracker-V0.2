@@ -24,11 +24,13 @@
 
 ### Windows 권장
 
-프로젝트 루트의 다음 파일을 더블클릭합니다.
+프로젝트 루트의 다음 실행파일을 더블클릭합니다.
 
 ```text
-projects/team-yukies-baseball/open-card-preview.bat
+projects/team-yukies-baseball/TEAM-YUKIES-Card-Preview.exe
 ```
+
+실행파일은 새 야구공 아이콘을 사용하며 내부적으로 기존 `open-card-preview.bat`를 호출합니다. 실행파일이 아직 빌드되지 않은 로컬 체크아웃에서는 `open-card-preview.bat`를 직접 실행해도 동일하게 동작합니다.
 
 실행하면 로컬 HTTP 서버를 열고 브라우저에서 다음 주소를 자동으로 엽니다.
 

@@ -1,0 +1,42 @@
+name: Build Team Yukies Card Launcher
+
+on:
+  push:
+    branches:
+      - gpt/card-yukies
+    paths:
+      - "projects/team-yukies-baseball/launcher/**"
+      - "projects/team-yukies-baseball/card-template-html/assets/app-icon.ico"
+      - "projects/team-yukies-baseball/open-card-preview.bat"
+      - ".github/workflows/build-team-yukies-card-launcher.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-launcher:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: gpt/card-yukies
+          fetch-depth: 0
+
+      - name: Build Windows launcher
+        shell: powershell
+        run: .\projects\team-yukies-baseball\launcher\build-launcher.ps1
+
+      - name: Commit launcher executable
+        shell: powershell
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "projects/team-yukies-baseball/TEAM-YUKIES-Card-Preview.exe"
+          if (git diff --cached --quiet) {
+            Write-Host "Launcher executable is already up to date."
+            exit 0
+          }
+          git commit -m "build(card-preview): refresh Windows launcher"
+          git push origin HEAD:gpt/card-yukies
