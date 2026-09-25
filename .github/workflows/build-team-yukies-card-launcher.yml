@@ -45,6 +45,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "projects/team-yukies-baseball/card-template-html/assets/app-icon.png"
           git add -- "projects/team-yukies-baseball/card-template-html/assets/app-icon.ico"
           git add -- "projects/team-yukies-baseball/TEAM-YUKIES-Card-Preview.exe"
           if (git diff --cached --quiet) {
