@@ -5,10 +5,10 @@
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>TEAM YUKIES Card Preview v10</title>
+<title>TEAM YUKIES Card Preview v11</title>
 <link rel="icon" type="image/png" href="./assets/app-icon.png">
 <link rel="shortcut icon" href="./assets/app-icon.ico">
-<link rel="stylesheet" href="./team-yukies-card.css?v=20260927v3">
+<link rel="stylesheet" href="./team-yukies-card.css?v=20260927v4">
 </head>
 <body>
 <header class="toolbar">
@@ -79,12 +79,13 @@
 
     <div class="toolbar__group toolbar__group--actions">
       <span class="toolbar__group-label">ACTIONS</span>
+      <button id="img-save" type="button" class="toolbar__primary" title="선수 이미지와 현재 배치를 저장">Save</button>
       <button id="img-reset" type="button">Reset</button>
       <button id="img-clear" type="button">Remove</button>
       <button id="img-copy-layout" type="button">Copy JSON</button>
     </div>
 
-    <span class="image-editor__hint">앞면 카드에 이미지 드래그앤드롭 가능</span>
+    <span class="image-editor__hint">앞면 카드에 이미지 드래그앤드롭 가능 · Save 시 재실행 후에도 이미지/배치 유지</span>
   </div>
 </header>
 
@@ -156,8 +157,9 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="./data/player_images.js?v=20260927v3"></script>
-<script src="./team-yukies-card.js?v=20260927v3"></script>
-<script src="./export-v3.js?v=20260927v3"></script>
+<script src="./data/player_images.js?v=20260927v4"></script>
+<script src="./team-yukies-card.js?v=20260927v4"></script>
+<script src="./image-persistence-v1.js?v=20260927v4"></script>
+<script src="./export-v3.js?v=20260927v4"></script>
 </body>
 </html>
