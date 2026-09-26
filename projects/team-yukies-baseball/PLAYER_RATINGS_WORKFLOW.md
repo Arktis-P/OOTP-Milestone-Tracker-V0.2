@@ -104,6 +104,8 @@ ganaha_hibiki
 
 투타·주 포지션·등번호·신체정보를 확정한다.
 
+`bats` 표준값은 `RIGHT`, `LEFT`, `SWITCH`만 사용한다. **양타자는 반드시 `SWITCH`로 기록하며 `BOTH`는 사용하지 않는다.** `throws`는 `RIGHT`, `LEFT`만 사용한다.
+
 공식 신상정보가 없는 경우에는 확인되지 않은 값을 공식 설정처럼 단정하지 않는다. 야구선수화에 필요한 추정값을 넣을 수는 있지만, 캐릭터의 체형·운동능력과 현실적인 선수 체격을 근거로 보수적으로 결정한다.
 
 #### `birth_place` 기록 규칙
@@ -137,6 +139,8 @@ CONFIRMED 선수는 세 Trait을 모두 채우며, 새로운 Trait이 필요하�
 `PLAYER_CREATION_GUIDELINES.md`를 기준으로 **20–80, 5 단위**로 결정한다.
 
 CONFIRMED 선수는 OVR 계산에 필요한 핵심 뒷면 레이팅이 모두 채워져 있어야 한다.
+
+야수는 주 포지션뿐 아니라 **현실적으로 소화 가능한 보조 포지션의 `def_*`도 실제 숙련도에 맞춰 기록**한다. 수비가 특기가 아닌 선수에게 멀티포지션이라는 이유만으로 높은 수비값을 주지 않으며, 긴급 소화 수준과 정기적으로 맡길 수 있는 수준을 구분한다.
 
 ### Step 5. 타자 파생값
 
@@ -249,6 +253,8 @@ CONFIRMED 상태로 두기 전에 다음을 확인한다.
 ### 공통
 
 - `player_id` 중복 없음
+- `bats` = `RIGHT`, `LEFT`, `SWITCH` 중 하나이며 양타자는 `SWITCH` 사용 (`BOTH` 금지)
+- `throws` = `RIGHT`, `LEFT` 중 하나
 - `birthday` = `MM-DD`
 - `birth_place`는 가능한 한 `Locality, Prefecture/Province` 형태이며 단순 `Region, Japan`을 피함
 - 추론한 `birth_place`는 `notes`에 근거가 있음
@@ -264,6 +270,7 @@ CONFIRMED 상태로 두기 전에 다음을 확인한다.
 
 - 핵심 원본 레이팅은 20–80, 5 단위
 - 주 포지션 `def_*` 존재
+- 자연스러운 보조 포지션이 있다면 해당 `def_*`가 실제 숙련도에 맞게 기록되어 있음
 - `speed`, `fielding`, `overall` 재계산 완료
 
 ### 투수
