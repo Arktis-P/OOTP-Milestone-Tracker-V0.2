@@ -153,6 +153,29 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script>
+(() => {
+  const originalToPng = window.htmlToImage?.toPng;
+  if (!originalToPng) return;
+
+  // html-to-image cacheBust appends a query string to image URLs. That can
+  // invalidate blob/object URLs used by the player-image editor, so keep the
+  // original URL intact for card export and normalize non-Error rejections.
+  window.htmlToImage.toPng = (node, options = {}) =>
+    Reflect.apply(originalToPng, window.htmlToImage, [
+      node,
+      { ...options, cacheBust: false }
+    ]).catch(error => {
+      if (error instanceof Error && error.message) throw error;
+
+      const target = error?.target;
+      const source = target?.currentSrc || target?.src || "";
+      throw new Error(source
+        ? `PNG export image load failed: ${source}`
+        : "PNG export failed while loading card assets");
+    });
+})();
+</script>
 <script src="./data/player_images.js"></script>
 <script src="./team-yukies-card.js"></script>
 </body>
