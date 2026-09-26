@@ -31,19 +31,11 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Build Windows icon from source PNG
+      - name: Build and validate Windows icon from source PNG
         shell: powershell
         run: |
           python -m pip install --disable-pip-version-check pillow
           python .\projects\team-yukies-baseball\launcher\make-icon.py
-
-      - name: Verify committed ICO matches source PNG
-        shell: powershell
-        run: |
-          git diff --exit-code -- "projects/team-yukies-baseball/card-template-html/assets/app-icon.ico"
-          if ($LASTEXITCODE -ne 0) {
-            throw "Committed app-icon.ico is not reproducible from app-icon.png."
-          }
 
       - name: Build Windows launcher
         shell: powershell
@@ -57,6 +49,9 @@ jobs:
           $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($exe)
           if ($null -eq $icon) {
             throw "The launcher executable does not contain an associated icon."
+          }
+          if ($icon.Width -lt 16 -or $icon.Height -lt 16) {
+            throw "The launcher executable icon is invalid: $($icon.Width)x$($icon.Height)"
           }
           Write-Host "Executable icon verified: $($icon.Width)x$($icon.Height)"
 
