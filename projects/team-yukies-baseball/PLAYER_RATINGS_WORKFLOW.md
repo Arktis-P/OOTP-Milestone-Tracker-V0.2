@@ -6,6 +6,7 @@
 
 - 평가 기준: `PLAYER_CREATION_GUIDELINES.md`
 - Trait 기준: `PLAYER_TRAIT_GUIDELINES.md`
+- 등번호 선정 기준: `PLAYER_NUMBER_GUIDELINES.md`
 - 단일 데이터 원본: `PLAYER_RATINGS.csv`
 - 카드 표시 스키마: `card-template-html/DATA_SCHEMA.md`
 
@@ -44,6 +45,7 @@
 - `role`
 - `scouting_report`
 - `status`
+- `notes`
 
 타자 원본 레이팅:
 - `contact`
@@ -103,6 +105,22 @@ ganaha_hibiki
 투타·주 포지션·등번호·신체정보를 확정한다.
 
 공식 신상정보가 없는 경우에는 확인되지 않은 값을 공식 설정처럼 단정하지 않는다. 야구선수화에 필요한 추정값을 넣을 수는 있지만, 캐릭터의 체형·운동능력과 현실적인 선수 체격을 근거로 보수적으로 결정한다.
+
+#### `birth_place` 기록 규칙
+
+`birth_place`는 기본적으로 `Locality, Prefecture/Province`처럼 **국가명보다 한 단계 이상 세부적인 두 지역 단위**를 기록한다. 일본 캐릭터라면 특별한 이유가 없는 한 `Japan`을 두 번째 값으로 쓰지 않는다.
+
+우선순위:
+1. 공식적으로 시·구·섬 등 세부 출생지가 있으면 그대로 사용한다.
+2. 공식 정보가 현·도까지만 있으면 원작의 생활권, 말투·문화권, 반복적으로 등장하는 지역, 다른 공식 설정을 종합해 가장 가능성 높은 세부 지역을 추론한다.
+3. 출생지는 불명이나 작품에서 명확한 고향·거주지·학교 생활권이 있으면 그 지역을 대체 기준으로 사용할 수 있다.
+4. 가공 지역이라도 작품 내 지명이 충분히 분명하면 지명을 유지하고, 현실 대응 지역이 강하게 추론되는 경우 두 번째 값에 현실의 광역 지역을 붙일 수 있다.
+5. 추론값은 반드시 `notes`에 근거와 불확실성을 남긴다.
+
+예:
+- 히메카와 유키: `Miyazaki, Miyazaki`
+- 가나하 히비키: `Ishigaki, Okinawa` — 공식 설정은 오키나와현 출신, 세부 지역은 프로젝트 추론.
+- 아라라기 카렌: `Naoetsu, Niigata` — 작품 내 나오에츠 생활권을 우선하고 현실의 니가타현 나오에츠를 대응시킨 프로젝트 추론.
 
 ### Step 3. Trait 입력
 
@@ -166,7 +184,13 @@ card_theme  = 1
 
 **실제로 확정·발급된 카드의 번호는 삭제 후에도 재사용하지 않는다.** 반면 잘못 추가된 임시 행, 테스트 데이터, 발급 전에 폐기된 DRAFT처럼 실제 카드로 존재한 적이 없는 데이터는 번호를 소비한 것으로 보지 않는다. 이런 오류 데이터를 제거한 뒤에는 연속된 다음 번호를 다시 사용한다.
 
-### Step 8. Serial 계산
+### Step 8. 등번호 확정
+
+`PLAYER_NUMBER_GUIDELINES.md`를 따라 캐릭터 개인의 상징성을 우선해 `uniform_number`를 정한다. 생일은 다른 개인적 근거가 없을 때만 fallback으로 사용한다.
+
+확정 근거는 `notes`에 기록한다.
+
+### Step 9. Serial 계산
 
 ```text
 serial =
@@ -186,7 +210,7 @@ YK + 26 + 1 + 1 + 01 + 32 + 5
 = YK261101325
 ```
 
-### Step 9. CSV 행 저장
+### Step 10. CSV 행 저장
 
 CSV 헤더 순서를 바꾸지 않고 해당 선수 행을 추가한다.
 
@@ -226,7 +250,10 @@ CONFIRMED 상태로 두기 전에 다음을 확인한다.
 
 - `player_id` 중복 없음
 - `birthday` = `MM-DD`
+- `birth_place`는 가능한 한 `Locality, Prefecture/Province` 형태이며 단순 `Region, Japan`을 피함
+- 추론한 `birth_place`는 `notes`에 근거가 있음
 - `uniform_number` = 0–99
+- 등번호 선정 근거가 `notes`에 있음
 - `card_grade` = 한 자리
 - `card_theme` = 한 자리
 - `theme_index` = 1–99, 같은 테마 범위에서 중복 없음
