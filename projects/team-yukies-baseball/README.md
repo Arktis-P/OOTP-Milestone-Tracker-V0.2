@@ -1,8 +1,11 @@
 # Team Yukies Baseball
 
-이 디렉터리의 현재 선수/카드 작업 기준은 다음 네 파일이다.
+이 디렉터리의 현재 선수/카드 작업 기준은 다음 파일들이다.
 
 - `PLAYER_CREATION_GUIDELINES.md` — 서브컬처 캐릭터를 야구선수로 해석하고 레이팅을 결정하는 기준
+- `PLAYER_PROFILE_GUIDELINES.md` — 신장·체중·생일·출생지 등 신상정보와 체형 추론 기준
+- `PLAYER_TRAIT_GUIDELINES.md` — Trait 1/2/3 슬롯과 허용 Trait 기준
+- `PLAYER_NUMBER_GUIDELINES.md` — 캐릭터별 등번호 선정 및 근거 기록 기준
 - `PLAYER_RATINGS_WORKFLOW.md` — 결정한 값을 CSV에 기록·재계산·검증하는 절차
 - `PLAYER_RATINGS.csv` — 선수 데이터 단일 원본
 - `card-template-html/` — 현재 Team Yukies 카드 템플릿
@@ -11,7 +14,9 @@
 
 ```text
 캐릭터 조사
-→ PLAYER_CREATION_GUIDELINES 기준으로 원본 레이팅 결정
+→ PLAYER_CREATION_GUIDELINES 기준으로 선수 유형·원본 레이팅 결정
+→ PLAYER_PROFILE_GUIDELINES 기준으로 신상정보 확정
+→ PLAYER_TRAIT_GUIDELINES / PLAYER_NUMBER_GUIDELINES 기준으로 Trait·등번호 확정
 → 계산값(speed / 야수 fielding / overall / serial) 계산
 → PLAYER_RATINGS_WORKFLOW에 따라 CSV 갱신
 → card-template-html에서 카드 확인
