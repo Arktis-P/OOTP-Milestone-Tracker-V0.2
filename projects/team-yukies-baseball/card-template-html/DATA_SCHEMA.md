@@ -2,10 +2,12 @@
 
 ## 1. Source of Truth
 
-- 선수 생성/평가 기준: `../PLAYER_CREATION_GUIDELINES.md`
-- Trait 기준: `../PLAYER_TRAIT_GUIDELINES.md`
-- 등번호 선정 기준: `../PLAYER_NUMBER_GUIDELINES.md`
-- CSV 작성/갱신 절차: `../PLAYER_RATINGS_WORKFLOW.md`
+- 통합 선수 작업 가이드: `../PLAYER_GUIDE.md`
+- 선수 생성/평가 기준: `../docs/PLAYER_CREATION_GUIDELINES.md`
+- 신상정보/체형 기준: `../docs/PLAYER_PROFILE_GUIDELINES.md`
+- Trait 기준: `../docs/PLAYER_TRAIT_GUIDELINES.md`
+- 등번호 선정 기준: `../docs/PLAYER_NUMBER_GUIDELINES.md`
+- CSV 작성/갱신 절차: `../docs/PLAYER_RATINGS_WORKFLOW.md`
 - 선수 데이터: `../PLAYER_RATINGS.csv`
 - 선수 이미지 배치: `data/player_images.js`
 
@@ -70,7 +72,7 @@ SPD  = speed
 FLD  = fielding
 ```
 
-`speed`와 야수 `fielding`은 `PLAYER_CREATION_GUIDELINES.md` 공식으로 계산한다.
+`speed`와 야수 `fielding`은 `../docs/PLAYER_CREATION_GUIDELINES.md` 공식으로 계산한다.
 
 포지션별 수비:
 - `def_c`

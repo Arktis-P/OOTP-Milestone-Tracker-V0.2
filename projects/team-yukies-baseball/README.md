@@ -1,24 +1,24 @@
 # Team Yukies Baseball
 
-이 디렉터리의 현재 선수/카드 작업 기준은 다음 파일들이다.
+선수 생성·평가 작업은 먼저 **`PLAYER_GUIDE.md`**를 확인한다. 이 파일이 어떤 단계에서 어떤 상세 문서를 참조해야 하는지 안내하는 단일 진입점이다.
 
-- `PLAYER_CREATION_GUIDELINES.md` — 서브컬처 캐릭터를 야구선수로 해석하고 레이팅을 결정하는 기준
-- `PLAYER_PROFILE_GUIDELINES.md` — 신장·체중·생일·출생지 등 신상정보와 체형 추론 기준
-- `PLAYER_TRAIT_GUIDELINES.md` — Trait 1/2/3 슬롯과 허용 Trait 기준
-- `PLAYER_NUMBER_GUIDELINES.md` — 캐릭터별 등번호 선정 및 근거 기록 기준
-- `PLAYER_RATINGS_WORKFLOW.md` — 결정한 값을 CSV에 기록·재계산·검증하는 절차
+## 현재 기준 파일
+
+- `PLAYER_GUIDE.md` — 선수 생성 작업의 통합 진입 문서
+- `docs/PLAYER_CREATION_GUIDELINES.md` — 포지션·역할·레이팅 및 OVR 기준
+- `docs/PLAYER_PROFILE_GUIDELINES.md` — 신장·체중·생일·출생지 추론 기준
+- `docs/PLAYER_TRAIT_GUIDELINES.md` — Trait 1/2/3 기준
+- `docs/PLAYER_NUMBER_GUIDELINES.md` — 등번호 선정 기준
+- `docs/PLAYER_RATINGS_WORKFLOW.md` — CSV 기록·계산·검증 절차
 - `PLAYER_RATINGS.csv` — 선수 데이터 단일 원본
 - `card-template-html/` — 현재 Team Yukies 카드 템플릿
 
 ## 작업 순서
 
 ```text
-캐릭터 조사
-→ PLAYER_CREATION_GUIDELINES 기준으로 선수 유형·원본 레이팅 결정
-→ PLAYER_PROFILE_GUIDELINES 기준으로 신상정보 확정
-→ PLAYER_TRAIT_GUIDELINES / PLAYER_NUMBER_GUIDELINES 기준으로 Trait·등번호 확정
-→ 계산값(speed / 야수 fielding / overall / serial) 계산
-→ PLAYER_RATINGS_WORKFLOW에 따라 CSV 갱신
+PLAYER_GUIDE.md 확인
+→ 필요한 docs 상세 기준만 참조
+→ PLAYER_RATINGS.csv 갱신
 → card-template-html에서 카드 확인
 ```
 
