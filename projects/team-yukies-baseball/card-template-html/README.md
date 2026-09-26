@@ -30,7 +30,9 @@
 projects/team-yukies-baseball/TEAM-YUKIES-Card-Preview.exe
 ```
 
-실행파일은 새 야구공 아이콘을 사용하며 내부적으로 기존 `open-card-preview.bat`를 호출합니다. 실행파일이 아직 빌드되지 않은 로컬 체크아웃에서는 `open-card-preview.bat`를 직접 실행해도 동일하게 동작합니다.
+이 실행파일에는 `assets/app-icon.png`에서 생성한 Windows 아이콘이 내장되어 있으며, 내부적으로 기존 `open-card-preview.bat`를 호출합니다.
+
+`open-card-preview.bat` 자체는 Windows 파일 연결 아이콘을 사용하는 스크립트이므로 개별 앱 아이콘을 내장할 수 없습니다. 브랜딩된 실행 진입점은 위 EXE를 사용합니다.
 
 실행하면 로컬 HTTP 서버를 열고 브라우저에서 다음 주소를 자동으로 엽니다.
 
@@ -51,6 +53,15 @@ py -m http.server 8765 --bind 127.0.0.1
 그 뒤 브라우저에서 `http://127.0.0.1:8765/card-template-html/`을 엽니다.
 
 `index.html`을 파일 탐색기에서 직접 더블클릭하는 방식(`file://`)은 브라우저 보안 정책 때문에 `../PLAYER_RATINGS.csv` 자동 로드가 막힐 수 있으므로 권장하지 않습니다.
+
+## 앱 아이콘
+
+- 원본 PNG: `assets/app-icon.png`
+- Windows ICO: `assets/app-icon.ico`
+- 생성기: `../launcher/make-icon.py`
+- 포함 크기: 16 / 32 / 48 / 64 / 128 px
+
+아이콘 생성기는 저장소의 실제 `app-icon.png`를 직접 읽습니다. 별도의 base64 복원본으로 PNG를 덮어쓰지 않습니다.
 
 ## 이미지 데이터
 
@@ -77,7 +88,6 @@ CSS는 저장소에 올라온 실제 파일명을 직접 참조합니다.
 - `fonts/esamanru Light.ttf` — Light
 - `fonts/esamanru Medium.ttf` — Medium
 - `fonts/esamanru Bold.ttf` — Bold
-
 
 ## v8 UI / PNG 저장
 

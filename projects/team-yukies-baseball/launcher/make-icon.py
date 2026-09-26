@@ -1,24 +1,38 @@
 from pathlib import Path
-import base64
 from PIL import Image
 
 here = Path(__file__).resolve().parent
 project_root = here.parent
-source_path = here / "app-icon.source.b64"
 png_path = project_root / "card-template-html" / "assets" / "app-icon.png"
 ico_path = project_root / "card-template-html" / "assets" / "app-icon.ico"
 
-encoded = "".join(source_path.read_text(encoding="ascii").split())
-png_path.write_bytes(base64.b64decode(encoded, validate=True))
+if not png_path.is_file():
+    raise FileNotFoundError(f"Icon source not found: {png_path}")
 
-with Image.open(png_path) as image:
-    image.load()
-    rgba = image.convert("RGBA")
-    rgba.save(
+with Image.open(png_path) as source:
+    source.verify()
+
+with Image.open(png_path) as source:
+    rgba = source.convert("RGBA")
+    square = rgba.resize((128, 128), Image.Resampling.LANCZOS)
+    indexed = square.quantize(
+        colors=256,
+        method=Image.Quantize.FASTOCTREE,
+        dither=Image.Dither.FLOYDSTEINBERG,
+    )
+    indexed.convert("RGBA").save(
         ico_path,
         format="ICO",
-        sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)],
+        sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128)],
     )
 
-print(f"Restored PNG: {png_path}")
-print(f"Built Windows icon: {ico_path}")
+with Image.open(ico_path) as icon:
+    sizes = sorted(icon.ico.sizes())
+
+expected = [(16, 16), (32, 32), (48, 48), (64, 64), (128, 128)]
+if sizes != expected:
+    raise RuntimeError(f"Unexpected ICO sizes: {sizes}")
+
+print(f"Source PNG: {png_path}")
+print(f"Windows ICO: {ico_path}")
+print(f"ICO sizes: {sizes}")

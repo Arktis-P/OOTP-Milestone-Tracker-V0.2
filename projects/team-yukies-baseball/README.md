@@ -23,6 +23,23 @@
 
 이미지 경로와 선수 이미지 배치는 `card-template-html/data/player_images.js`에서 별도 관리한다.
 
+## Windows 실행
+
+브랜딩된 기본 실행 진입점은 다음 파일이다.
+
+```text
+TEAM-YUKIES-Card-Preview.exe
+```
+
+- 아이콘 원본: `card-template-html/assets/app-icon.png`
+- Windows ICO: `card-template-html/assets/app-icon.ico`
+- 런처 소스/빌드: `launcher/`
+- `open-card-preview.bat`는 호환용/수동 실행 경로로 유지한다.
+
+Windows의 `.bat` 파일 아이콘은 파일 자체에 개별 아이콘을 내장할 수 없고 파일 연결 아이콘을 사용한다. 따라서 사용자에게 노출되는 앱 실행 아이콘은 `TEAM-YUKIES-Card-Preview.exe`에 적용한다.
+
+GitHub Actions의 런처 워크플로는 빌드/아이콘 검증만 수행하며 저장소에 자동 커밋하거나 푸시하지 않는다.
+
 ## Archive
 
 이전 Python/SVG 기반 카드 템플릿과 과거 문서는:
@@ -30,15 +47,3 @@
 `archive/legacy-card-template/`
 
 에 보관하며 현재 기준으로 사용하지 않는다.
-
-## Windows 실행파일
-
-Windows에서는 프로젝트 폴더의 `TEAM-YUKIES-Card-Preview.exe`를 실행하면 기존 `open-card-preview.bat`를 통해 로컬 카드 프리뷰 서버가 시작됩니다.
-
-- 실행파일: `TEAM-YUKIES-Card-Preview.exe`
-- 아이콘 원본: `card-template-html/assets/app-icon.png`
-- Windows 아이콘: `card-template-html/assets/app-icon.ico`
-- 런처 소스/빌드: `launcher/`
-- 배치 파일은 호환용/수동 실행 경로로 유지합니다.
-
-아이콘 또는 런처 소스를 바꾸면 GitHub Actions가 Windows 런처를 다시 빌드해 같은 브랜치에 반영합니다.
