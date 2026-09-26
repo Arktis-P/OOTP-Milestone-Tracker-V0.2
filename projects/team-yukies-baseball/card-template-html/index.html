@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>TEAM YUKIES Card Preview v7</title>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>TEAM YUKIES Card Preview v10</title>
 <link rel="icon" type="image/png" href="./assets/app-icon.png">
 <link rel="shortcut icon" href="./assets/app-icon.ico">
-<link rel="stylesheet" href="./team-yukies-card.css">
+<link rel="stylesheet" href="./team-yukies-card.css?v=20260927v3">
 </head>
 <body>
 <header class="toolbar">
@@ -153,62 +156,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script>
-(() => {
-  function normalizeExportError(error) {
-    if (error instanceof Error && error.message) return error;
-
-    const target = error?.target;
-    const source = target?.currentSrc || target?.src || "";
-    if (source) return new Error(`PNG export image load failed: ${source}`);
-
-    const text = typeof error === "string" ? error : String(error || "");
-    if (text && text !== "[object Event]" && text !== "[object Object]") {
-      return new Error(text);
-    }
-    return new Error("PNG export failed while rendering the card");
-  }
-
-  window.htmlToImage = {
-    toPng: async (node, options = {}) => {
-      if (!window.html2canvas) {
-        throw new Error("PNG export library failed to load");
-      }
-
-      try {
-        const canvas = await window.html2canvas(node, {
-          backgroundColor: options.backgroundColor ?? null,
-          scale: 1,
-          width: Number(options.width) || 900,
-          height: Number(options.height) || 1260,
-          useCORS: true,
-          allowTaint: false,
-          logging: false,
-          removeContainer: true,
-          imageTimeout: 15000,
-          scrollX: 0,
-          scrollY: 0,
-          onclone: clonedDocument => {
-            const stage = clonedDocument.querySelector("#card-stage");
-            if (stage) stage.style.transform = "none";
-
-            const clone = node.id ? clonedDocument.getElementById(node.id) : null;
-            if (clone) {
-              clone.style.margin = "0";
-              clone.style.transform = "none";
-            }
-          }
-        });
-        return canvas.toDataURL("image/png");
-      } catch (error) {
-        throw normalizeExportError(error);
-      }
-    }
-  };
-})();
-</script>
-<script src="./data/player_images.js"></script>
-<script src="./team-yukies-card.js"></script>
-<script src="./export-fix.js"></script>
+<script src="./data/player_images.js?v=20260927v3"></script>
+<script src="./team-yukies-card.js?v=20260927v3"></script>
+<script src="./export-v3.js?v=20260927v3"></script>
 </body>
 </html>
