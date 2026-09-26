@@ -3,6 +3,8 @@
 ## 1. Source of Truth
 
 - 선수 생성/평가 기준: `../PLAYER_CREATION_GUIDELINES.md`
+- Trait 기준: `../PLAYER_TRAIT_GUIDELINES.md`
+- 등번호 선정 기준: `../PLAYER_NUMBER_GUIDELINES.md`
 - CSV 작성/갱신 절차: `../PLAYER_RATINGS_WORKFLOW.md`
 - 선수 데이터: `../PLAYER_RATINGS.csv`
 - 선수 이미지 배치: `data/player_images.js`
@@ -38,6 +40,9 @@
 - `trait_1`–`trait_3`
 - `serial` — 계산값
 - `status`
+- `notes` — 카드에는 표시하지 않는 내부 비고. 등번호 선정 근거, 공식 설정과 추정값의 구분 등 나중에 추적할 판단 근거를 기록한다.
+
+CSV 파서는 헤더명을 기준으로 각 행을 읽으므로 `notes` 같은 비표시 필드를 추가해도 기존 카드 렌더링 필드에는 영향을 주지 않는다.
 
 ## 3. 타자 카드
 
