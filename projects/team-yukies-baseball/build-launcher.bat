@@ -8,5 +8,5 @@ if errorlevel 1 (
   exit /b 1
 )
 echo.
-echo TEAM-YUKIES-Card-Preview.exe updated.
+echo Team Yukies Card Preview.exe updated.
 pause

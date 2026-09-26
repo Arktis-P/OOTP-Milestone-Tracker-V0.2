@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $sourcePath = Join-Path $PSScriptRoot "CardPreviewLauncher.cs"
 $iconPath = Join-Path $projectRoot "card-template-html\assets\app-icon.ico"
-$outputPath = Join-Path $projectRoot "TEAM-YUKIES-Card-Preview.exe"
+$outputPath = Join-Path $projectRoot "Team Yukies Card Preview.exe"
 
 foreach ($path in @($sourcePath, $iconPath)) {
     if (-not (Test-Path -LiteralPath $path)) {

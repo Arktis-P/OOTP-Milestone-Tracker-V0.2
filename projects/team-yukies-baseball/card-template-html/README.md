@@ -1,4 +1,4 @@
-# TEAM YUKIES Card Template v7
+# Team Yukies Card Template v7
 
 ## 데이터 원본
 
@@ -27,7 +27,7 @@
 프로젝트 루트의 다음 실행파일을 더블클릭합니다.
 
 ```text
-projects/team-yukies-baseball/TEAM-YUKIES-Card-Preview.exe
+projects/team-yukies-baseball/Team Yukies Card Preview.exe
 ```
 
 이 실행파일에는 `assets/app-icon.png`에서 생성한 Windows 아이콘이 내장되어 있으며, 내부적으로 기존 `open-card-preview.bat`를 호출합니다.
