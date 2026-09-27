@@ -5,11 +5,11 @@
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>TEAM YUKIES Card Preview v12</title>
+<title>TEAM YUKIES Card Preview v13</title>
 <link rel="icon" type="image/png" href="./assets/app-icon.png">
 <link rel="shortcut icon" href="./assets/app-icon.ico">
-<link rel="stylesheet" href="./team-yukies-card.css?v=20260927v5">
-<link rel="stylesheet" href="./image-adjust-v1.css?v=20260927v5">
+<link rel="stylesheet" href="./team-yukies-card.css?v=20260927v6">
+<link rel="stylesheet" href="./image-adjust-v2.css?v=20260927v6">
 </head>
 <body>
 <header class="toolbar">
@@ -82,18 +82,21 @@
       <span class="toolbar__group-label">ADJUST</span>
       <label class="image-adjust-control" title="Brightness">
         <span>BRT</span>
-        <input id="img-brightness" type="range" min="50" max="150" step="1" value="100" aria-label="Player image brightness">
-        <output id="img-brightness-value">100%</output>
+        <input id="img-brightness" type="range" min="50" max="150" step="1" value="100" aria-label="Player image brightness slider">
+        <input id="img-brightness-number" class="image-adjust-number" type="number" min="50" max="150" step="1" value="100" aria-label="Player image brightness value">
+        <span class="adjust-unit">%</span>
       </label>
       <label class="image-adjust-control" title="Contrast">
         <span>CON</span>
-        <input id="img-contrast" type="range" min="50" max="150" step="1" value="100" aria-label="Player image contrast">
-        <output id="img-contrast-value">100%</output>
+        <input id="img-contrast" type="range" min="50" max="150" step="1" value="100" aria-label="Player image contrast slider">
+        <input id="img-contrast-number" class="image-adjust-number" type="number" min="50" max="150" step="1" value="100" aria-label="Player image contrast value">
+        <span class="adjust-unit">%</span>
       </label>
       <label class="image-adjust-control" title="Saturation">
         <span>SAT</span>
-        <input id="img-saturation" type="range" min="0" max="200" step="1" value="100" aria-label="Player image saturation">
-        <output id="img-saturation-value">100%</output>
+        <input id="img-saturation" type="range" min="0" max="200" step="1" value="100" aria-label="Player image saturation slider">
+        <input id="img-saturation-number" class="image-adjust-number" type="number" min="0" max="200" step="1" value="100" aria-label="Player image saturation value">
+        <span class="adjust-unit">%</span>
       </label>
       <button id="img-tone-reset" type="button" title="보정값을 기본값으로 되돌림">Tone Reset</button>
     </div>
@@ -102,12 +105,14 @@
       <span class="toolbar__group-label">OUTLINE</span>
       <label class="outline-color-control" title="Outline color">
         <span>COLOR</span>
-        <input id="img-outline-color" type="color" value="#202A43" aria-label="Player image outline color">
+        <input id="img-outline-color" type="color" value="#202A43" aria-label="Player image outline color picker">
+        <input id="img-outline-hex" class="outline-hex-input" type="text" value="#202A43" maxlength="7" spellcheck="false" aria-label="Player image outline hex color">
       </label>
       <label class="image-adjust-control" title="Outline width">
         <span>WIDTH</span>
-        <input id="img-outline-width" type="range" min="0" max="12" step="0.5" value="0" aria-label="Player image outline width">
-        <output id="img-outline-width-value">0px</output>
+        <input id="img-outline-width" type="range" min="0" max="50" step="0.5" value="0" aria-label="Player image outline width slider">
+        <input id="img-outline-width-number" class="image-adjust-number" type="number" min="0" max="50" step="0.5" value="0" aria-label="Player image outline width value">
+        <span class="adjust-unit">px</span>
       </label>
       <button id="img-outline-reset" type="button" title="아웃라인을 끄고 기본 색상으로 되돌림">Reset</button>
       <span id="adjust-status" class="toolbar__status" title="현재 캐릭터 이미지 보정 상태"></span>
@@ -138,13 +143,10 @@
     <div class="preview-scroll">
       <div class="stage" id="card-stage">
   <section class="card card--front-editor" id="front-card">
-    <img class="card__layer card__background" id="front-background"
-         src="./assets/front-background.png" alt="">
+    <img class="card__layer card__background" id="front-background" src="./assets/front-background.png" alt="">
     <img class="card__player" id="front-player" alt="" draggable="false" hidden>
-    <img class="card__layer card__overlay" id="front-batter-overlay"
-         src="./assets/front-batter-overlay.png" alt="">
-    <img class="card__layer card__overlay" id="front-pitcher-overlay"
-         src="./assets/front-pitcher-overlay.png" alt="" hidden>
+    <img class="card__layer card__overlay" id="front-batter-overlay" src="./assets/front-batter-overlay.png" alt="">
+    <img class="card__layer card__overlay" id="front-pitcher-overlay" src="./assets/front-pitcher-overlay.png" alt="" hidden>
 
     <div class="card__drop-hint">PLAYER IMAGE DROP</div>
 
@@ -160,10 +162,8 @@
   </section>
 
   <section class="card" id="back-card">
-    <img class="card__layer card__overlay" id="back-batter-overlay"
-         src="./assets/back-batter-overlay.png" alt="">
-    <img class="card__layer card__overlay" id="back-pitcher-overlay"
-         src="./assets/back-pitcher-overlay.png" alt="" hidden>
+    <img class="card__layer card__overlay" id="back-batter-overlay" src="./assets/back-batter-overlay.png" alt="">
+    <img class="card__layer card__overlay" id="back-pitcher-overlay" src="./assets/back-pitcher-overlay.png" alt="" hidden>
 
     <div class="card__data">
       <div class="t back__first"></div>
@@ -193,10 +193,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="./data/player_images.js?v=20260927v5"></script>
-<script src="./team-yukies-card.js?v=20260927v5"></script>
-<script src="./image-persistence-v1.js?v=20260927v5"></script>
-<script src="./image-adjust-v1.js?v=20260927v5"></script>
-<script src="./export-v4.js?v=20260927v5"></script>
+<script src="./data/player_images.js?v=20260927v6"></script>
+<script src="./team-yukies-card.js?v=20260927v6"></script>
+<script src="./image-persistence-v1.js?v=20260927v6"></script>
+<script src="./image-adjust-v2.js?v=20260927v6"></script>
+<script src="./export-v4.js?v=20260927v6"></script>
 </body>
 </html>

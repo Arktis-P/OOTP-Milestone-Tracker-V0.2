@@ -1,0 +1,100 @@
+/* TEAM YUKIES — player illustration tone / outline controls v2 */
+.toolbar__group--adjust,
+.toolbar__group--outline {
+  flex: 0 1 auto;
+  gap: 5px;
+}
+
+.image-adjust-control,
+.outline-color-control {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 5px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 5px;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.image-adjust-control > span:first-child,
+.outline-color-control > span:first-child {
+  color: var(--ui-muted);
+  font: 800 8px/1 sans-serif;
+  letter-spacing: .04em;
+}
+
+.image-adjust-control input[type="range"] {
+  width: 62px;
+  margin: 0;
+  accent-color: var(--navy);
+}
+
+.image-adjust-number {
+  width: 44px;
+  height: 20px;
+  padding: 0 4px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 4px;
+  outline: 0;
+  color: var(--ui-text);
+  background: #fff;
+  font: 700 9px/1 sans-serif;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.image-adjust-number:focus,
+.outline-hex-input:focus {
+  border-color: var(--navy);
+}
+
+.adjust-unit {
+  color: var(--ui-muted);
+  font: 700 8px/1 sans-serif;
+}
+
+#img-outline-width {
+  width: 62px;
+}
+
+.outline-color-control input[type="color"] {
+  width: 25px;
+  height: 20px;
+  padding: 1px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.outline-hex-input {
+  width: 72px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 4px;
+  outline: 0;
+  color: var(--ui-text);
+  background: #fff;
+  font: 700 9px/1 monospace;
+  text-transform: uppercase;
+}
+
+#adjust-status {
+  max-width: 130px;
+}
+
+#img-tone-reset,
+#img-outline-reset {
+  padding-inline: 7px;
+  font-size: 10px;
+}
+
+@media (max-width: 1180px) {
+  .toolbar__group--adjust,
+  .toolbar__group--outline {
+    flex: 1 1 auto;
+  }
+}
