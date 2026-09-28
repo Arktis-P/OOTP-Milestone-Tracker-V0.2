@@ -1,0 +1,94 @@
+/* TEAM YUKIES — per-player selective text fitting controls */
+.toolbar__row--text {
+  border-top: 1px solid var(--ui-border);
+}
+
+.toolbar__group--text-target,
+.toolbar__group--text-adjust,
+.toolbar__group--text-actions {
+  flex: 0 0 auto;
+}
+
+.text-fit-select {
+  height: 26px;
+  min-width: 190px;
+  padding: 0 8px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 5px;
+  outline: 0;
+  background: var(--ui-panel);
+  color: var(--ui-text);
+  font: 700 10px/1 sans-serif;
+}
+
+.text-fit-control {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 5px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 5px;
+  background: var(--ui-panel);
+  white-space: nowrap;
+}
+
+.text-fit-control > span:first-child {
+  color: var(--ui-muted);
+  font: 800 8px/1 sans-serif;
+  letter-spacing: .04em;
+}
+
+.text-fit-control input[type="range"] {
+  width: 100px;
+  margin: 0;
+  accent-color: var(--navy);
+}
+
+.text-fit-number {
+  width: 54px;
+  height: 20px;
+  padding: 0 4px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 4px;
+  outline: 0;
+  background: var(--ui-panel);
+  color: var(--ui-text);
+  font: 700 9px/1 sans-serif;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-fit-number:focus,
+.text-fit-select:focus {
+  border-color: var(--navy);
+}
+
+.text-fit-unit {
+  color: var(--ui-muted);
+  font: 700 8px/1 sans-serif;
+}
+
+#text-fit-status {
+  max-width: 320px;
+}
+
+html[data-ui-theme="dark"] .text-fit-select,
+html[data-ui-theme="dark"] .text-fit-control,
+html[data-ui-theme="dark"] .text-fit-number {
+  background: #1b2029;
+  color: var(--ui-text);
+}
+
+html[data-ui-theme="dark"] .text-fit-number:focus,
+html[data-ui-theme="dark"] .text-fit-select:focus {
+  border-color: var(--orange);
+}
+
+@media (max-width: 1180px) {
+  .toolbar__group--text-target,
+  .toolbar__group--text-adjust,
+  .toolbar__group--text-actions {
+    flex: 1 1 auto;
+  }
+}

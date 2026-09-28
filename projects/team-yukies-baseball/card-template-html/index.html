@@ -5,13 +5,14 @@
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>TEAM YUKIES Card Preview v16</title>
+<title>TEAM YUKIES Card Preview v17</title>
 <link rel="icon" type="image/png" href="./assets/app-icon.png">
 <link rel="shortcut icon" href="./assets/app-icon.ico">
-<script src="./theme-v1.js?v=20260927v9"></script>
-<link rel="stylesheet" href="./team-yukies-card.css?v=20260927v9">
-<link rel="stylesheet" href="./image-adjust-v2.css?v=20260927v9">
-<link rel="stylesheet" href="./theme-v1.css?v=20260927v9">
+<script src="./theme-v1.js?v=20260929v10"></script>
+<link rel="stylesheet" href="./team-yukies-card.css?v=20260929v10">
+<link rel="stylesheet" href="./image-adjust-v2.css?v=20260929v10">
+<link rel="stylesheet" href="./text-fit-v1.css?v=20260929v10">
+<link rel="stylesheet" href="./theme-v1.css?v=20260929v10">
 </head>
 <body>
 <header class="toolbar">
@@ -131,6 +132,38 @@
 
     <span class="image-editor__hint">드래그앤드롭 가능 · 배치/톤/아웃라인은 선수별 저장</span>
   </div>
+
+  <div class="toolbar__row toolbar__row--text text-fit-editor">
+    <div class="toolbar__section-title">TEXT FIT</div>
+
+    <div class="toolbar__group toolbar__group--text-target">
+      <span class="toolbar__group-label">FIELD</span>
+      <select id="text-fit-target" class="text-fit-select" aria-label="Text field to adjust"></select>
+    </div>
+
+    <div class="toolbar__group toolbar__group--text-adjust">
+      <span class="toolbar__group-label">ADJUST</span>
+      <label class="text-fit-control" title="현재 텍스트 영역의 기본 자간에 더하거나 뺄 값">
+        <span>TRACK</span>
+        <input id="text-fit-tracking" type="range" min="-12" max="6" step="0.5" value="0" aria-label="Letter spacing adjustment">
+        <input id="text-fit-tracking-number" class="text-fit-number" type="number" min="-12" max="6" step="0.5" value="0" aria-label="Letter spacing adjustment value">
+        <span class="text-fit-unit">px</span>
+      </label>
+      <label class="text-fit-control" title="글자 자체의 가로 폭. 100%가 원본">
+        <span>WIDTH</span>
+        <input id="text-fit-width" type="range" min="50" max="120" step="1" value="100" aria-label="Text horizontal width">
+        <input id="text-fit-width-number" class="text-fit-number" type="number" min="50" max="120" step="1" value="100" aria-label="Text horizontal width value">
+        <span class="text-fit-unit">%</span>
+      </label>
+    </div>
+
+    <div class="toolbar__group toolbar__group--text-actions">
+      <span class="toolbar__group-label">ACTIONS</span>
+      <button id="text-fit-reset-field" type="button">Reset Field</button>
+      <button id="text-fit-reset-player" type="button">Reset Player</button>
+      <span id="text-fit-status" class="toolbar__status"></span>
+    </div>
+  </div>
 </header>
 
 <div class="workspace">
@@ -196,11 +229,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="./data/player_images.js?v=20260927v9"></script>
-<script src="./team-yukies-card.js?v=20260927v9"></script>
-<script src="./pitcher-front-v2.js?v=20260927v9"></script>
-<script src="./image-persistence-v1.js?v=20260927v9"></script>
-<script src="./image-adjust-v3.js?v=20260927v9"></script>
-<script src="./export-v4.js?v=20260927v9"></script>
+<script src="./data/player_images.js?v=20260929v10"></script>
+<script src="./team-yukies-card.js?v=20260929v10"></script>
+<script src="./pitcher-front-v2.js?v=20260929v10"></script>
+<script src="./image-persistence-v1.js?v=20260929v10"></script>
+<script src="./image-adjust-v3.js?v=20260929v10"></script>
+<script src="./text-fit-v1.js?v=20260929v10"></script>
+<script src="./export-v4.js?v=20260929v10"></script>
 </body>
 </html>
