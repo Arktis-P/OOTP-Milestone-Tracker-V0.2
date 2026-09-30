@@ -30,11 +30,36 @@
   });
 
   const style = document.createElement("style");
-  style.dataset.teamYukiesPitchSchema = "v2";
+  style.dataset.teamYukiesPitchSchema = "v3";
   style.textContent = `
-    .pitch-list { height: 302px; }
-    .pitch-slot[data-row="5"] { top: 220px; }
-    .pitch-slot[data-row="6"] { top: 264px; }
+    /* 7 rows per column must stay inside the original 214px arsenal area. */
+    .pitch-list {
+      height: 214px;
+    }
+
+    .pitch-slot {
+      height: 28px;
+    }
+
+    .pitch-slot[data-row="0"] { top: 0; }
+    .pitch-slot[data-row="1"] { top: 31px; }
+    .pitch-slot[data-row="2"] { top: 62px; }
+    .pitch-slot[data-row="3"] { top: 93px; }
+    .pitch-slot[data-row="4"] { top: 124px; }
+    .pitch-slot[data-row="5"] { top: 155px; }
+    .pitch-slot[data-row="6"] { top: 186px; }
+
+    .pitch-label,
+    .pitch-value {
+      height: 28px;
+      font-size: 24px;
+      line-height: 28px;
+    }
+
+    .pitch-label {
+      padding-left: 8px;
+      letter-spacing: -0.02em;
+    }
   `;
   document.head.appendChild(style);
 })();
