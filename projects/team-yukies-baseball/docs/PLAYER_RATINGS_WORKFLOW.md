@@ -67,7 +67,7 @@
 - `pitchability`
 - `fielding`
 - `velocity_kmh`
-- 공식 구종 11종
+- 공식 구종 14종
 
 ### 계산값
 

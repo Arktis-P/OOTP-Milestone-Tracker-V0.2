@@ -111,19 +111,22 @@ fielding
 - `pitch_cutter`
 - `pitch_slider`
 - `pitch_changeup`
+- `pitch_circle_change`
 - `pitch_curveball`
+- `pitch_knuckle_curve`
 - `pitch_splitter`
 - `pitch_forkball`
 - `pitch_sweeper`
 - `pitch_slurve`
+- `pitch_screwball`
 - `pitch_knuckleball`
 
 ### 구종 세분화 원칙
 
 - **Splitter / Forkball**: 별도 구종으로 관리한다. 그립·구속·회전·제구 특성이 충분히 다르고 한 투수가 두 구종을 동시에 운용할 수 있다.
-- **Slurve / Knuckle Curve**: 서로 다른 구종으로 본다. 다만 현재 로스터에서 knuckle curve가 필요한 선수가 없으므로 `pitch_knuckle_curve`는 실제 사용자가 생길 때 추가한다.
-- **Changeup / Circle Change**: 별도 CSV 컬럼으로 나누지 않는다. Circle change는 `pitch_changeup`에 저장하고 세부 그립·무브먼트는 `notes` 또는 scouting report로 기록한다.
-- **Screwball**: 독립 구종으로 인정하되 현재 사용자가 없으므로 실제 필요 시 `pitch_screwball`을 추가한다.
+- **Curveball / Knuckle Curve**: 별도 구종으로 관리한다. 기본 커브와 너클 커브를 서로 다른 구종 레퍼토리로 기록할 수 있다.
+- **Changeup / Circle Change**: 별도 구종으로 관리한다. 일반 체인지업과 서클 체인지를 서로 다른 레퍼토리로 명시할 필요가 있을 때 각각의 컬럼에 기록한다.
+- **Screwball**: 독립 구종으로 관리한다.
 - **Gyroball**: 독립 구종 컬럼으로 사용하지 않는다. 자이로 회전 특성은 실제 움직임에 따라 slider/cutter 등 기존 구종으로 분류하고 세부 특성을 비고에 기록한다.
 - **Slow Curve 등 기타 희귀 세부형**: 로스터에 명확한 필요가 생길 때만 추가한다. 스키마를 실제 사용하지 않는 세부 그립으로 과도하게 확장하지 않는다.
 
