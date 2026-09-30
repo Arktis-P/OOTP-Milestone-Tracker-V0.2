@@ -316,7 +316,7 @@ Velocity는 Stuff의 근거 중 하나이므로 OVR에 다시 직접 넣지 않�
 
 ## 9. 투수 구종
 
-현재 공식 구종은 다음 10개만 사용한다.
+현재 공식 구종은 다음 11개를 사용한다.
 
 - `pitch_four_seam`
 - `pitch_sinker`
@@ -325,6 +325,7 @@ Velocity는 Stuff의 근거 중 하나이므로 OVR에 다시 직접 넣지 않�
 - `pitch_changeup`
 - `pitch_curveball`
 - `pitch_splitter`
+- `pitch_forkball`
 - `pitch_sweeper`
 - `pitch_slurve`
 - `pitch_knuckleball`
@@ -333,6 +334,8 @@ Velocity는 Stuff의 근거 중 하나이므로 OVR에 다시 직접 넣지 않�
 사용하지 않는 구종은 빈 값으로 둔다.
 
 개별 구종 구속은 별도로 저장하지 않는다.
+
+Splitter/Forkball처럼 실제 투구 특성과 운용 목적이 명확히 다른 구종은 별도 필드로 관리한다. 반면 Circle Change처럼 기본 구종의 그립 변형에 가까운 세부형은 기본 구종 필드에 저장한다. Knuckle Curve, Screwball 등 현재 로스터에서 사용하지 않는 독립 구종은 실제 사용자가 생길 때 추가하며, Gyroball은 별도 구종 필드로 만들지 않는다. 세부 정책은 `../card-template-html/DATA_SCHEMA.md`의 구종 세분화 원칙을 따른다.
 
 ---
 

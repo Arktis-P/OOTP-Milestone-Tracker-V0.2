@@ -67,7 +67,7 @@
 - `pitchability`
 - `fielding`
 - `velocity_kmh`
-- 공식 구종 10종
+- 공식 구종 11종
 
 ### 계산값
 
@@ -225,6 +225,8 @@ CSV 헤더 순서를 바꾸지 않고 해당 선수 행을 추가한다.
 - 투수에게 해당하지 않는 타자 능력
 
 은 빈 셀로 유지한다.
+
+새 구종 필드를 스키마에 추가할 때는 `PLAYER_RATINGS.csv`, `card-template-html/DATA_SCHEMA.md`, 카드의 구종 렌더링 목록을 같은 작업에서 함께 갱신한다.
 
 ---
 
