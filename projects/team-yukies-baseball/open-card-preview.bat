@@ -3,7 +3,7 @@ setlocal
 cd /d "%~dp0"
 
 set "PORT=8765"
-set "BUILD=20260929v11"
+set "BUILD=20261001v5"
 set "URL=http://127.0.0.1:%PORT%/card-template-html/?build=%BUILD%"
 
 where py >nul 2>&1
