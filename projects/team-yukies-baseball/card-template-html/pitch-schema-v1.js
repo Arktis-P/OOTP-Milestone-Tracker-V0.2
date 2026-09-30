@@ -30,50 +30,46 @@
   });
 
   const style = document.createElement("style");
-  style.dataset.teamYukiesPitchSchema = "v5";
+  style.dataset.teamYukiesPitchSchema = "v6";
   style.textContent = `
-    /*
-     * The overlay is presentation-only. The pitch labels are always rendered
-     * by the DOM, so give the dynamic arsenal its own clean canvas. This also
-     * masks any legacy labels that may still be baked into an older/cached
-     * pitcher overlay without covering the velocity badge or helper text.
-     */
+    /* 7 rows per column, expanded to use the arsenal body without touching
+       the helper line printed near the bottom of the overlay. */
     .pitch-list {
-      height: 190px;
+      height: 210px;
       overflow: hidden;
       background: #F9F9F9;
       z-index: 2;
     }
 
     .pitch-slot {
-      height: 24px;
+      height: 26px;
       z-index: 3;
     }
 
     .pitch-slot[data-row="0"] { top: 0; }
-    .pitch-slot[data-row="1"] { top: 27px; }
-    .pitch-slot[data-row="2"] { top: 54px; }
-    .pitch-slot[data-row="3"] { top: 81px; }
-    .pitch-slot[data-row="4"] { top: 108px; }
-    .pitch-slot[data-row="5"] { top: 135px; }
-    .pitch-slot[data-row="6"] { top: 162px; }
+    .pitch-slot[data-row="1"] { top: 30px; }
+    .pitch-slot[data-row="2"] { top: 60px; }
+    .pitch-slot[data-row="3"] { top: 90px; }
+    .pitch-slot[data-row="4"] { top: 120px; }
+    .pitch-slot[data-row="5"] { top: 150px; }
+    .pitch-slot[data-row="6"] { top: 180px; }
 
     .pitch-label,
     .pitch-value {
-      height: 24px;
-      line-height: 24px;
+      height: 26px;
+      line-height: 26px;
     }
 
     .pitch-label {
       padding-left: 8px;
-      font-size: 20px;
+      font-size: 22px;
       letter-spacing: -0.03em;
       white-space: nowrap;
       overflow: hidden;
     }
 
     .pitch-value {
-      font-size: 22px;
+      font-size: 24px;
     }
   `;
   document.head.appendChild(style);
