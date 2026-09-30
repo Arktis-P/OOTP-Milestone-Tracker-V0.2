@@ -30,20 +30,24 @@
   });
 
   const style = document.createElement("style");
-  style.dataset.teamYukiesPitchSchema = "v4";
+  style.dataset.teamYukiesPitchSchema = "v5";
   style.textContent = `
     /*
-     * Pitcher overlay was originally designed for five rows per column.
-     * Keep all seven rows inside the same arsenal body and leave a clear
-     * safety gap above the printed helper line at the bottom of the asset.
+     * The overlay is presentation-only. The pitch labels are always rendered
+     * by the DOM, so give the dynamic arsenal its own clean canvas. This also
+     * masks any legacy labels that may still be baked into an older/cached
+     * pitcher overlay without covering the velocity badge or helper text.
      */
     .pitch-list {
-      height: 210px;
+      height: 190px;
       overflow: hidden;
+      background: #F9F9F9;
+      z-index: 2;
     }
 
     .pitch-slot {
       height: 24px;
+      z-index: 3;
     }
 
     .pitch-slot[data-row="0"] { top: 0; }
