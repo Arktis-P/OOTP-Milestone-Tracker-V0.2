@@ -30,35 +30,46 @@
   });
 
   const style = document.createElement("style");
-  style.dataset.teamYukiesPitchSchema = "v3";
+  style.dataset.teamYukiesPitchSchema = "v4";
   style.textContent = `
-    /* 7 rows per column must stay inside the original 214px arsenal area. */
+    /*
+     * Pitcher overlay was originally designed for five rows per column.
+     * Keep all seven rows inside the same arsenal body and leave a clear
+     * safety gap above the printed helper line at the bottom of the asset.
+     */
     .pitch-list {
-      height: 214px;
+      height: 210px;
+      overflow: hidden;
     }
 
     .pitch-slot {
-      height: 28px;
+      height: 24px;
     }
 
     .pitch-slot[data-row="0"] { top: 0; }
-    .pitch-slot[data-row="1"] { top: 31px; }
-    .pitch-slot[data-row="2"] { top: 62px; }
-    .pitch-slot[data-row="3"] { top: 93px; }
-    .pitch-slot[data-row="4"] { top: 124px; }
-    .pitch-slot[data-row="5"] { top: 155px; }
-    .pitch-slot[data-row="6"] { top: 186px; }
+    .pitch-slot[data-row="1"] { top: 27px; }
+    .pitch-slot[data-row="2"] { top: 54px; }
+    .pitch-slot[data-row="3"] { top: 81px; }
+    .pitch-slot[data-row="4"] { top: 108px; }
+    .pitch-slot[data-row="5"] { top: 135px; }
+    .pitch-slot[data-row="6"] { top: 162px; }
 
     .pitch-label,
     .pitch-value {
-      height: 28px;
-      font-size: 24px;
-      line-height: 28px;
+      height: 24px;
+      line-height: 24px;
     }
 
     .pitch-label {
       padding-left: 8px;
-      letter-spacing: -0.02em;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .pitch-value {
+      font-size: 22px;
     }
   `;
   document.head.appendChild(style);
