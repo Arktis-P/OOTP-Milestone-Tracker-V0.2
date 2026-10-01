@@ -30,34 +30,34 @@
   });
 
   const style = document.createElement("style");
-  style.dataset.teamYukiesPitchSchema = "v6";
+  style.dataset.teamYukiesPitchSchema = "v7";
   style.textContent = `
-    /* 7 rows per column, expanded to use the arsenal body without touching
-       the helper line printed near the bottom of the overlay. */
+    /* 7 rows: fill the arsenal body down toward the overlay helper line.
+       Overlay helper text starts around y=972; list is top 750 + 216 = 966. */
     .pitch-list {
-      height: 210px;
+      height: 216px;
       overflow: hidden;
       background: #F9F9F9;
       z-index: 2;
     }
 
     .pitch-slot {
-      height: 26px;
+      height: 28px;
       z-index: 3;
     }
 
     .pitch-slot[data-row="0"] { top: 0; }
-    .pitch-slot[data-row="1"] { top: 30px; }
-    .pitch-slot[data-row="2"] { top: 60px; }
-    .pitch-slot[data-row="3"] { top: 90px; }
-    .pitch-slot[data-row="4"] { top: 120px; }
-    .pitch-slot[data-row="5"] { top: 150px; }
-    .pitch-slot[data-row="6"] { top: 180px; }
+    .pitch-slot[data-row="1"] { top: 31px; }
+    .pitch-slot[data-row="2"] { top: 62px; }
+    .pitch-slot[data-row="3"] { top: 93px; }
+    .pitch-slot[data-row="4"] { top: 124px; }
+    .pitch-slot[data-row="5"] { top: 155px; }
+    .pitch-slot[data-row="6"] { top: 186px; }
 
     .pitch-label,
     .pitch-value {
-      height: 26px;
-      line-height: 26px;
+      height: 28px;
+      line-height: 28px;
     }
 
     .pitch-label {
